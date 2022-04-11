@@ -1,0 +1,38 @@
+@startuml
+skinparam linetype ortho
+skinparam Monochrome true
+
+
+class Cams_data {
+    serial id
+    int cam_num
+    String task_type
+    Time date_time
+
+}
+
+class Automations {
+    serial id
+    String type
+    Time date_time
+    int gpio_pin
+}
+
+enum Task_type {
+    COUNT 
+    STATE
+}
+
+enum Automation_type {
+    BICICLE_PASS
+    CAR_PASS
+    TRUCK_PASS
+    PEDESTRIAN_PASS
+    PEDESTRIAN_NUM
+    VEHICLE_NUM
+}
+
+Automations -- Automation_type
+Cams_data -- Task_type
+
+@enduml
