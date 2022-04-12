@@ -6,7 +6,7 @@ skinparam Monochrome true
 class Cams_data {
     serial id
     int cam_num
-    String task_type
+    String event
     Time date_time
 
 }
