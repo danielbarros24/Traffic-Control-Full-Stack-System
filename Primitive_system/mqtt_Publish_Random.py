@@ -13,7 +13,7 @@ MQTT_Broker = "192.168.1.199"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 
-MQTT_Topic_RuleEngine = "Cam1/onvif-ej/RuleEngine/CountAgregation/Counter/&1"
+MQTT_Topic_RuleEngine = "BoschCam1/onvif-ej/RuleEngine/CountAgregation/Counter/&1"
 MQTT_Topic_IVA = "BoschCam1/onvif-ej/IVA/"
 MQTT_Topic_VideoSource = "BoschCam1/onvif-ej/VideoSource/"
 MQTT_Topic_Device = "BoschCam1/onvif-ej/Device/"

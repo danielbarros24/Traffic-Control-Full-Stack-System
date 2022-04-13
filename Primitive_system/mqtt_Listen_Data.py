@@ -3,6 +3,7 @@
 #------------------------------------------
 
 import paho.mqtt.client as mqtt
+from database_manager import database_insert, database_remove, database_create_query, database_get_all, database_iter, database_search, database_truncate, database_update
 import json
 #from store_data_into_db import sensor_Data_Handler
 #from tiny_db_manager import Data_handler
@@ -11,7 +12,7 @@ import json
 MQTT_Broker = "192.168.1.199"
 MQTT_Port = 1883
 Keep_Alive_Interval = 40
-MQTT_Topic = "Cam1/#"
+MQTT_Topic = "BoschCam1/#"
 
 #Server Credentials
 username = "daniel"
@@ -23,7 +24,6 @@ def parse_mqtt_message(topic, message):
 
 	Topic_array = []
 	Topic_array = topic.split("/")
-	print("[Deserialized Topic]:" + str(Topic_array))
 
 	msg_deserialized = json.loads(message)
 
@@ -38,9 +38,12 @@ def parse_mqtt_message(topic, message):
 		"Data": msg_deserialized['Data']
 	}
 
-	print("Source: " + str(Source))	
 	DB_row_json = json.dumps(DB_row)
-	print("[INPUT DB]: " + str(DB_row_json))
+	print("[DATABASE INPUT]: " + str(DB_row_json))
+
+	database_insert(json.loads(DB_row_json))
+	print("==========================DATA INSERTED IN DATABASE==========================" + "\n\n")
+	
 
 #Subscribe to all Sensors at Base Topic
 def on_connect(client, userdata, flags, rc):
@@ -50,10 +53,11 @@ def on_connect(client, userdata, flags, rc):
 #Save Data into DB Table
 def on_message(client, userdata, msg):
 
-	print("MQTT Data Received!")
+	print("=============================MQTT DATA RECEIVED==============================")
 	print("[MQTT TOPIC]: " + msg.topic)
+	print("[MQTT MESSAGE]: " + str(msg.payload))
 	parse_mqtt_message(msg.topic, msg.payload)
-	print("[MQTT MESSAGE]: " + str(msg.payload) + "\n")
+	
 
 
 def on_subscribe(client, userdata, mid, granted_qos):
