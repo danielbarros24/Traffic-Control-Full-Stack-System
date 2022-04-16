@@ -36,8 +36,7 @@
     <v-data-table
       :headers="headers"
       :items="automations"
-      sort-by="calories"
-      class="elevation-24"
+      class="elevation-24 mt-13"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -45,7 +44,7 @@
             >Automations</v-toolbar-title
           >
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="700px">
+          <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="secondary"
@@ -90,6 +89,7 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-switch
                         v-model="editedItem.state"
+                        label="State"
                       ></v-switch>
                     </v-col>
                   </v-row>
@@ -167,7 +167,7 @@ export default {
       },
       { text: "Rule", value: "rule" },
       { text: "GPIO Pin", value: "gpio" },
-      { text: "State", value: "state" },
+      { text: "State", value: "state", sortable: false },
       { text: "Actions", value: "actions", sortable: false },
     ],
     automations: [],
