@@ -89,7 +89,6 @@
                     <v-col cols="12" sm="6" md="4">
                       <v-switch
                         v-model="editedItem.state"
-                        label="State"
                       ></v-switch>
                     </v-col>
                   </v-row>
@@ -123,6 +122,9 @@
             </v-card>
           </v-dialog>
         </v-toolbar>
+      </template>
+      <template v-slot:[`item.state`]="{ item }">
+        <v-switch v-model="item.state" hide-details class="ma-0 pa-0"></v-switch>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
@@ -161,13 +163,17 @@ export default {
     dialogDelete: false,
     headers: [
       {
+        text: "",
+        value: "state", sortable: false,
+        width: 0
+      },
+      {
         text: "Name",
         align: "start",
         value: "name",
       },
       { text: "Rule", value: "rule" },
       { text: "GPIO Pin", value: "gpio" },
-      { text: "State", value: "state", sortable: false },
       { text: "Actions", value: "actions", sortable: false },
     ],
     automations: [],
