@@ -2,12 +2,14 @@ from asyncio import tasks
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from tinydb import TinyDB, Query
+from datetime import datetime
+import time
 
 app = Flask(__name__)
 Cors = CORS(app)
 
 # Database
-db = TinyDB('db.json')
+db = TinyDB('mqtt/db.json')
 query = Query()
 
 CORS(app, resources={r'/*': {'origins':
@@ -34,22 +36,32 @@ def submitData():
 
     return response_object
 
-@app.post("/dash")
-def ChartData():
+@app.post("/dashboard")
+def chartData():
+    response = {'status': 'success'} 
+
+    dash_data = request.get_json()
+    cam = dash_data.get('cam')
+    time = dash_data.get('time')
+    subtask = dash_data.get('subtask')
+
+    print("Responded!")
+    print(cam)
+    print(time)
+    print(subtask)
+
+    return jsonify(db.search(query.Subtask == subtask))
+
+
+@app.post("/time")
+def recentTime():
     response = {'status': 'success'} 
 
     dash_data = request.get_json()
 
-    cam = dash_data.get('cam'),
-    time = dash_data.get('time'),
-    task = dash_data.get('task'),
+    minTime = dash_data.get('minTime')
 
     print("Responded!")
+    print(minTime)
 
-    return {
-        "cam": cam,
-        "time": time,
-        "task": task,
-    }
-        
-    
+    return jsonify(db.search(query.UtcTime >= minTime))
