@@ -1,8 +1,9 @@
 from asyncio import tasks
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from tinydb import TinyDB, Query
+from tinydb import TinyDB, Query, where
 from datetime import datetime
+from flask_login import LoginManager, UserMixin
 import time
 
 app = Flask(__name__)
@@ -10,16 +11,33 @@ Cors = CORS(app)
 
 # Database
 db = TinyDB('mqtt/db.json')
+db_auth = TinyDB('auth.json')
+
 query = Query()
 
 CORS(app, resources={r'/*': {'origins':
  '*'}}, CORS_SUPPORTS_CREDENTIALS=True)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['SECRET_KEY'] = '5e8a67084c7862b81e91f3dc1742335c'
 
-@app.route('/db', methods=['GET'])
-def load():
-    return jsonify(db.search(query.Data.Count == 24))
+
+@app.route('/login', methods=['POST'])
+def login():
+
+    credentials = request.get_json() 
+    username = credentials.get('username')
+    password = credentials.get('password')
+
+    print(username)
+    print(db_auth.search())
+    print("check")
+
+    if db_auth.search(query.username == username):
+        return jsonify(status='ok')
+    else:
+        return jsonify(status='wrong')
+
 
 @app.post("/data")
 def submitData():  
@@ -38,7 +56,6 @@ def submitData():
 
 @app.post("/dashboard")
 def chartData():
-    response = {'status': 'success'} 
 
     dash_data = request.get_json()
     cam = dash_data.get('cam')
@@ -52,10 +69,7 @@ def chartData():
 
     return jsonify(db.search(query.Subtask == subtask))
 
-
-@app.post("/time")
 def recentTime():
-    response = {'status': 'success'} 
 
     dash_data = request.get_json()
 
