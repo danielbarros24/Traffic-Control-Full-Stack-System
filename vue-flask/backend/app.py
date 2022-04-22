@@ -28,16 +28,16 @@ def login():
     credentials = request.get_json() 
     username = credentials.get('username')
     password = credentials.get('password')
-
-    print(username)
-    print(db_auth.search())
-    print("check")
-
+    
     if db_auth.search(query.username == username):
-        return jsonify(status='ok')
-    else:
-        return jsonify(status='wrong')
-
+        username_el = db_auth.get(query.username == username)
+        password_el = db_auth.get(query.password == password)
+    
+        if password_el:
+            if username_el.doc_id == password_el.doc_id:
+                return jsonify(status='ok')
+            else:
+                return jsonify(status='wrong')
 
 @app.post("/data")
 def submitData():  
