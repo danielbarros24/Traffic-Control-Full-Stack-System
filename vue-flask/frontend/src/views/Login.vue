@@ -33,7 +33,7 @@
                         color="deep-purple darken-3"
                         :rules="[v => !!v || 'You must type password!']"
                       />
-                      <v-btn v-on:click="signIn" rounded color="deep-purple darken-3" class="mt-4" block dark 
+                      <v-btn @click="postData" rounded color="deep-purple darken-3" class="mt-4" block dark 
                       >SIGN IN</v-btn
                     >
                     </v-form>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+const baseURL = "http://127.0.0.1:5000";
 export default {
   data: () => ({
     step: 1,
@@ -64,16 +65,53 @@ export default {
     signIn() {
       console.log("Logged in")
       this.$router.push("dashboard");
-    }
+    },
+    fortmatResponse(res) {
+      return JSON.stringify(res, null, 2);
+    },
+    async postData() {
+      const postData = {
+        username: this.username,
+        password: this.password,
+      };
+      try {
+        const res = await fetch(`${baseURL}/login`, {
+          method: "post",
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json;charset=utf-8'
+          },
+          body: JSON.stringify(postData),
+        });
+        console.log(res)
+        if (!res.ok) {
+          const message = `An error has occured: ${res.status} - ${res.statusText}`;
+          throw new Error(message);
+        }
+        const data = await res.json();
+        const result = {
+          status: res.status + "-" + res.statusText,
+          headers: {
+            "Content-Type": res.headers.get("Content-Type"),
+            "Content-Length": res.headers.get("Content-Length"),
+          },
+          data: data,
+        };
+        this.postResult = this.fortmatResponse(result);
+      } catch (err) {
+        this.postResult = err.message;
+      }
+    },
+    clearPostOutput() {
+      this.postResult = null;
+    },
   },
 
   async mounted() {
-    const response = await fetch("http://127.0.0.1:5000/")
+    const response = await fetch(`${baseURL}/login`)
 
     const data = await response.json()
     console.log(data)
-
-    this.age = data.idade
   }
 };
 
