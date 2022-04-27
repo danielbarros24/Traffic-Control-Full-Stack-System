@@ -255,11 +255,11 @@ export default {
         },
       },
       {
-        title: "Settings",
+        title: "Automations",
         icon: "mdi-cogs",
         click() {
-          console.log("settings");
-          this.$router.push("settings");
+          console.log("automations");
+          this.$router.push("automations");
         },
       },
     ],

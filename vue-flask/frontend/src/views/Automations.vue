@@ -7,7 +7,7 @@
         src="../assets/logo_simple.png"
         @click="clickLogo()"
       ></v-img>
-      <v-toolbar-title class="ml-4">Settings</v-toolbar-title>
+      <v-toolbar-title class="ml-4">Automations</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -76,20 +76,40 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.rule"
-                        label="Rule"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
                         v-model="editedItem.gpio"
                         label="GPIO"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-switch
-                        v-model="editedItem.state"
-                      ></v-switch>
+                      <v-switch v-model="editedItem.state"></v-switch>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-dialog
+                        v-model="rule_dialog"
+                        fullscreen
+                        hide-overlay
+                        transition="dialog-bottom-transition"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                            Add Rule
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-toolbar dark color="primary">
+                            <v-btn icon dark @click="dialog = false">
+                              <v-icon>mdi-close</v-icon>
+                            </v-btn>
+                            <v-toolbar-title>Rule</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-toolbar-items>
+                              <v-btn dark text @click="dialog = false">
+                                Save
+                              </v-btn>
+                            </v-toolbar-items>
+                          </v-toolbar>
+                        </v-card>
+                      </v-dialog>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -104,10 +124,10 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-dialog v-model="dialogDelete" max-width="573px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this item?</v-card-title
+                >Are you sure you want to delete this automation?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -124,7 +144,11 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.state`]="{ item }">
-        <v-switch v-model="item.state" hide-details class="ma-0 pa-0"></v-switch>
+        <v-switch
+          v-model="item.state"
+          hide-details
+          class="ma-0 pa-0"
+        ></v-switch>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
@@ -138,6 +162,8 @@
 </template>
 
 <script>
+const transformJS = require("js-to-json-logic");
+
 export default {
   data: () => ({
     items: [
@@ -160,12 +186,14 @@ export default {
     ],
 
     dialog: false,
+    rule_dialog: false,
     dialogDelete: false,
     headers: [
       {
         text: "",
-        value: "state", sortable: false,
-        width: 0
+        value: "state",
+        sortable: false,
+        width: 0,
       },
       {
         text: "Name",
@@ -194,7 +222,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New Automation" : "Edit Automation";
     },
   },
 

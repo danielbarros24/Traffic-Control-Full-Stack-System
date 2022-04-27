@@ -7,7 +7,7 @@
 
 from tinydb import TinyDB, Query
 
-db = TinyDB('db.json')
+db = TinyDB('../database/camera_data.json')
 query = Query()
 
 

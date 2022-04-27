@@ -3,6 +3,7 @@ from flask import make_response, request, Response, render_template
 from flask_login import LoginManager, login_required, login_user
 from flask_session import Session
 from flask_cors import CORS
+from json_logic import jsonLogic
 
 from tinydb import TinyDB, Query, where
 from typing import Dict, Optional
@@ -24,8 +25,9 @@ app = Flask(__name__)
 
 
 # DATABASE
-db = TinyDB('mqtt/db.json')
-db_auth = TinyDB('auth.json')
+db_camera = TinyDB('database/camera_data.json')
+db_auth = TinyDB('database/auth.json')
+db_auto = TinyDB('database/automations.json')
 query = Query()
 
 # CORS
@@ -99,7 +101,7 @@ def login():
 
 #### LOGOUT #####
 @app.route('/logout')
-def logout():
+def logout():   
     session.pop('username', None)
     return redirect(url_for('index'))
 
@@ -107,6 +109,23 @@ def logout():
 
 
 ############# OTHER FUNCTIONS ################
+@app.post('/automation')
+def automation():
+    automation = request.get_json()
+
+    info = automation.get('info')
+    rules = automation.get('rules')
+    data = automation.get('data')
+
+    print("[INFO]: " + str(info))
+    print("[RULES]: " + str(rules))
+    print("[DATA]: " + str(data))
+
+    db_auto.insert(automation)
+    #jsonLogic(rules, data)
+
+    
+    return jsonify(status='Success')
 
 @app.post("/dashboard")
 def chartData():
@@ -116,12 +135,12 @@ def chartData():
     time = dash_data.get('time')
     subtask = dash_data.get('subtask')
 
-    print("Responded!")
+    print("Responded!") 
     print(cam)
     print(time)
     print(subtask)
 
-    return jsonify(db.search(query.Subtask == subtask))
+    return jsonify(db_camera.search(query.Subtask == subtask))
 
 def recentTime():
 
@@ -132,4 +151,4 @@ def recentTime():
     print("Responded!")
     print(minTime)
 
-    return jsonify(db.search(query.UtcTime >= minTime))
+    return jsonify(db_camera.search(query.UtcTime >= minTime))

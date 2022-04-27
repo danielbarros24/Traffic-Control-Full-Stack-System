@@ -33,7 +33,7 @@
                         color="deep-purple darken-3"
                         :rules="[v => !!v || 'You must type password!']"
                       />
-                      <v-btn @click="postData" rounded color="deep-purple darken-3" class="mt-4" block dark 
+                      <v-btn to="/dashboard" rounded color="deep-purple darken-3" class="mt-4" block dark 
                       >SIGN IN</v-btn
                     >
                     </v-form>

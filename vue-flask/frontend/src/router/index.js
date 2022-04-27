@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 
 import Dashboard from '../views/Dashboard.vue'
 import Login from '../views/Login.vue'
-import Settings from '../views/Settings.vue'
+import Automations from '../views/Automations.vue'
 
 Vue.use(VueRouter)
 
@@ -19,9 +19,9 @@ const routes = [
     component: Login
   },
   {
-    path: '/settings',
-    name: 'settings',
-    component: Settings
+    path: '/automations',
+    name: 'automations',
+    component: Automations
   }
 ]
 
