@@ -97,7 +97,7 @@
                         </template>
                         <v-card>
                           <v-toolbar dark color="primary">
-                            <v-btn icon dark @click="dialog = false">
+                            <v-btn icon dark @click="rule_dialog = false">
                               <v-icon>mdi-close</v-icon>
                             </v-btn>
                             <v-toolbar-title>Rule</v-toolbar-title>
