@@ -19,7 +19,7 @@ function MyAddNode()
 {
   this.addInput("A","number");
   this.addInput("B","number");
-  this.addOutput("A+B","number");
+  this.addOutput("A-B","number");
   this.properties = { precision: 1 };
 }
 
@@ -48,7 +48,7 @@ function MyAddNode()
 {
   this.addInput("A","number");
   this.addInput("B","number");
-  this.addOutput("AxB","number");
+  this.addOutput("A*B","number");
   this.properties = { precision: 1 };
 }
 

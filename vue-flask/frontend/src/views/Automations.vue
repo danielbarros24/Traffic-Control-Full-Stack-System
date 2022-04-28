@@ -44,7 +44,7 @@
             >Automations</v-toolbar-title
           >
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" full-screen>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="secondary"
@@ -66,53 +66,7 @@
               </v-card-title>
 
               <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.name"
-                        label="Name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.gpio"
-                        label="GPIO"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-switch v-model="editedItem.state"></v-switch>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-dialog
-                        v-model="rule_dialog"
-                        fullscreen
-                        hide-overlay
-                        transition="dialog-bottom-transition"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                            Add Rule
-                          </v-btn>
-                        </template>
-                        <v-card>
-                          <v-toolbar dark color="primary">
-                            <v-btn icon dark @click="rule_dialog = false">
-                              <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                            <v-toolbar-title>Rule</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                            <v-toolbar-items>
-                              <v-btn dark text @click="dialog = false">
-                                Save
-                              </v-btn>
-                            </v-toolbar-items>
-                          </v-toolbar>
-                        </v-card>
-                      </v-dialog>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                <div id="drawflow" style="height: 500px; background-color: pink;"></div>
               </v-card-text>
 
               <v-card-actions>
@@ -162,7 +116,11 @@
 </template>
 
 <script>
-const transformJS = require("js-to-json-logic");
+import Drawflow from 'drawflow'
+import Vue from 'vue'
+
+import AddNode from '@/components/drawflow/nodes/AddNode'
+import ConstantNode from '@/components/drawflow/nodes/ConstantNode'
 
 export default {
   data: () => ({
@@ -185,7 +143,7 @@ export default {
       },
     ],
 
-    dialog: false,
+    dialog: true,
     rule_dialog: false,
     dialogDelete: false,
     headers: [
@@ -218,6 +176,8 @@ export default {
       gpio: 0,
       state: false,
     },
+
+    editor: null,
   }),
 
   computed: {
@@ -235,8 +195,19 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.initialize();
+
+    // Pass render Vue
+    let id = document.getElementById("drawflow");
+    this.editor = new Drawflow(id, Vue, this);
+    this.editor.start()
+
+    this.editor.registerNode('AddNode', AddNode, {}, {});
+    this.editor.registerNode('ConstantNode', ConstantNode, {}, {});
+
+    this.editor.addNode('Name', 2, 1, 200, 300, 'Class', {}, 'AddNode', 'vue');
+    this.editor.addNode('Name', 0, 1, 150, 300, 'Class', {}, 'ConstantNode', 'vue');
   },
 
   methods: {
