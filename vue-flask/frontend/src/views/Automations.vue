@@ -66,7 +66,9 @@
               </v-card-title>
 
               <v-card-text>
-                <div id="drawflow" style="height: 500px; background-color: pink;"></div>
+                <v-btn @click="createNodeClick">Hello</v-btn>
+
+                <ReteEditor />
               </v-card-text>
 
               <v-card-actions>
@@ -116,13 +118,12 @@
 </template>
 
 <script>
-import Drawflow from 'drawflow'
-import Vue from 'vue'
-
-import AddNode from '@/components/drawflow/nodes/AddNode'
-import ConstantNode from '@/components/drawflow/nodes/ConstantNode'
+import ReteEditor from '@/components/rete/ReteEditor'
 
 export default {
+  components: {
+    ReteEditor
+  },
   data: () => ({
     items: [
       {
@@ -195,22 +196,13 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     this.initialize();
-
-    // Pass render Vue
-    let id = document.getElementById("drawflow");
-    this.editor = new Drawflow(id, Vue, this);
-    this.editor.start()
-
-    this.editor.registerNode('AddNode', AddNode, {}, {});
-    this.editor.registerNode('ConstantNode', ConstantNode, {}, {});
-
-    this.editor.addNode('Name', 2, 1, 200, 300, 'Class', {}, 'AddNode', 'vue');
-    this.editor.addNode('Name', 0, 1, 150, 300, 'Class', {}, 'ConstantNode', 'vue');
   },
 
   methods: {
+    async createNodeClick() {
+    },
     handleClick(index) {
       this.items[index].click.call(this);
     },
@@ -309,3 +301,23 @@ export default {
   },
 };
 </script>
+
+<style>
+.node-editor {
+  text-align: left;
+  height: 100vh;
+  width: 100vw;
+}
+.node .control input, .node .input-control input {
+  width: 140px;
+}
+select, input {
+  width: 100%;
+  border-radius: 30px;
+  background-color: white;
+  padding: 2px 6px;
+  border: 1px solid #999;
+  font-size: 110%;
+  width: 170px;
+}
+</style>
