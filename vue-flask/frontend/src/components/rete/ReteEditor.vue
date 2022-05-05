@@ -24,7 +24,9 @@ export default {
   },
 
   async mounted() {
-    var numSocket = new Socket('Number value');
+    var numSocket = new Socket('Number');
+    var vehileSocket = new Socket('Vehicle');
+    var roadSocket = new Socket('Road');
 
     class NumControl extends Control {
       constructor(emitter, key, readonly) {
@@ -41,7 +43,87 @@ export default {
 
     class ConstantComponent extends Component {
         constructor(){
-            super("Constant");
+            super("Constante");
+        }
+
+        builder(node) {
+            var out1 = new Output('num', "number", numSocket);
+            return node
+              .addControl(new NumControl(this.editor, 'num'))
+              .addOutput(out1);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class TempoDePermanenciaComponent extends Component {
+        constructor(){
+            super("Tempo de permanência");
+        }
+
+        builder(node) {
+            var inp1 = new Input('str', "Vehicle", vehileSocket);
+            var inp2 = new Input('num', "In", numSocket);
+            var out = new Output('num', "Out", numSocket);
+
+            return node
+
+                .addInput(inp2)
+                .addInput(inp1)
+                .addControl(new NumControl(this.editor, 'num'))
+                .addOutput(out);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class FluxoComponent extends Component {
+        constructor(){
+            super("Fluxo");
+        }
+
+        builder(node) {
+
+            var inp1 = new Input('str', "Number of vehicles", vehileSocket);
+            var inp2 = new Input('num', "In", numSocket);
+            var out1 = new Output('Out', "Out", numSocket);
+
+            return node
+
+              .addInput(inp2)
+              .addInput(inp1)
+              .addOutput(out1);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class NumeroDeVeiculosComponent extends Component {
+        constructor(){
+            super("Número de veículos");
+        }
+
+        builder(node) {
+            var out1 = new Output('num', "Number", numSocket);
+            return node
+              .addControl(new NumControl(this.editor, 'num'))
+              .addOutput(out1);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class FilaComponent extends Component {
+        constructor(){
+            super("Fila");
         }
 
         builder(node) {
@@ -58,7 +140,7 @@ export default {
 
     class AddComponent extends Component {
         constructor(){
-            super("Add");
+            super("+");
         }
         
         builder(node) {
@@ -80,7 +162,7 @@ export default {
 
     class MultiplyComponent extends Component {
         constructor(){
-            super("Multiply");
+            super("x");
         }
         
         builder(node) {
@@ -102,7 +184,7 @@ export default {
 
     class DivisionComponent extends Component {
         constructor(){
-            super("Divide");
+            super("/");
         }
         
         builder(node) {
@@ -143,8 +225,180 @@ export default {
         }
     }
 
+    class DifferentThanComponent extends Component {
+        constructor(){
+            super("!=");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class GreaterThanComponent extends Component {
+        constructor(){
+            super(">");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class LessThanComponent extends Component {
+        constructor(){
+            super("<");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class GreaterThanOrEqualToComponent extends Component {
+        constructor(){
+            super(">=");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class LessThanOrEqualToComponent extends Component {
+        constructor(){
+            super("<=");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class ANDComponent extends Component {
+        constructor(){
+            super("AND");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class ORComponent extends Component {
+        constructor(){
+            super("OR");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class NOTComponent extends Component {
+        constructor(){
+            super("NOT");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+    
+
     var container = this.$refs.nodeEditor
-    var components = [new ConstantComponent(), new AddComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent()];
+    var components = [new ConstantComponent(), new TempoDePermanenciaComponent(), new FluxoComponent(), new NumeroDeVeiculosComponent(), 
+      new FilaComponent(), new AddComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
+      new DifferentThanComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
+      new ANDComponent(), new ORComponent(), new NOTComponent()];
     var editor = new NodeEditor('demo@0.1.0', container);
 
     editor.use(ConnectionPlugin);
@@ -170,13 +424,6 @@ export default {
     add.position = [500, 240];
     sub.position = [800, 240];
 
-    editor.addNode(n1);
-    editor.addNode(n2);
-    editor.addNode(add);
-    editor.addNode(sub);
-
-    editor.connect(n1.outputs.get('num'), add.inputs.get('num'));
-    editor.connect(n2.outputs.get('num'), add.inputs.get('num2'));
     editor.on('process nodecreated noderemoved connectioncreated connectionremoved', async () => {
       console.log('process');
         await engine.abort();
@@ -194,8 +441,7 @@ export default {
 <style>
 .node-editor {
   text-align: left;
-  height: 100vh;
-  width: 100vw;
+  overflow: hidden;
 }
 .node .control input, .node .input-control input {
   width: 140px;
