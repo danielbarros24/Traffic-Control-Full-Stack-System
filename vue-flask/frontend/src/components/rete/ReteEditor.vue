@@ -24,7 +24,7 @@ export default {
   },
 
   async mounted() {
-    var numSocket = new Socket('Number');
+    var numSocket = new Socket('num');
     var vehileSocket = new Socket('Vehicle');
     var roadSocket = new Socket('Road');
 
@@ -76,7 +76,7 @@ export default {
                 .addOutput(out);
         }
 
-        worker(node, inputs, outputs) {
+        worker(node, outputs) {
             outputs['num'] = node.data.num;
         }
     }
@@ -90,16 +90,19 @@ export default {
 
             var inp1 = new Input('str', "Number of vehicles", vehileSocket);
             var inp2 = new Input('num', "In", numSocket);
+
+            var inp3 = new Input('num', "temp", numSocket);
             var out1 = new Output('Out', "Out", numSocket);
 
             return node
 
               .addInput(inp2)
               .addInput(inp1)
+              .addInput(inp3)
               .addOutput(out1);
         }
 
-        worker(node, inputs, outputs) {
+        worker(node, outputs) {
             outputs['num'] = node.data.num;
         }
     }
