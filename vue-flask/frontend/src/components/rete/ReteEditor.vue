@@ -100,8 +100,51 @@ export default {
         }
     }
 
+    class DivisionComponent extends Component {
+        constructor(){
+            super("Divide");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addControl(new NumControl(this.editor, 'preview', true))
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
+    class EqualToComponent extends Component {
+        constructor(){
+            super("=");
+        }
+        
+        builder(node) {
+            var inp1 = new Input('num',"Number", numSocket, true);
+            var out = new Output('num', "Number", numSocket);
+
+            return node
+                .addInput(inp1)
+                .addOutput(out);
+        }
+        
+        worker(node, inputs, outputs) {
+            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
+            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
+            outputs['num'] = sum;
+        }
+    }
+
     var container = this.$refs.nodeEditor
-    var components = [new ConstantComponent(), new AddComponent(), new MultiplyComponent()];
+    var components = [new ConstantComponent(), new AddComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent()];
     var editor = new NodeEditor('demo@0.1.0', container);
 
     editor.use(ConnectionPlugin);
@@ -120,6 +163,7 @@ export default {
     var n2 = await components[0].createNode({num: 0});
     var add = await components[1].createNode();
     var sub = await components[2].createNode();
+    
 
     n1.position = [80, 200];
     n2.position = [80, 400];
