@@ -25,8 +25,8 @@ export default {
 
   async mounted() {
     var numSocket = new Socket('num');
-    var vehileSocket = new Socket('Vehicle');
-    var roadSocket = new Socket('Road');
+    var vehileSocket = new Socket('vehicle');
+    var roadSocket = new Socket('road');
 
     class NumControl extends Control {
       constructor(emitter, key, readonly) {
@@ -41,13 +41,47 @@ export default {
       }
     }
 
-    class ConstantComponent extends Component {
+    class EndComponent extends Component {
         constructor(){
-            super("Constante");
+            super("End");
         }
 
         builder(node) {
-            var out1 = new Output('num', "number", numSocket);
+            var inp1 = new Input('num', "In", numSocket);
+            return node
+              .addInput(inp1);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class ZoneComponent extends Component {
+        constructor(){
+            super("Zone");
+        }
+
+        builder(node) {
+
+            var out1 = new Output('str', "Out", roadSocket);
+            return node
+              .addControl(new NumControl(this.editor, 'num'))
+              .addOutput(out1);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class TimeComponent extends Component {
+        constructor(){
+            super("Tempo (s)");
+        }
+
+        builder(node) {
+            var out1 = new Output('num', "Out", numSocket);
             return node
               .addControl(new NumControl(this.editor, 'num'))
               .addOutput(out1);
@@ -64,13 +98,11 @@ export default {
         }
 
         builder(node) {
-            var inp1 = new Input('str', "Vehicle", vehileSocket);
-            var inp2 = new Input('num', "In", numSocket);
+            var inp1 = new Input('str', "vehicle type", vehileSocket);
             var out = new Output('num', "Out", numSocket);
 
             return node
 
-                .addInput(inp2)
                 .addInput(inp1)
                 .addControl(new NumControl(this.editor, 'num'))
                 .addOutput(out);
@@ -87,18 +119,13 @@ export default {
         }
 
         builder(node) {
-
-            var inp1 = new Input('str', "Number of vehicles", vehileSocket);
-            var inp2 = new Input('num', "In", numSocket);
-
-            var inp3 = new Input('num', "temp", numSocket);
+            
+            var inp1 = new Input('str', "Zone", roadSocket);
             var out1 = new Output('Out', "Out", numSocket);
 
             return node
 
-              .addInput(inp2)
               .addInput(inp1)
-              .addInput(inp3)
               .addOutput(out1);
         }
 
@@ -113,7 +140,7 @@ export default {
         }
 
         builder(node) {
-            var out1 = new Output('num', "Number", numSocket);
+            var out1 = new Output('num', "Out", numSocket);
             return node
               .addControl(new NumControl(this.editor, 'num'))
               .addOutput(out1);
@@ -130,9 +157,29 @@ export default {
         }
 
         builder(node) {
-            var out1 = new Output('num', "Number", numSocket);
+
+            var inp1 = new Input('str', "Zone", roadSocket);
+            var out1 = new Output('num', "Out", numSocket);
             return node
-              .addControl(new NumControl(this.editor, 'num'))
+
+              .addInput(inp1)
+              .addOutput(out1);
+        }
+
+        worker(node, inputs, outputs) {
+            outputs['num'] = node.data.num;
+        }
+    }
+
+    class TipoDeVeiculoComponent extends Component {
+        constructor(){
+            super("Tipo de Veículo");
+        }
+
+        builder(node) {
+            var out1 = new Output('str', "Out", vehileSocket);
+            return node
+              .addControl(new NumControl(this.editor, 'Road'))
               .addOutput(out1);
         }
 
@@ -147,8 +194,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -169,8 +216,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -191,8 +238,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -213,8 +260,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -234,8 +281,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"Input", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -255,8 +302,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -276,9 +323,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
-
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
             return node
                 .addInput(inp1)
                 .addOutput(out);
@@ -297,8 +343,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -318,8 +364,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -339,8 +385,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -360,8 +406,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -381,8 +427,8 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Number", numSocket, true);
-            var out = new Output('num', "Number", numSocket);
+            var inp1 = new Input('num',"In", numSocket, true);
+            var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
@@ -398,10 +444,10 @@ export default {
     
 
     var container = this.$refs.nodeEditor
-    var components = [new ConstantComponent(), new TempoDePermanenciaComponent(), new FluxoComponent(), new NumeroDeVeiculosComponent(), 
+    var components = [new ZoneComponent(), new NumeroDeVeiculosComponent(), new TipoDeVeiculoComponent(), new TimeComponent(), new TempoDePermanenciaComponent(), new FluxoComponent(), 
       new FilaComponent(), new AddComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
       new DifferentThanComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
-      new ANDComponent(), new ORComponent(), new NOTComponent()];
+      new ANDComponent(), new ORComponent(), new NOTComponent(), new EndComponent()];
     var editor = new NodeEditor('demo@0.1.0', container);
 
     editor.use(ConnectionPlugin);

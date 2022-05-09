@@ -62,11 +62,132 @@
             </template>
             <v-card>
               <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
+                <span class="text-h4 font-weight-bold">{{ formTitle }}</span>
               </v-card-title>
 
               <v-card-text>
-                <v-btn @click="createNodeClick">Hello</v-btn>
+                <v-col cols="4" md="2" class="mr-5">
+                  <h2>Name</h2>
+                  <v-text-field
+                    v-model="AutomationName"
+                    label="Insert Automation Name Here!"
+                    required
+                  ></v-text-field>
+                </v-col>
+
+                <v-col cols="3" md="2">
+                  <div>
+                    <h2>Time</h2>
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="dateRangeText"
+                          label="Select date range"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="dates" range></v-date-picker>
+                    </v-menu>
+
+                    <v-menu
+                      ref="menu1"
+                      v-model="menuStart"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value.sync="time1"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="time1"
+                          label="Start Time"
+                          prepend-icon="mdi-clock-time-four-outline"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="menuStart"
+                        v-model="time1"
+                        format="24h"
+                        scrollable
+                        full-width
+                        @click:minute="$refs.menu1.save(time1)"
+                      ></v-time-picker>
+                    </v-menu>
+
+                    <v-menu
+                      ref="menu2"
+                      v-model="menuEnd"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value.sync="time2"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="time2"
+                          label="End Time"
+                          prepend-icon="mdi-clock-time-four-outline"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="menuEnd"
+                        v-model="time2"
+                        format="24h"
+                        scrollable
+                        full-width
+                        @click:minute="$refs.menu2.save(time2)"
+                      ></v-time-picker>
+                    </v-menu>
+                  </div>
+                </v-col>
+
+                <v-col cols="3" md="2">
+                  <div>
+                    <h2 class="mb-4">Output</h2>
+                    <div class="text-center d-flex justify-start">
+                      <v-menu offset-y>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn color="primary" dark v-bind="attrs" v-on="on">
+                            GPIOS
+                          </v-btn>
+                        </template>
+                        <v-list>
+                          <v-list-item
+                            v-for="(item, index) in GPIOS"
+                            :key="index"
+                            link
+                          >
+                            <v-list-item-title>{{
+                              item.title
+                            }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                    </div>
+                  </div>
+                </v-col>
 
                 <ReteEditor />
               </v-card-text>
@@ -118,11 +239,11 @@
 </template>
 
 <script>
-import ReteEditor from '@/components/rete/ReteEditor'
+import ReteEditor from "@/components/rete/ReteEditor";
 
 export default {
   components: {
-    ReteEditor
+    ReteEditor,
   },
   data: () => ({
     items: [
@@ -143,6 +264,20 @@ export default {
         },
       },
     ],
+
+    GPIOS: [
+      { title: "1" },
+      { title: "2" },
+      { title: "3" },
+      { title: "4" },
+      { title: "5" },
+      { title: "6" },
+    ],
+
+    time1: null,
+    time2: null,
+    menuStart: false,
+    menuEnd: false,
 
     dialog: true,
     rule_dialog: false,
@@ -201,8 +336,7 @@ export default {
   },
 
   methods: {
-    async createNodeClick() {
-    },
+    async createNodeClick() {},
     handleClick(index) {
       this.items[index].click.call(this);
     },
@@ -308,10 +442,12 @@ export default {
   height: 100vh;
   width: 100vw;
 }
-.node .control input, .node .input-control input {
+.node .control input,
+.node .input-control input {
   width: 140px;
 }
-select, input {
+select,
+input {
   width: 100%;
   border-radius: 30px;
   background-color: white;
