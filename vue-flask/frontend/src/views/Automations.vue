@@ -44,6 +44,7 @@
             >Automations</v-toolbar-title
           >
           <v-spacer></v-spacer>
+
           <v-dialog v-model="dialog" full-screen>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -60,147 +61,159 @@
                 <v-icon class="mr-3">mdi-plus</v-icon>Create automation
               </v-btn>
             </template>
-            <v-card>
+
+            <v-card overflow-hidden>
               <v-card-title>
                 <span class="text-h4 font-weight-bold">{{ formTitle }}</span>
               </v-card-title>
-
-              <v-card-text>
-                <v-col cols="4" md="2" class="mr-5">
-                  <h2>Name</h2>
-                  <v-text-field
-                    v-model="AutomationName"
-                    label="Insert Automation Name Here!"
-                    required
-                  ></v-text-field>
-                </v-col>
-
-                <v-col cols="3" md="2">
-                  <div>
-                    <h2>Time</h2>
-                    <v-menu
-                      v-model="menu2"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      transition="scale-transition"
-                      offset-y
-                      min-width="auto"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="dateRangeText"
-                          label="Select date range"
-                          prepend-icon="mdi-calendar"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-date-picker v-model="dates" range></v-date-picker>
-                    </v-menu>
-
-                    <v-menu
-                      ref="menu1"
-                      v-model="menuStart"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="time1"
-                      transition="scale-transition"
-                      offset-y
-                      max-width="290px"
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="time1"
-                          label="Start Time"
-                          prepend-icon="mdi-clock-time-four-outline"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="menuStart"
-                        v-model="time1"
-                        format="24h"
-                        scrollable
-                        full-width
-                        @click:minute="$refs.menu1.save(time1)"
-                      ></v-time-picker>
-                    </v-menu>
-
-                    <v-menu
-                      ref="menu2"
-                      v-model="menuEnd"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="time2"
-                      transition="scale-transition"
-                      offset-y
-                      max-width="290px"
-                      min-width="290px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-text-field
-                          v-model="time2"
-                          label="End Time"
-                          prepend-icon="mdi-clock-time-four-outline"
-                          readonly
-                          v-bind="attrs"
-                          v-on="on"
-                        ></v-text-field>
-                      </template>
-                      <v-time-picker
-                        v-if="menuEnd"
-                        v-model="time2"
-                        format="24h"
-                        scrollable
-                        full-width
-                        @click:minute="$refs.menu2.save(time2)"
-                      ></v-time-picker>
-                    </v-menu>
-                  </div>
-                </v-col>
-
-                <v-col cols="3" md="2">
-                  <div>
-                    <h2 class="mb-4">Output</h2>
-                    <div class="text-center d-flex justify-start">
-                      <v-menu offset-y>
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                            GPIOS
-                          </v-btn>
-                        </template>
-                        <v-list>
-                          <v-list-item
-                            v-for="(item, index) in GPIOS"
-                            :key="index"
-                            link
-                          >
-                            <v-list-item-title>{{
-                              item.title
-                            }}</v-list-item-title>
-                          </v-list-item>
-                        </v-list>
-                      </v-menu>
-                    </div>
-                  </div>
-                </v-col>
-
-                <ReteEditor />
-              </v-card-text>
-
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
+                <v-btn color="blue darken-1 mr-auto" text @click="save">
+                  Save
+                </v-btn>
+                <v-btn color="blue darken-1 mr-auto" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
               </v-card-actions>
+
+              <v-card-text>
+                <v-row>
+                  <v-col cols="4" md="2">
+                    <h2 class="mt-12">Name</h2>
+                    <v-text-field
+                      v-model="AutomationName"
+                      label="Insert Automation Name Here!"
+                      required
+                      class="mt-3 mb-6"
+                    ></v-text-field>
+
+                    <div>
+                      <h2>Time</h2>
+                      <v-menu
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="dateRangeText"
+                            label="Select date range"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            class="mt-3"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker v-model="dates" range></v-date-picker>
+                      </v-menu>
+
+                      <v-menu
+                        ref="menu1"
+                        v-model="menuStart"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="time1"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="time1"
+                            label="Start Time"
+                            prepend-icon="mdi-clock-time-four-outline"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-time-picker
+                          v-if="menuStart"
+                          v-model="time1"
+                          format="24h"
+                          scrollable
+                          full-width
+                          @click:minute="$refs.menu1.save(time1)"
+                        ></v-time-picker>
+                      </v-menu>
+
+                      <v-menu
+                        ref="menu2"
+                        v-model="menuEnd"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="time2"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="time2"
+                            label="End Time"
+                            prepend-icon="mdi-clock-time-four-outline"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                            class="mb-6"
+                          ></v-text-field>
+                        </template>
+                        <v-time-picker
+                          v-if="menuEnd"
+                          v-model="time2"
+                          format="24h"
+                          scrollable
+                          full-width
+                          @click:minute="$refs.menu2.save(time2)"
+                        ></v-time-picker>
+                      </v-menu>
+                    </div>
+
+                    <div>
+                      <h2>Outputs</h2>
+                      <v-row>
+                        <v-autocomplete
+                          v-model="gpiosValues"
+                          :items="gpios"
+                          chips
+                          deletable-chips
+                          multiple
+                          label="Select GPIOS as outputs"
+                          class="ml-3 mt-3 mb-6"
+                        >
+                          <template v-slot:item="{ item, on, attrs }">
+                            <v-list-item v-on="on" v-bind="attrs">
+                              <v-list-item-content>
+                                <v-list-item-title>
+                                  <v-chip dark color="primary">
+                                    {{ item }}
+                                  </v-chip>
+                                </v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </template>
+                        </v-autocomplete>
+                      </v-row>
+                    </div>
+
+                    <div>
+                      <h2>Enable</h2>
+                      <v-switch v-model="switch1"></v-switch>
+                    </div>
+                  </v-col>
+                  <v-col md="10">
+                    <ReteEditor />
+                  </v-col>
+                </v-row>
+              </v-card-text>
             </v-card>
           </v-dialog>
+
           <v-dialog v-model="dialogDelete" max-width="573px">
             <v-card>
               <v-card-title class="text-h5"
@@ -242,10 +255,42 @@
 import ReteEditor from "@/components/rete/ReteEditor";
 
 export default {
+  name: "AutoChips",
   components: {
     ReteEditor,
   },
   data: () => ({
+    gpios: [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+    ],
+    gpiosValues: [],
+    value: null,
+
     items: [
       {
         title: "Logout",
@@ -261,6 +306,14 @@ export default {
         click() {
           console.log("dashboard");
           this.$router.push("dashboard");
+        },
+      },
+      {
+        title: "Settings",
+        icon: "mdi-cogs",
+        click() {
+          console.log("settings");
+          this.$router.push("settings");
         },
       },
     ],

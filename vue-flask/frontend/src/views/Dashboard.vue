@@ -256,10 +256,18 @@ export default {
       },
       {
         title: "Automations",
-        icon: "mdi-cogs",
+        icon: "mdi-auto-fix",
         click() {
           console.log("automations");
           this.$router.push("automations");
+        },
+      },
+      {
+        title: "Settings",
+        icon: "mdi-cogs",
+        click() {
+          console.log("settings");
+          this.$router.push("settings");
         },
       },
     ],

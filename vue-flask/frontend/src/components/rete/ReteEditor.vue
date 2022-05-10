@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrapper"><div class="node-editor" ref="nodeEditor"></div></div>
-    <canvas id="canvasOutput"></canvas>
+    <canvas id="canvasOutput" class="canvas"></canvas>
   </div>
 </template>
 
@@ -98,13 +98,14 @@ export default {
         }
 
         builder(node) {
-            var inp1 = new Input('str', "vehicle type", vehileSocket);
+            var inp1 = new Input('str', "Vehicle type", vehileSocket);
+            var inp2 = new Input('num', "Zone", roadSocket)
             var out = new Output('num', "Out", numSocket);
 
             return node
 
                 .addInput(inp1)
-                .addControl(new NumControl(this.editor, 'num'))
+                .addInput(inp2)
                 .addOutput(out);
         }
 
@@ -121,11 +122,13 @@ export default {
         builder(node) {
             
             var inp1 = new Input('str', "Zone", roadSocket);
+            var inp2 = new Input('num', "Time", numSocket);
             var out1 = new Output('Out', "Out", numSocket);
 
             return node
 
               .addInput(inp1)
+              .addInput(inp2)
               .addOutput(out1);
         }
 
@@ -194,19 +197,16 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"In", numSocket, true);
+            var inp1 = new Input('num',"In1", numSocket, true);
             var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
-                .addControl(new NumControl(this.editor, 'preview', true))
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) => partialSum + a, 0);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -225,10 +225,8 @@ export default {
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum * a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -247,10 +245,8 @@ export default {
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -260,18 +256,18 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"In", numSocket, true);
+            var inp1 = new Input('num1',"In1", numSocket);
+            var inp2 = new Input('num2',"In2", numSocket);
             var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
+                .addInput(inp2)
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -281,18 +277,18 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"Input", numSocket, true);
+            var inp1 = new Input('num1',"In1", numSocket);
+            var inp2 = new Input('num2',"In2", numSocket);
             var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
+                .addInput(inp2)
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -302,18 +298,18 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"In", numSocket, true);
+            var inp1 = new Input('num1',"In1", numSocket);
+            var inp2 = new Input('num2',"In2", numSocket);
             var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
+                .addInput(inp2)
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -323,17 +319,17 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"In", numSocket, true);
+            var inp1 = new Input('num1',"In1", numSocket);
+            var inp2 = new Input('num2',"In2", numSocket);
             var out = new Output('num', "Out", numSocket);
             return node
                 .addInput(inp1)
+                .addInput(inp2)
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -343,18 +339,18 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"In", numSocket, true);
+            var inp1 = new Input('num1',"In1", numSocket);
+            var inp2 = new Input('num2',"In2", numSocket);
             var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
+                .addInput(inp2)
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -364,18 +360,18 @@ export default {
         }
         
         builder(node) {
-            var inp1 = new Input('num',"In", numSocket, true);
+            var inp1 = new Input('num1',"In1", numSocket);
+            var inp2 = new Input('num2',"In2", numSocket);
             var out = new Output('num', "Out", numSocket);
 
             return node
                 .addInput(inp1)
+                .addInput(inp2)
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -393,10 +389,8 @@ export default {
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -414,10 +408,8 @@ export default {
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
 
@@ -435,14 +427,11 @@ export default {
                 .addOutput(out);
         }
         
-        worker(node, inputs, outputs) {
-            var sum = inputs['num'].reduce((partialSum, a) =>  partialSum / a, 1);
-            this.editor.nodes.find(n => n.id == node.id).controls.get('preview').setValue(sum);
-            outputs['num'] = sum;
+        worker(node, outputs) {
+            outputs['num'] = node.data.num;
         }
     }
     
-
     var container = this.$refs.nodeEditor
     var components = [new ZoneComponent(), new NumeroDeVeiculosComponent(), new TipoDeVeiculoComponent(), new TimeComponent(), new TempoDePermanenciaComponent(), new FluxoComponent(), 
       new FilaComponent(), new AddComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
@@ -503,5 +492,9 @@ select, input {
   border: 1px solid #999;
   font-size: 110%;
   width: 170px;
+}
+
+.canvas {
+    height: 1px;
 }
 </style>
