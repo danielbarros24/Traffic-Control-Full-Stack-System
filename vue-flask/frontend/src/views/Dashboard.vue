@@ -148,7 +148,7 @@
             ></v-checkbox>
             <v-checkbox
               v-on:click="LenghtOfStayGraph = !LenghtOfStayGraph"
-              label="Lenght of Stay"
+              label="Length of Stay"
               value="length"
               hide-details
             ></v-checkbox>

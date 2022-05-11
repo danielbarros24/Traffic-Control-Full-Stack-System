@@ -89,7 +89,6 @@
                     <div>
                       <h2>Time</h2>
                       <v-menu
-                        v-model="menu2"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         transition="scale-transition"
@@ -205,9 +204,16 @@
                       <h2>Enable</h2>
                       <v-switch v-model="switch1"></v-switch>
                     </div>
+
+                    <v-btn @click="onExport">Export</v-btn>
+
+                    <v-textarea v-model="editorJSON"></v-textarea>
+                    <v-btn @click="onEditorSync">Sync</v-btn>
+                    <v-btn @click="onEditorImport">Import</v-btn>
+
                   </v-col>
                   <v-col md="10">
-                    <ReteEditor />
+                    <ReteEditor v-model="editor" />
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -261,32 +267,32 @@ export default {
   },
   data: () => ({
     gpios: [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "10",
-      "11",
-      "12",
-      "13",
-      "14",
-      "15",
-      "16",
-      "17",
-      "18",
-      "19",
-      "20",
-      "21",
-      "22",
-      "23",
-      "24",
-      "25",
-      "26",
+      "GPIO 1",
+      "GPIO 2",
+      "GPIO 3",
+      "GPIO 4",
+      "GPIO 5",
+      "GPIO 6",
+      "GPIO 7",
+      "GPIO 8",
+      "GPIO 9",
+      "GPIO 10",
+      "GPIO 11",
+      "GPIO 12",
+      "GPIO 13",
+      "GPIO 14",
+      "GPIO 15",
+      "GPIO 16",
+      "GPIO 17",
+      "GPIO 18",
+      "GPIO 19",
+      "GPIO 20",
+      "GPIO 21",
+      "GPIO 22",
+      "GPIO 23",
+      "GPIO 24",
+      "GPIO 25",
+      "GPIO 26",
     ],
     gpiosValues: [],
     value: null,
@@ -318,21 +324,12 @@ export default {
       },
     ],
 
-    GPIOS: [
-      { title: "1" },
-      { title: "2" },
-      { title: "3" },
-      { title: "4" },
-      { title: "5" },
-      { title: "6" },
-    ],
-
     time1: null,
     time2: null,
     menuStart: false,
     menuEnd: false,
 
-    dialog: true,
+    dialog: false,
     rule_dialog: false,
     dialogDelete: false,
     headers: [
@@ -366,13 +363,20 @@ export default {
       state: false,
     },
 
+    dates: [],
+    switch1: false,
+    dateRangeText: '',
+    AutomationName: '',
+
     editor: null,
+    editorJSON: '',
+
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Automation" : "Edit Automation";
-    },
+    }
   },
 
   watch: {
@@ -485,28 +489,23 @@ export default {
       }
       this.close();
     },
+
+    async onExport() {
+      const editor = this.editor;
+      
+      const endNode = this.editor.nodes.find(node => node.name === 'End')
+      const endComponent = editor.getComponent('End')
+      
+      console.log(JSON.stringify(endComponent.toJsonLogic?.(endNode)))
+    },
+
+    async onEditorImport() {
+      await this.editor.fromJSON(JSON.parse(this.editorJSON));
+    },
+
+    async onEditorSync() {
+      this.editorJSON = JSON.stringify(await this.editor.toJSON())
+    }
   },
 };
 </script>
-
-<style>
-.node-editor {
-  text-align: left;
-  height: 100vh;
-  width: 100vw;
-}
-.node .control input,
-.node .input-control input {
-  width: 140px;
-}
-select,
-input {
-  width: 100%;
-  border-radius: 30px;
-  background-color: white;
-  padding: 2px 6px;
-  border: 1px solid #999;
-  font-size: 110%;
-  width: 170px;
-}
-</style>

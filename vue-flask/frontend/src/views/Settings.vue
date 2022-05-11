@@ -77,15 +77,12 @@
               MQTT Broker Configuration
             </v-card-subtitle>
 
-            <v-card-text>
-              <p class="text-h7 font-weight-regular">
-                Current IP: http://192.168.1.199
-              </p>
+            <v-card-text> 
               <p class="text-h6 font-weight-medium mt-8">
                 Change MQTT Broker IP
               </p>
               <v-form>
-                <v-text-field label="Set new broker IP" required></v-text-field>
+                <v-text-field label="Set new broker IP" required value="192.168.1.169"></v-text-field>
               </v-form>
             </v-card-text>
 

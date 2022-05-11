@@ -1,13 +1,10 @@
 <template>
-<input
-  type="Road"
-  :readonly="readonly"
-  :value="value"
-  @input="change($event)"
-  @dblclick.stop=""
-  @pointerdown.stop=""
-  @pointermove.stop=""
-/>
+<v-text-field
+  label="Regular"
+  placeholder="Placeholder"
+  solo
+  dense
+></v-text-field>
 </template>
 
 <script>
@@ -15,7 +12,7 @@ export default {
   props: ['readonly', 'emitter', 'ikey', 'getData', 'putData'],
   data() {
     return {
-      value: 0,
+      value: Math.floor(Math.random() * 50),
     }
   },
   methods: {
