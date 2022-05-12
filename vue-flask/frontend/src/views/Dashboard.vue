@@ -169,7 +169,7 @@
       </v-col>
 
       <v-col cols="6" md="10" no-gutters class="mt-13">
-        <v-row :align="align" no-gutters max-height="320">
+        <v-row no-gutters max-height="320">
           <v-expand-transition>
             <v-card
               class="d-flex ml-3 mb-6 pa-6"
@@ -196,7 +196,7 @@
           </v-expand-transition>
         </v-row>
 
-        <v-row :align="align" no-gutters max-height="320">
+        <v-row no-gutters max-height="320">
           <v-expand-transition>
             <v-card
               class="d-flex ml-3 pa-6"
@@ -280,6 +280,9 @@ export default {
     time2: null,
     menuStart: false,
     menuEnd: false,
+
+    menu1: null,
+    menu2: null,
 
     VehicleCountsGraph: false,
     TrafficFlowAnalysisGraph: false,

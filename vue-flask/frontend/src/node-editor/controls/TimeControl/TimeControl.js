@@ -1,10 +1,10 @@
 import Rete from "rete";
-import VueTextControl from "./TextControl.vue";
+import VueTimeControl from "./TimeControl.vue";
 
-export class TextControl extends Rete.Control {
+export class TimeControl extends Rete.Control {
   constructor(emitter, key, readonly) {
     super(key);
-    this.component = VueTextControl;
+    this.component = VueTimeControl;
     this.props = { emitter, ikey: key, readonly };
   }
 

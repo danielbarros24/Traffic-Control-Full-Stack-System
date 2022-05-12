@@ -5,6 +5,7 @@ import AreaPlugin from "rete-area-plugin";
 import KeyboardPlugin from 'rete-keyboard-plugin';
 
 import { AddComponent } from '@/node-editor/components/AddComponent'
+import { SubComponent } from '@/node-editor/components/SubComponent'
 import { ANDComponent } from '@/node-editor/components/ANDComponent'
 import { ConstantComponent } from '@/node-editor/components/ConstantComponent'
 import { DifferentThanComponent } from '@/node-editor/components/DifferentThanComponent'
@@ -30,7 +31,7 @@ import Rete from "rete";
 
 export default async function(container) {
     const components = [new ZoneComponent(), new NumeroDeVeiculosComponent(), new TipoDeVeiculoComponent(), new TimeComponent(), new TempoDePermanenciaComponent(), new FluxoComponent(), 
-        new FilaComponent(), new AddComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
+        new FilaComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
         new DifferentThanComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
         new ANDComponent(), new ORComponent(), new NOTComponent(), new ConstantComponent(), new EndComponent()];
   

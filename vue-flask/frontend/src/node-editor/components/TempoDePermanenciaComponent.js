@@ -1,20 +1,21 @@
 import Rete from "rete";
 import * as Socket from "../sockets";
 
+import { VehicleTypeControl } from "@/node-editor/controls/VehicleTypeControl/VehicleTypeControl";
+import { ZoneControl } from "@/node-editor/controls/ZoneControl/ZoneControl"
+
 export class TempoDePermanenciaComponent extends Rete.Component {
     constructor(){
         super("Tempo de permanência");
     }
 
     builder(node) {
-        var inp1 = new Rete.Input('str', "Vehicle type", Socket.vehicle);
-        var inp2 = new Rete.Input('num', "Zone", Socket.road);
         var out = new Rete.Output('num', "Out", Socket.number);
 
         return node
 
-            .addInput(inp1)
-            .addInput(inp2)
+            .addControl(new VehicleTypeControl(this.editor, 'str'))
+            .addControl(new ZoneControl(this.editor, 'str1'))
             .addOutput(out);
     }
 

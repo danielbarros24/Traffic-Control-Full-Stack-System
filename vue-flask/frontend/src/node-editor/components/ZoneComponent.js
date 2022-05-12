@@ -10,7 +10,7 @@ export class ZoneComponent extends Rete.Component {
 
     builder(node) {
 
-        var out1 = new Rete.Output('str', "Out", Socket.road);
+        var out1 = new Rete.Output('num', "Out", Socket.road);
         return node
           .addControl(new NumControl(this.editor, 'num'))
           .addOutput(out1);

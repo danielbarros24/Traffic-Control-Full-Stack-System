@@ -1,7 +1,6 @@
 <template>
-<v-text-field
-  label="Regular"
-  placeholder="Placeholder"
+<v-text-field class="d-flex justify-start mr-6"
+  placeholder="Add a number"
   solo
   dense
 ></v-text-field>

@@ -20,4 +20,28 @@ export class DifferentThanComponent extends Rete.Component {
     worker(node, inputs, outputs) {
         outputs['num'] = node.data.num;
     }
+
+    _inputToJsonLogic(node, name) {
+        const { inputs } = node;
+
+        const input = inputs.get(name)
+        const { connections } = input;
+
+        if (connections.length == 0) {
+            return {};
+        }
+
+        const connection = connections[0];
+        const connectionNode = connection.output.node;
+        const connectionComponent = this.editor.getComponent(connectionNode.name);
+
+        return connectionComponent.toJsonLogic?.(connectionNode);
+    }
+  
+    toJsonLogic(node) {
+        const json1 = this._inputToJsonLogic(node, 'num1')
+        const json2 = this._inputToJsonLogic(node, 'num2')
+
+        return {"!=" : [json1, json2]}
+    }
 }

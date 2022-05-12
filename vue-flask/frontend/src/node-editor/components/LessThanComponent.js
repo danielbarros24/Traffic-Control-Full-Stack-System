@@ -3,12 +3,12 @@ import * as Socket from "../sockets";
 
 export class LessThanComponent extends Rete.Component {
     constructor(){
-        super("<");
+        super("A<B");
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In1", Socket.number);
-        var inp2 = new Rete.Input('num2',"In2", Socket.number);
+        var inp1 = new Rete.Input('num1',"A", Socket.number);
+        var inp2 = new Rete.Input('num2',"B", Socket.number);
         var out = new Rete.Output('num', "Out", Socket.number);
         return node
             .addInput(inp1)
@@ -41,6 +41,6 @@ export class LessThanComponent extends Rete.Component {
         const json1 = this._inputToJsonLogic(node, 'num1')
         const json2 = this._inputToJsonLogic(node, 'num2')
 
-        return {">" : [json1, json2]}
+        return {"<" : [json1, json2]}
     }
 }

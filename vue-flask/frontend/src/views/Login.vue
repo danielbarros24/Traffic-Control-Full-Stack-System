@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-content>
+    <v-main>
       <v-container class="fill-height">
         <v-row align="center" justify="center">
           <v-col cols="7" md="4">
@@ -44,7 +44,7 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -118,17 +118,8 @@ export default {
 </script>
 
 <style>
-.v-content {
-  background: rgb(63, 154, 251);
-  background: radial-gradient(
-    circle,
-    rgba(63, 154, 251, 1) 0%,
-    rgba(140, 91, 251, 1) 45%,
-    rgba(126, 70, 252, 1) 100%
-  );
-}
 
-.v-card {
-  background: transparent;
-}
+
+
+
 </style>

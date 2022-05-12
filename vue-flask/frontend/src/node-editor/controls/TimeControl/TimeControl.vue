@@ -1,10 +1,9 @@
 <template>
-<input 
-  type="text" 
-  :readonly="readonly" 
-  :value="value" 
-  @input="change($event)"
-/>
+<v-text-field class="ml-1 mt-2 mr-16"
+  placeholder="Add duration in seconds"
+  solo
+  dense
+></v-text-field>
 </template>
 
 
@@ -32,7 +31,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 select, input {
   width: 100%;
   border-radius: 30px;

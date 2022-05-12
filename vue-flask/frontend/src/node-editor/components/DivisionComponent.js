@@ -18,4 +18,19 @@ export class DivisionComponent extends Rete.Component {
     worker(node, inputs, outputs) {
         outputs['num'] = node.data.num;
     }
+
+    toJsonLogic(node) {
+        const { inputs } = node;
+        
+        const inputNum = inputs.get('num1');
+        const { connections } = inputNum;
+
+        return {
+            "-": connections.map(connection => {
+                const connectionNode = connection.output.node;
+                const connectionComponent = this.editor.getComponent(connectionNode.name);
+                return connectionComponent.toJsonLogic?.(connectionNode)
+            })  
+        }  
+    }
 }
