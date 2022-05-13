@@ -14,7 +14,6 @@ export class FilaComponent extends Rete.Component {
         var out1 = new Rete.Output('num', "Out", Socket.number);
         return node
 
-          .addInput(inp1)
           .addControl(new ZoneControl(this.editor, 'num'))
           .addOutput(out1);
     }

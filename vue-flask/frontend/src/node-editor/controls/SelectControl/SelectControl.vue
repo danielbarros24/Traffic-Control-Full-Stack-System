@@ -1,20 +1,25 @@
 <template>
-  <v-text-field class="d-flex justify-start mr-6"
-    :placeholder="placeholder"
-    solo
-    dense
+  <v-select 
+    :items="items" 
     v-model="reteValue"
-  ></v-text-field>
+    solo
+  >
+  </v-select>
 </template>
+
 
 <script>
 export default {
-  props: ['readonly', 'emitter', 'ikey', 'getData', 'putData', 'placeholder'],
+  name: 'SelectControl',
+
+  props: ['emitter', 'ikey', "getData", "putData", "items"],
+
   data() {
     return {
-      value: 0,
-    }
+      value: ''
+    };
   },
+
   computed: {
     reteValue: {
       get() {
@@ -29,8 +34,9 @@ export default {
       }
     }
   },
+
   mounted() {
     this.value = this.getData(this.ikey);
-  }
-}
+  },
+};
 </script>

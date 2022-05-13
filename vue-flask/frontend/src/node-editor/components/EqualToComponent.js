@@ -9,7 +9,7 @@ export class EqualToComponent extends Rete.Component {
     builder(node) {
         var inp1 = new Rete.Input('num1',"A", Socket.number);
         var inp2 = new Rete.Input('num2',"B", Socket.number);
-        var out = new Rete.Output('num', "Out", Socket.number);
+        var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
             .addInput(inp1)

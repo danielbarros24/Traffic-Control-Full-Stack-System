@@ -4,6 +4,9 @@ import ContextMenuPlugin from "rete-context-menu-plugin";
 import AreaPlugin from "rete-area-plugin";
 import KeyboardPlugin from 'rete-keyboard-plugin';
 
+import router from '@/router'
+import vuetify from '@/plugins/vuetify'
+
 import { AddComponent } from '@/node-editor/components/AddComponent'
 import { SubComponent } from '@/node-editor/components/SubComponent'
 import { ANDComponent } from '@/node-editor/components/ANDComponent'
@@ -38,7 +41,12 @@ export default async function(container) {
     const editor = new Rete.NodeEditor("demo@0.1.0", container);
 
     editor.use(ConnectionPlugin);
-    editor.use(VueRenderPlugin);
+    editor.use(VueRenderPlugin, {
+        options: {
+          router,
+          vuetify
+        }
+    });
     editor.use(ContextMenuPlugin);
     editor.use(AreaPlugin);
     editor.use(KeyboardPlugin);

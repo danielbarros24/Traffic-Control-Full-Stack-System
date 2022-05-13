@@ -80,7 +80,7 @@
                   <v-col cols="4" md="2">
                     <h2 class="mt-12">Name</h2>
                     <v-text-field
-                      v-model="AutomationName"
+                      v-model="editedItem.name"
                       label="Insert Automation Name Here!"
                       required
                       class="mt-3 mb-6"
@@ -89,6 +89,7 @@
                     <div>
                       <h2>Time</h2>
                       <v-menu
+                        v-model="menu2"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         transition="scale-transition"
@@ -177,7 +178,7 @@
                       <h2>Outputs</h2>
                       <v-row>
                         <v-autocomplete
-                          v-model="gpiosValues"
+                          v-model="editedItem.gpios"
                           :items="gpios"
                           chips
                           deletable-chips
@@ -190,7 +191,7 @@
                               <v-list-item-content>
                                 <v-list-item-title>
                                   <v-chip dark color="primary">
-                                    {{ item }}
+                                    {{ item.text }}
                                   </v-chip>
                                 </v-list-item-title>
                               </v-list-item-content>
@@ -202,7 +203,7 @@
 
                     <div>
                       <h2>Enable</h2>
-                      <v-switch v-model="switch1"></v-switch>
+                      <v-switch v-model="editedItem.state"></v-switch>
                     </div>
 
                     <v-btn @click="onExport">Export</v-btn>
@@ -210,7 +211,6 @@
                     <v-textarea v-model="editorJSON"></v-textarea>
                     <v-btn @click="onEditorSync">Sync</v-btn>
                     <v-btn @click="onEditorImport">Import</v-btn>
-
                   </v-col>
                   <v-col md="10">
                     <ReteEditor v-model="editor" />
@@ -261,122 +261,110 @@
 import ReteEditor from "@/components/rete/ReteEditor";
 
 export default {
-  name: "AutoChips",
+  name: "Automations",
   components: {
     ReteEditor,
   },
-  data: () => ({
-    gpios: [
-      "GPIO 1",
-      "GPIO 2",
-      "GPIO 3",
-      "GPIO 4",
-      "GPIO 5",
-      "GPIO 6",
-      "GPIO 7",
-      "GPIO 8",
-      "GPIO 9",
-      "GPIO 10",
-      "GPIO 11",
-      "GPIO 12",
-      "GPIO 13",
-      "GPIO 14",
-      "GPIO 15",
-      "GPIO 16",
-      "GPIO 17",
-      "GPIO 18",
-      "GPIO 19",
-      "GPIO 20",
-      "GPIO 21",
-      "GPIO 22",
-      "GPIO 23",
-      "GPIO 24",
-      "GPIO 25",
-      "GPIO 26",
-    ],
-    gpiosValues: [],
-    value: null,
 
-    items: [
-      {
-        title: "Logout",
-        icon: "mdi-logout",
-        click() {
-          console.log("logout");
-          this.$router.push("/");
+  data() {
+    const gpios = [];
+    for (let i = 1; i  < 27; i++) {
+      gpios.push({
+        text: `GPIO ${i}`,
+        value: i
+      })
+    }
+
+    return {
+      gpios: gpios,
+      gpiosValues: [],
+      value: null,
+
+      items: [
+        {
+          title: "Logout",
+          icon: "mdi-logout",
+          click() {
+            console.log("logout");
+            this.$router.push("/");
+          },
         },
-      },
-      {
-        title: "Dashboard",
-        icon: "mdi-view-dashboard",
-        click() {
-          console.log("dashboard");
-          this.$router.push("dashboard");
+        {
+          title: "Dashboard",
+          icon: "mdi-view-dashboard",
+          click() {
+            console.log("dashboard");
+            this.$router.push("dashboard");
+          },
         },
-      },
-      {
-        title: "Settings",
-        icon: "mdi-cogs",
-        click() {
-          console.log("settings");
-          this.$router.push("settings");
+        {
+          title: "Settings",
+          icon: "mdi-cogs",
+          click() {
+            console.log("settings");
+            this.$router.push("settings");
+          },
         },
+      ],
+
+      dates: [],
+
+      time1: null,
+      time2: null,
+      menuStart: false,
+      menuEnd: false,
+      menu1: null,
+      menu2: null,
+
+      switch1: false,
+
+      AutomationName: "",
+      dialog: false,
+      rule_dialog: false,
+      dialogDelete: false,
+
+      headers: [
+        {
+          text: "",
+          value: "state",
+          sortable: false,
+          width: 0,
+        },
+        {
+          text: "Name",
+          align: "start",
+          value: "name",
+        },
+        { text: "Actions", value: "actions", sortable: false },
+      ],
+      automations: [],
+      editedIndex: -1,
+      editedItem: {
+        name: "",
+        rule: 0,
+        gpios: [],
+        state: false,
       },
-    ],
 
-    time1: null,
-    time2: null,
-    menuStart: false,
-    menuEnd: false,
-
-    dialog: false,
-    rule_dialog: false,
-    dialogDelete: false,
-    headers: [
-      {
-        text: "",
-        value: "state",
-        sortable: false,
-        width: 0,
+      defaultItem: {
+        name: "",
+        rule: 0,
+        gpios: [],
+        state: false,
       },
-      {
-        text: "Name",
-        align: "start",
-        value: "name",
-      },
-      { text: "Rule", value: "rule" },
-      { text: "GPIO Pin", value: "gpio" },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
-    automations: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      rule: 0,
-      gpio: 0,
-      state: false,
-    },
-    defaultItem: {
-      name: "",
-      rule: 0,
-      gpio: 0,
-      state: false,
-    },
 
-    dates: [],
-    switch1: false,
-    dateRangeText: '',
-    AutomationName: '',
-
-    editor: null,
-    editorJSON: '',
-
-  }),
+      editor: null,
+      editorJSON: "",
+    };
+  },
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Automation" : "Edit Automation";
-    }
+    },
+    dateRangeText() {
+      return this.dates.join(" ~ ");
+    },
   },
 
   watch: {
@@ -405,53 +393,161 @@ export default {
       this.automations = [
         {
           name: "Automation 1",
-          rule: 11,
-          gpio: 6,
           state: false,
-        },
-        {
-          name: "Automation 2",
-          rule: 6,
-          gpio: 9,
-          state: false,
-        },
-        {
-          name: "Automation 3",
-          rule: 7,
-          gpio: 16,
-          state: false,
-        },
-        {
-          name: "Automation 4",
-          rule: 12,
-          gpio: 12,
-          state: false,
-        },
-        {
-          name: "Automation 5",
-          rule: 10,
-          gpio: 16.0,
-          state: false,
-        },
-        {
-          name: "Automation 6",
-          rule: 3,
-          gpio: 19,
-          state: false,
-        },
-        {
-          name: "Automation 7",
-          rule: 8,
-          gpio: 1,
-          state: false,
+          gpios: [],
+          blueprint: {
+            id: "demo@0.1.0",
+            nodes: {
+              4: {
+                id: 4,
+                data: {},
+                inputs: {
+                  num1: {
+                    connections: [
+                      {
+                        node: 5,
+                        output: "num",
+                        data: {},
+                      },
+                      {
+                        node: 6,
+                        output: "num",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                outputs: {
+                  num: {
+                    connections: [
+                      {
+                        node: 9,
+                        input: "num1",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                position: [204.8333740234375, -356.75],
+                name: "+",
+              },
+              5: {
+                id: 5,
+                data: {
+                  num1: "25",
+                },
+                inputs: {},
+                outputs: {
+                  num: {
+                    connections: [
+                      {
+                        node: 4,
+                        input: "num1",
+                        data: {},
+                      },
+                      {
+                        node: 9,
+                        input: "num2",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                position: [-179.1666259765625, -156.75],
+                name: "Constant",
+              },
+              6: {
+                id: 6,
+                data: {
+                  type: "ALL",
+                },
+                inputs: {},
+                outputs: {
+                  num: {
+                    connections: [
+                      {
+                        node: 4,
+                        input: "num1",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                position: [-632.1666259765625, -397.75],
+                name: "Tempo de permanência",
+              },
+              9: {
+                id: 9,
+                data: {},
+                inputs: {
+                  num1: {
+                    connections: [
+                      {
+                        node: 4,
+                        output: "num",
+                        data: {},
+                      },
+                    ],
+                  },
+                  num2: {
+                    connections: [
+                      {
+                        node: 5,
+                        output: "num",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                outputs: {
+                  num: {
+                    connections: [
+                      {
+                        node: 10,
+                        input: "num",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                position: [575.0035706388225, -319.57509650521735],
+                name: "A>B",
+              },
+              10: {
+                id: 10,
+                data: {},
+                inputs: {
+                  num: {
+                    connections: [
+                      {
+                        node: 9,
+                        output: "num",
+                        data: {},
+                      },
+                    ],
+                  },
+                },
+                outputs: {},
+                position: [951.6885958661557, -262.21828330473755],
+                name: "End",
+              },
+            },
+          },
         },
       ];
     },
 
-    editItem(item) {
+    async editItem(item) {
       this.editedIndex = this.automations.indexOf(item);
       this.editedItem = Object.assign({}, item);
+
       this.dialog = true;
+
+      setTimeout(async () => {
+        const blueprint = this.editedItem.blueprint;
+        // import blueprint
+        await this.editor.fromJSON(blueprint);
+      }, 200);
     },
 
     deleteItem(item) {
@@ -481,22 +577,49 @@ export default {
       });
     },
 
-    save() {
+    async save() {
+      const editor = this.editor;
+
+      const blueprint = await editor.toJSON();
+
+      const endNode = this.editor.nodes.find((node) => node.name === "End");
+      const endComponent = editor.getComponent("End");
+
+      const logic = endComponent.toJsonLogic?.(endNode);
+
+      const automation = {
+        name: this.editedItem.name,
+        startTime: "1996-10-15T00:05:32.000Z",
+        endTime: "1997-10-15T00:05:32.000Z",
+        enable: this.editedItem.state,
+        gpios: this.editedItem.gpios,
+        rules: logic,
+        blueprint: blueprint,
+      };
+
+      const file = JSON.stringify(automation);
+
+      console.log(file);
+
+      // Enviar POST
+      // OK -> Fechas o dialog, atualizas a tabela
+
       if (this.editedIndex > -1) {
         Object.assign(this.automations[this.editedIndex], this.editedItem);
       } else {
         this.automations.push(this.editedItem);
       }
+
       this.close();
     },
 
     async onExport() {
       const editor = this.editor;
-      
-      const endNode = this.editor.nodes.find(node => node.name === 'End')
-      const endComponent = editor.getComponent('End')
-      
-      console.log(JSON.stringify(endComponent.toJsonLogic?.(endNode)))
+
+      const endNode = this.editor.nodes.find((node) => node.name === "End");
+      const endComponent = editor.getComponent("End");
+
+      console.log(JSON.stringify(endComponent.toJsonLogic?.(endNode)));
     },
 
     async onEditorImport() {
@@ -504,8 +627,8 @@ export default {
     },
 
     async onEditorSync() {
-      this.editorJSON = JSON.stringify(await this.editor.toJSON())
-    }
+      this.editorJSON = JSON.stringify(await this.editor.toJSON());
+    },
   },
 };
 </script>

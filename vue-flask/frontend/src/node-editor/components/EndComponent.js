@@ -7,7 +7,7 @@ export class EndComponent extends Rete.Component {
     }
 
     builder(node) {
-        var input = new Rete.Input('num', "Input", Socket.number);
+        var input = new Rete.Input('num', "Input", Socket.all);
         return node
           .addInput(input);
     }

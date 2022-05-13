@@ -11,7 +11,7 @@ export class NumeroDeVeiculosComponent extends Rete.Component {
     builder(node) {
         var out1 = new Rete.Output('num', "Out", Socket.number);
         return node
-          .addControl(new NumControl(this.editor, 'num'))
+          .addControl(new NumControl(this.editor, 'num', false, 'Number of vehicles'))
           .addOutput(out1);
     }
 

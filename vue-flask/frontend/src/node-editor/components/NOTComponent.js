@@ -8,8 +8,8 @@ export class NOTComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In", Socket.number);
-        var out = new Rete.Output('num', "Out", Socket.number);
+        var inp1 = new Rete.Input('num1',"In", Socket.boolean);
+        var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
             .addInput(inp1)

@@ -9,7 +9,7 @@ export class DifferentThanComponent extends Rete.Component {
     builder(node) {
         var inp1 = new Rete.Input('num1',"In1", Socket.number);
         var inp2 = new Rete.Input('num2',"In2", Socket.number);
-        var out = new Rete.Output('num', "Out", Socket.number);
+        var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
             .addInput(inp1)

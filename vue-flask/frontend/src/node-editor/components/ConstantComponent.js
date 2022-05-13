@@ -20,6 +20,6 @@ export class ConstantComponent extends Rete.Component {
     }
 
     toJsonLogic(node) {
-        return Math.floor(Math.random() * 100); //node.data.num1;
+        return node.data.num1;
     }
 }
