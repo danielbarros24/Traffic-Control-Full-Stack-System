@@ -14,10 +14,11 @@ export class TipoDeVeiculoComponent extends Rete.Component {
 
         return node
           .addControl(new SelectControl(this.editor, 'type', [
+            { text: 'All', value: 'ALL' },
             { text: 'Car', value: 'CAR' },
             { text: 'Truck', value: 'TRUCK' },
             { text: 'Motocycle', value: 'MOTO' }
-          ]))
+          ], "Vehicle Type"))
           .addOutput(out1);
     }
 

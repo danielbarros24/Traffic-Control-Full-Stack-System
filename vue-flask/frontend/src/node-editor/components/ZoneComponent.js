@@ -1,7 +1,7 @@
 import Rete from "rete";
 import * as Socket from "../sockets";
 
-import { NumControl } from '@/node-editor/controls/NumControl/NumControl'
+import { ZoneControl } from "../controls/ZoneControl/ZoneControl";
 
 export class ZoneComponent extends Rete.Component {
     constructor(){
@@ -12,7 +12,7 @@ export class ZoneComponent extends Rete.Component {
 
         var out1 = new Rete.Output('num', "Out", Socket.road);
         return node
-          .addControl(new NumControl(this.editor, 'num'))
+          .addControl(new ZoneControl(this.editor, 'num'))
           .addOutput(out1);
     }
 

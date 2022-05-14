@@ -2,7 +2,7 @@ import Rete from "rete";
 import VueSelectControl from "./SelectControl.vue";
 
 export class SelectControl extends Rete.Control {
-  constructor(emitter, key, items) {
+  constructor(emitter, key, items, placeholder) {
     super(key)
 
     this.component = VueSelectControl;
@@ -10,7 +10,8 @@ export class SelectControl extends Rete.Control {
     this.props = {
       emitter,
       ikey: key,
-      items
+      items,
+      placeholder
     };
   }
 

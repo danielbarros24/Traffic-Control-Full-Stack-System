@@ -18,7 +18,7 @@ export class TempoDePermanenciaComponent extends Rete.Component {
                 { text: 'Car', value: 'CAR' },
                 { text: 'Truck', value: 'TRUCK' },
                 { text: 'Motocycle', value: 'MOTO' }
-            ]))
+            ], "Vehicle Type"))
             .addControl(new ZoneControl(this.editor, 'zone'))
             .addOutput(out);
     }

@@ -268,11 +268,11 @@ export default {
 
   data() {
     const gpios = [];
-    for (let i = 1; i  < 27; i++) {
+    for (let i = 1; i < 27; i++) {
       gpios.push({
         text: `GPIO ${i}`,
-        value: i
-      })
+        value: i,
+      });
     }
 
     return {
@@ -587,10 +587,20 @@ export default {
 
       const logic = endComponent.toJsonLogic?.(endNode);
 
+      const dates = this.dates;
+      const both_dates = dates.toString().split('~');
+      const selectedDate = both_dates.toString().split(',')
+
+      const startHour = this.time1;
+      const endHour = this.time2;
+
+      const startTime = selectedDate[0] + 'T' + startHour + ':00.000Z';
+      const endTime = selectedDate[1] + 'T' + endHour + ':00.000Z';
+
       const automation = {
         name: this.editedItem.name,
-        startTime: "1996-10-15T00:05:32.000Z",
-        endTime: "1997-10-15T00:05:32.000Z",
+        startTime: startTime,
+        endTime: endTime,
         enable: this.editedItem.state,
         gpios: this.editedItem.gpios,
         rules: logic,
@@ -602,7 +612,7 @@ export default {
       console.log(file);
 
       // Enviar POST
-      // OK -> Fechas o dialog, atualizas a tabela
+      // OK -> Fechar o dialog, atualizar a tabela
 
       if (this.editedIndex > -1) {
         Object.assign(this.automations[this.editedIndex], this.editedItem);

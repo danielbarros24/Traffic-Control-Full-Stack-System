@@ -3,6 +3,8 @@
     :items="items" 
     v-model="reteValue"
     solo
+    class="mr-6"
+    :placeholder="placeholder"
   >
   </v-select>
 </template>
@@ -12,7 +14,7 @@
 export default {
   name: 'SelectControl',
 
-  props: ['emitter', 'ikey', "getData", "putData", "items"],
+  props: ['emitter', 'ikey', "getData", "putData", "items", "placeholder"],
 
   data() {
     return {
@@ -40,3 +42,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+
+.v-select {
+  width: 200px;
+}
+</style>
