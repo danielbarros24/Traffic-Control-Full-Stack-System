@@ -28,6 +28,8 @@ app = Flask(__name__)
 db_camera = TinyDB('database/camera_data.json')
 db_auth = TinyDB('database/auth.json')
 db_auto = TinyDB('database/automations.json')
+db_general = TinyDB('database/general_info.json')
+
 query = Query()
 
 # CORS
@@ -92,7 +94,7 @@ def login():
 
                 #if not is_safe_url(next):
                 #    return flask.abort(400)
-
+                print(username_el)
                 return redirect(url_for('index'))
                 
             return jsonify(status='Login unsuccessful! Please check your credentials.')
@@ -115,11 +117,9 @@ def automation():
 
     info = automation.get('info')
     rules = automation.get('rules')
-    data = automation.get('data')
 
     print("[INFO]: " + str(info))
     print("[RULES]: " + str(rules))
-    print("[DATA]: " + str(data))
 
     db_auto.insert(automation)
     #jsonLogic(rules, data)

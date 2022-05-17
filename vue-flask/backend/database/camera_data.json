@@ -1335,6 +1335,1167 @@
             "Vehicle": "Truck",
             "Zone": "T1-1",
             "Count": 424
+        },
+        "168": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T18:29:40.381Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "5"
+        },
+        "169": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T21:05:58.011Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "70"
+        },
+        "170": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T19:45:35.461Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "23"
+        },
+        "171": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T20:39:00.131Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "64"
+        },
+        "172": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:13:32.401415",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 445
+        },
+        "173": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:13:33.401737",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 231
+        },
+        "174": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:13:34.401992",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 466
+        },
+        "175": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:13:35.402266",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 26
+        },
+        "176": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:13:36.402525",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 496
+        },
+        "177": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:13:37.402753",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 362
+        },
+        "178": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T18:29:40.381Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "5"
+        },
+        "179": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T21:05:58.011Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "70"
+        },
+        "180": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T19:45:35.461Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "23"
+        },
+        "181": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T20:39:00.131Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "64"
+        },
+        "182": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:14:58.575976",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 331
+        },
+        "183": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:14:59.576229",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 442
+        },
+        "184": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:00.576485",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 352
+        },
+        "185": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:01.576769",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 466
+        },
+        "186": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:02.577029",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 491
+        },
+        "187": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:03.577301",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 181
+        },
+        "188": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:04.577556",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 225
+        },
+        "189": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:05.577805",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 28
+        },
+        "190": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:06.578006",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 159
+        },
+        "191": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:07.578257",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 1
+        },
+        "192": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:08.578519",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 262
+        },
+        "193": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:09.578783",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 140
+        },
+        "194": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:10.579049",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 63
+        },
+        "195": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:11.579299",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 302
+        },
+        "196": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:12.579928",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 196
+        },
+        "197": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:13.580199",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 440
+        },
+        "198": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:14.580462",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 406
+        },
+        "199": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:15.580713",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 33
+        },
+        "200": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:16.580917",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 424
+        },
+        "201": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:17.581119",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 282
+        },
+        "202": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:18.581352",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 216
+        },
+        "203": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:19.581806",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 496
+        },
+        "204": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:20.582067",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 291
+        },
+        "205": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:21.582280",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 2
+        },
+        "206": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:22.582534",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 129
+        },
+        "207": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:23.582801",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 19
+        },
+        "208": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:24.582996",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 264
+        },
+        "209": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:25.583224",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 39
+        },
+        "210": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T18:29:40.381Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "5"
+        },
+        "211": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T21:05:58.011Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "70"
+        },
+        "212": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T19:45:35.461Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "23"
+        },
+        "213": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T20:39:00.131Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "64"
+        },
+        "214": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:27.583776",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 461
+        },
+        "215": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:28.584041",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 327
+        },
+        "216": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:29.584305",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 234
+        },
+        "217": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:30.584595",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 132
+        },
+        "218": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:31.584879",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 109
+        },
+        "219": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:32.585154",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 108
+        },
+        "220": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:33.585410",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 387
+        },
+        "221": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:34.585679",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 266
+        },
+        "222": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:35.585937",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 76
+        },
+        "223": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:36.586235",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 150
+        },
+        "224": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:37.586496",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 313
+        },
+        "225": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:38.586773",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 158
+        },
+        "226": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:39.587035",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 148
+        },
+        "227": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:40.587270",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 149
+        },
+        "228": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:41.587515",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 482
+        },
+        "229": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:42.587734",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 269
+        },
+        "230": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:43.587936",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 337
+        },
+        "231": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:44.588208",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 315
+        },
+        "232": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:45.588479",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 25
+        },
+        "233": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:46.588703",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 99
+        },
+        "234": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:47.588983",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 129
+        },
+        "235": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:48.589241",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 233
+        },
+        "236": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:49.589665",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 299
+        },
+        "237": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:50.589888",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 239
+        },
+        "238": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:51.590146",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 279
+        },
+        "239": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:52.590402",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 115
+        },
+        "240": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:53.590653",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 188
+        },
+        "241": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:54.590921",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 449
+        },
+        "242": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:55.591122",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 397
+        },
+        "243": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:56.591318",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 283
+        },
+        "244": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:57.591526",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 331
+        },
+        "245": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:58.591748",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 122
+        },
+        "246": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:15:59.591996",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 412
+        },
+        "247": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:00.592199",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 277
+        },
+        "248": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:01.592452",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 183
+        },
+        "249": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:02.592675",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 34
+        },
+        "250": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:03.592902",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 200
+        },
+        "251": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:04.593139",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 71
+        },
+        "252": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:05.593392",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 136
+        },
+        "253": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:06.593854",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 138
+        },
+        "254": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:07.594134",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 13
+        },
+        "255": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:08.594382",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 243
+        },
+        "256": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:09.594616",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 121
+        },
+        "257": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:10.594887",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 235
+        },
+        "258": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:11.595111",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 425
+        },
+        "259": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:12.595315",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 322
+        },
+        "260": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:13.595509",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 410
+        },
+        "261": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:14.595780",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 463
+        },
+        "262": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:15.596002",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 489
+        },
+        "263": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:16.596178",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 405
+        },
+        "264": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:17.596419",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 426
+        },
+        "265": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:18.596691",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 289
+        },
+        "266": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:19.596919",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 177
+        },
+        "267": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:20.597359",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 64
+        },
+        "268": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:21.597562",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 294
+        },
+        "269": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:22.597820",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 244
+        },
+        "270": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:23.598072",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 498
+        },
+        "271": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:24.598324",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 329
+        },
+        "272": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:25.598555",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 186
+        },
+        "273": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:26.598776",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 74
+        },
+        "274": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:27.599056",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 290
+        },
+        "275": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:28.599275",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 291
+        },
+        "276": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:29.599521",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 396
+        },
+        "277": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:30.599744",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 237
+        },
+        "278": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:31.600010",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 113
+        },
+        "279": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:32.600266",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 235
+        },
+        "280": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:33.600513",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 381
+        },
+        "281": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:34.600781",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 412
+        },
+        "282": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:35.601003",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 43
+        },
+        "283": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:36.601206",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 256
+        },
+        "284": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:37.601409",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 13
+        },
+        "285": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:38.601692",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 306
+        },
+        "286": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:39.601929",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 486
+        },
+        "287": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:40.602345",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 223
+        },
+        "288": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:41.602617",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 261
+        },
+        "289": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:42.602876",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 54
+        },
+        "290": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:43.603493",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 280
+        },
+        "291": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:44.603760",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 441
+        },
+        "292": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:45.604008",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 463
+        },
+        "293": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:46.604241",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 272
+        },
+        "294": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:47.604506",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 445
+        },
+        "295": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:48.604734",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 467
+        },
+        "296": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T18:29:40.381Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "5"
+        },
+        "297": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T21:05:58.011Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "70"
+        },
+        "298": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T19:45:35.461Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "23"
+        },
+        "299": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T20:39:00.131Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "64"
+        },
+        "300": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:56.606648",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "301": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:56.606648",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 333
+        },
+        "302": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:57.606885",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "303": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:57.606885",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 419
+        },
+        "304": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:58.607123",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "305": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:58.607123",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 70
+        },
+        "306": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:59.607347",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "307": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:16:59.607347",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 301
+        },
+        "308": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:17:00.607578",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "309": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:17:00.607578",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 246
+        },
+        "310": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:17:01.607834",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "311": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:17:01.607834",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 276
+        },
+        "312": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:17:02.608065",
+            "Task": "Idle_Truck",
+            "Vehicle": "Truck",
+            "State": "true"
+        },
+        "313": {
+            "Cam": "T1",
+            "UtcTime": "2022-05-16T22:17:02.608065",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 288
         }
     }
 }
