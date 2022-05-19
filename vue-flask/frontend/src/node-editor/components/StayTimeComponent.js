@@ -2,11 +2,10 @@ import Rete from "rete";
 import * as Socket from "../sockets";
 
 import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
-import { ZoneControl } from "@/node-editor/controls/ZoneControl/ZoneControl"
 
-export class TempoDePermanenciaComponent extends Rete.Component {
+export class StayTimeComponent extends Rete.Component {
     constructor(){
-        super("Tempo de permanência");
+        super("Stay Time");
     }
 
     builder(node) {
@@ -19,7 +18,10 @@ export class TempoDePermanenciaComponent extends Rete.Component {
                 { text: 'Truck', value: 'TRUCK' },
                 { text: 'Motocycle', value: 'MOTO' }
             ], "Vehicle Type"))
-            .addControl(new ZoneControl(this.editor, 'zone'))
+            .addControl(new SelectControl(this.editor, 'type1', [
+                { text: 'Sensor 1 - Route 1', value: 'T1-1' },
+                { text: 'Sensor 1 - Route 2', value: 'T1-2' }
+            ], "Zone"))
             .addOutput(out);
     }
 
@@ -29,15 +31,7 @@ export class TempoDePermanenciaComponent extends Rete.Component {
 
     toJsonLogic(node) {
         const type = node.data.type;
-        const zone = node.data.zone;
-
-
-        /*
-        {
-            "stayTime": [ TYPE, ZONE ]
-        }
-        */
-
+        const zone = node.data.type1;
 
         return {
             "stayTime": [ type, zone ]

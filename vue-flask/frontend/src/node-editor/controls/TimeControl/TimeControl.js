@@ -11,4 +11,4 @@ export class TimeControl extends Rete.Control {
   setValue(val) {
     this.vueContext.value = val;
   }
-}
+} 

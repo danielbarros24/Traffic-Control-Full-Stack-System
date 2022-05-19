@@ -5,6 +5,7 @@
     solo
     class="mr-6"
     :placeholder="placeholder"
+    dense
   >
   </v-select>
 </template>

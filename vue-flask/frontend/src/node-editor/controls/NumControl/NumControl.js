@@ -12,4 +12,4 @@ export class NumControl extends Rete.Control {
   setValue(val) {
     this.vueContext.value = val;
   }
-}
+} 

@@ -2,15 +2,15 @@ import Rete from "rete";
 import * as Socket from "../sockets";
 
 import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
-import { NumControl } from '@/node-editor/controls/NumControl/NumControl'
 
-export class TipoDeVeiculoComponent extends Rete.Component {
+
+export class VehicleDetectionComponent extends Rete.Component {
     constructor(){
-        super("Tipo de Veículo");
+        super("Vehicle Detection");
     }
 
     builder(node) {
-        var out1 = new Rete.Output('num', "Out", Socket.vehicle);
+        var out1 = new Rete.Output('num', "Out", Socket.number);
 
         return node
           .addControl(new SelectControl(this.editor, 'type', [
@@ -19,6 +19,10 @@ export class TipoDeVeiculoComponent extends Rete.Component {
             { text: 'Truck', value: 'TRUCK' },
             { text: 'Motocycle', value: 'MOTO' }
           ], "Vehicle Type"))
+          .addControl(new SelectControl(this.editor, 'type1', [
+            { text: 'Sensor 1 - Route 1', value: 'T1-1' },
+            { text: 'Sensor 1 - Route 2', value: 'T1-2' }
+        ], "Zone"))
           .addOutput(out1);
     }
 
@@ -27,6 +31,11 @@ export class TipoDeVeiculoComponent extends Rete.Component {
     }
 
     toJsonLogic(node) {
-        return node.data.type;
+        const type = node.data.type;
+        const zone = node.data.type1;
+
+        return {
+            "vehicle detection": [zone, type]
+        }  
     }
 }

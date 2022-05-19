@@ -29,6 +29,7 @@ db_camera = TinyDB('database/camera_data.json')
 db_auth = TinyDB('database/auth.json')
 db_auto = TinyDB('database/automations.json')
 db_general = TinyDB('database/general_info.json')
+db_gpios = TinyDB('database/gpios.json')
 
 query = Query()
 
@@ -116,9 +117,12 @@ def new_automation():
     automation = request.get_json()
     
     db_auto.insert(automation)
-
-    print("Automation inserted!")
+    gpios = automation.get("gpios") 
     
+    print("Automation inserted!")
+
+    db_gpios.update({'gpios': gpios})
+
     return jsonify(status='Success')
 
 
@@ -141,6 +145,9 @@ def update_automation():
 #####get automations########
 @app.get('/automation')
 def get_automation():
+    
+    gpios = db_gpios.get(query.gpios == 2)
+    print(gpios)
 
     automations = db_auto.all()
 
@@ -164,6 +171,16 @@ def delete_automation():
 
     return jsonify(status=res)
 
+#####get used GPIOs########
+@app.get('/pins')
+def get_used_pins():
+
+    data = db_general.all()
+    data_deserialized = json.loads(data)
+    gpios = data_deserialized.Used_GPIOs
+
+    print(gpios)  
+    return jsonify()
 
 @app.post("/dashboard")
 def chartData():
