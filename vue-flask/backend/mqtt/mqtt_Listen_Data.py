@@ -15,6 +15,10 @@ MQTT_Port = 1883
 Keep_Alive_Interval = 40
 n_sensors = 1
 
+# Server Credentials
+username = "daniel"
+password = "password"
+
 MQTT_Topics = []
 for i in range(n_sensors):
     j = i+1
@@ -22,10 +26,6 @@ for i in range(n_sensors):
 
 print(MQTT_Topics)
 # TOPICS
-
-# Server Credentials
-username = "daniel"
-password = "password"
 
 def mqtt_data_received (msg):
     print(

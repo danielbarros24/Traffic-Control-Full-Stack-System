@@ -73,7 +73,7 @@ def load_user(user_id) -> Optional[User]:
 def index():
     if 'username' in session:
         return f'Logged in as {session["username"]}'   
-    return jsonify(access='granted')
+    return jsonify(access='ok')
 
 ##### If not logged - LOGIN #######
 @app.route('/login', methods=['POST'])
@@ -108,24 +108,62 @@ def logout():
     return redirect(url_for('index'))
 
 
-
-
 ############# OTHER FUNCTIONS ################
+
+#####Create new automation########
 @app.post('/automation')
-def automation():
+def new_automation():
     automation = request.get_json()
-
-    info = automation.get('info')
-    rules = automation.get('rules')
-
-    print("[INFO]: " + str(info))
-    print("[RULES]: " + str(rules))
-
+    
     db_auto.insert(automation)
-    #jsonLogic(rules, data)
 
+    print("Automation inserted!")
     
     return jsonify(status='Success')
+
+
+#####Update automation########
+@app.patch('/automation')
+def update_automation():
+
+    automation = request.get_json()
+    automation_id = request.args.get('id')
+
+    if db_auto.contains(doc_id=int(automation_id)):    
+        db_auto.update(automation, doc_ids=[int(automation_id)])
+        res = "success"
+        print("Automation updated!")
+    else:
+        res = "not found" 
+
+    return jsonify(status=res)
+
+#####get automations########
+@app.get('/automation')
+def get_automation():
+
+    automations = db_auto.all()
+
+    for n in automations:
+        n["id"] = n.doc_id
+
+    print("Automations returned!")    
+    return jsonify(automations)
+
+#####delete automations########
+@app.delete('/automation')
+def delete_automation():
+
+    automation_id = request.args.get('id')
+    if db_auto.contains(doc_id=int(automation_id)):    
+        db_auto.remove(doc_ids=[int(automation_id)])
+        res = "success"
+        print("Automation deleted!")
+    else:
+        res = "not found" 
+
+    return jsonify(status=res)
+
 
 @app.post("/dashboard")
 def chartData():

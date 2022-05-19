@@ -250,7 +250,7 @@ export default {
         title: "Logout",
         icon: "mdi-logout",
         click() {
-          console.log("logout");
+          //console.log("logout");
           this.$router.push("/");
         },
       },

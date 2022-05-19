@@ -5,7 +5,7 @@
         <v-row align="center" justify="center">
           <v-col cols="7" md="4">
             <v-card class="elevation-12">
-              <v-window v-model="step">
+              <v-window>
                   <v-card-text class="pt-9 pl-10 pr-16 pb-10" flat>
                     <v-img
                       class="mb-12 mx-auto text-center"
@@ -33,9 +33,12 @@
                         color="deep-purple darken-3"
                         :rules="[v => !!v || 'You must type password!']"
                       />
-                      <v-btn to="/dashboard" rounded color="deep-purple darken-3" class="mt-4" block dark 
+                      <v-btn @click="postData()" rounded color="deep-purple darken-3" class="mt-4" block dark 
                       >SIGN IN</v-btn
                     >
+                    <v-text-field v-show="login" color="red">
+                      data
+                    </v-text-field>
                     </v-form>
 
                   </v-card-text>
@@ -49,46 +52,43 @@
 </template>
 
 <script>
-const baseURL = "http://127.0.0.1:5000";
 export default {
   data: () => ({
-    step: 1,
-    age: 11,
     username:'',
-    password:''
+    password:'',
+    login: false
   }),
   props: {
     source: String,
   },
 
   methods:{
-    signIn() {
-      console.log("Logged in")
-      this.$router.push("dashboard");
-    },
-    fortmatResponse(res) {
-      return JSON.stringify(res, null, 2);
-    },
     async postData() {
       const postData = {
         username: this.username,
         password: this.password,
-      };
+      }
       try {
-        const res = await fetch(`${baseURL}/login`, {
-          method: "post",
+        const res = await fetch("http://127.0.0.1:5000/login", {
+          method: "POST",
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json;charset=utf-8'
           },
           body: JSON.stringify(postData),
-        });
-        console.log(res)
-        if (!res.ok) {
-          const message = `An error has occured: ${res.status} - ${res.statusText}`;
-          throw new Error(message);
-        }
+        })
+
         const data = await res.json();
+        console.log(data)
+
+        if (data.access != "ok") {
+          const message = `An error has occured: ${res.status} - ${res.statusText}`;
+          throw new Error(message)
+        }
+        if(data.access == "ok") {
+          this.$router.push("dashboard")
+        }
+
         const result = {
           status: res.status + "-" + res.statusText,
           headers: {
@@ -108,18 +108,10 @@ export default {
   },
 
   async mounted() {
-    const response = await fetch(`${baseURL}/login`)
-
-    const data = await response.json()
-    console.log(data)
   }
 };
 
 </script>
 
 <style>
-
-
-
-
 </style>

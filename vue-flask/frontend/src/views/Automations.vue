@@ -44,24 +44,19 @@
             >Automations</v-toolbar-title
           >
           <v-spacer></v-spacer>
-
+          <v-btn
+            color="secondary"
+            depressed
+            elevation="4"
+            raised
+            mx-auto
+            rounded
+            dark
+            @click="createItem"
+          >
+            <v-icon class="mr-3">mdi-plus</v-icon>Create automation
+          </v-btn>
           <v-dialog v-model="dialog" full-screen>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                color="secondary"
-                depressed
-                elevation="4"
-                raised
-                mx-auto
-                rounded
-                dark
-                v-bind="attrs"
-                v-on="on"
-              >
-                <v-icon class="mr-3">mdi-plus</v-icon>Create automation
-              </v-btn>
-            </template>
-
             <v-card overflow-hidden>
               <v-card-title>
                 <span class="text-h4 font-weight-bold">{{ formTitle }}</span>
@@ -107,7 +102,10 @@
                             class="mt-3"
                           ></v-text-field>
                         </template>
-                        <v-date-picker v-model="dates" range></v-date-picker>
+                        <v-date-picker
+                          v-model="editedItem.dates"
+                          range
+                        ></v-date-picker>
                       </v-menu>
 
                       <v-menu
@@ -115,7 +113,7 @@
                         v-model="menuStart"
                         :close-on-content-click="false"
                         :nudge-right="40"
-                        :return-value.sync="time1"
+                        :return-value.sync="editedItem.startHour"
                         transition="scale-transition"
                         offset-y
                         max-width="290px"
@@ -123,7 +121,7 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="time1"
+                            v-model="editedItem.startHour"
                             label="Start Time"
                             prepend-icon="mdi-clock-time-four-outline"
                             readonly
@@ -133,11 +131,11 @@
                         </template>
                         <v-time-picker
                           v-if="menuStart"
-                          v-model="time1"
+                          v-model="editedItem.startHour"
                           format="24h"
                           scrollable
                           full-width
-                          @click:minute="$refs.menu1.save(time1)"
+                          @click:minute="$refs.menu1.save(editedItem.startHour)"
                         ></v-time-picker>
                       </v-menu>
 
@@ -146,7 +144,7 @@
                         v-model="menuEnd"
                         :close-on-content-click="false"
                         :nudge-right="40"
-                        :return-value.sync="time2"
+                        :return-value.sync="editedItem.endHour"
                         transition="scale-transition"
                         offset-y
                         max-width="290px"
@@ -154,7 +152,7 @@
                       >
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
-                            v-model="time2"
+                            v-model="editedItem.endHour"
                             label="End Time"
                             prepend-icon="mdi-clock-time-four-outline"
                             readonly
@@ -165,11 +163,11 @@
                         </template>
                         <v-time-picker
                           v-if="menuEnd"
-                          v-model="time2"
+                          v-model="editedItem.endHour"
                           format="24h"
                           scrollable
                           full-width
-                          @click:minute="$refs.menu2.save(time2)"
+                          @click:minute="$refs.menu2.save(editedItem.endHour)"
                         ></v-time-picker>
                       </v-menu>
                     </div>
@@ -203,7 +201,7 @@
 
                     <div>
                       <h2>Enable</h2>
-                      <v-switch v-model="editedItem.state"></v-switch>
+                      <v-switch v-model="editedItem.enable"></v-switch>
                     </div>
 
                     <v-btn @click="onExport">Export</v-btn>
@@ -239,9 +237,10 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:[`item.state`]="{ item }">
+      <template v-slot:[`item.enable`]="{ item }">
         <v-switch
-          v-model="item.state"
+          :input-value="item.enable"
+          @change="updateEnable($event, item)"
           hide-details
           class="ma-0 pa-0"
         ></v-switch>
@@ -250,15 +249,14 @@
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
-      </template>
     </v-data-table>
   </div>
 </template>
 
 <script>
 import ReteEditor from "@/components/rete/ReteEditor";
+import * as dayjs from 'dayjs'
+
 
 export default {
   name: "Automations",
@@ -307,10 +305,6 @@ export default {
         },
       ],
 
-      dates: [],
-
-      time1: null,
-      time2: null,
       menuStart: false,
       menuEnd: false,
       menu1: null,
@@ -322,11 +316,11 @@ export default {
       dialog: false,
       rule_dialog: false,
       dialogDelete: false,
-
+      
       headers: [
         {
           text: "",
-          value: "state",
+          value: "enable",
           sortable: false,
           width: 0,
         },
@@ -340,17 +334,27 @@ export default {
       automations: [],
       editedIndex: -1,
       editedItem: {
+        id: 0,
         name: "",
         rule: 0,
         gpios: [],
-        state: false,
+        enable: false,
+        dates: [],
+        startHour: "",
+        endHour: "",
+        blueprint: {},
       },
 
       defaultItem: {
+        id: 0,
         name: "",
         rule: 0,
         gpios: [],
-        state: false,
+        enable: false,
+        dates: [],
+        startHour: "",
+        endHour: "",
+        blueprint: {},
       },
 
       editor: null,
@@ -363,7 +367,7 @@ export default {
       return this.editedIndex === -1 ? "New Automation" : "Edit Automation";
     },
     dateRangeText() {
-      return this.dates.join(" ~ ");
+      return this.editedItem.dates.join(" ~ ");
     },
   },
 
@@ -377,7 +381,29 @@ export default {
   },
 
   async mounted() {
-    this.initialize();
+    const response = await fetch("http://127.0.0.1:5000/automation");
+    const json = await response.json();
+    this.automations = json.map((val) => {
+      const startTime = new Date(val.startTime);
+      const endTime = new Date(val.endTime);
+
+      delete val.startTime;
+      delete val.endTime;
+
+      val.dates = [
+        `${dayjs(startTime).format('YYYY')}-${
+          dayjs(startTime).format('MM')
+        }-${dayjs(startTime).format('DD')}`,
+        `${dayjs(endTime).format('YYYY')}-${
+          dayjs(endTime).format('MM')
+        }-${dayjs(endTime).format('DD')}`,
+      ];
+      val.startHour = `${dayjs(startTime).format('HH')}:${dayjs(startTime).format('mm')}`;
+      val.endHour = `${dayjs(endTime).format('HH')}:${dayjs(endTime).format('mm')}`;
+
+      return val;
+    });
+    
   },
 
   methods: {
@@ -387,154 +413,6 @@ export default {
     },
     clickLogo() {
       this.$router.push("dashboard");
-    },
-
-    initialize() {
-      this.automations = [
-        {
-          name: "Automation 1",
-          state: false,
-          gpios: [],
-          blueprint: {
-            id: "demo@0.1.0",
-            nodes: {
-              4: {
-                id: 4,
-                data: {},
-                inputs: {
-                  num1: {
-                    connections: [
-                      {
-                        node: 5,
-                        output: "num",
-                        data: {},
-                      },
-                      {
-                        node: 6,
-                        output: "num",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                outputs: {
-                  num: {
-                    connections: [
-                      {
-                        node: 9,
-                        input: "num1",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                position: [204.8333740234375, -356.75],
-                name: "+",
-              },
-              5: {
-                id: 5,
-                data: {
-                  num1: "25",
-                },
-                inputs: {},
-                outputs: {
-                  num: {
-                    connections: [
-                      {
-                        node: 4,
-                        input: "num1",
-                        data: {},
-                      },
-                      {
-                        node: 9,
-                        input: "num2",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                position: [-179.1666259765625, -156.75],
-                name: "Constant",
-              },
-              6: {
-                id: 6,
-                data: {
-                  type: "ALL",
-                },
-                inputs: {},
-                outputs: {
-                  num: {
-                    connections: [
-                      {
-                        node: 4,
-                        input: "num1",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                position: [-632.1666259765625, -397.75],
-                name: "Tempo de permanência",
-              },
-              9: {
-                id: 9,
-                data: {},
-                inputs: {
-                  num1: {
-                    connections: [
-                      {
-                        node: 4,
-                        output: "num",
-                        data: {},
-                      },
-                    ],
-                  },
-                  num2: {
-                    connections: [
-                      {
-                        node: 5,
-                        output: "num",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                outputs: {
-                  num: {
-                    connections: [
-                      {
-                        node: 10,
-                        input: "num",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                position: [575.0035706388225, -319.57509650521735],
-                name: "A>B",
-              },
-              10: {
-                id: 10,
-                data: {},
-                inputs: {
-                  num: {
-                    connections: [
-                      {
-                        node: 9,
-                        output: "num",
-                        data: {},
-                      },
-                    ],
-                  },
-                },
-                outputs: {},
-                position: [951.6885958661557, -262.21828330473755],
-                name: "End",
-              },
-            },
-          },
-        },
-      ];
     },
 
     async editItem(item) {
@@ -550,13 +428,24 @@ export default {
       }, 200);
     },
 
+    async createItem() {
+      this.dialog = true;
+      setTimeout(async () => {
+        await this.editor.clear();
+      }, 200);
+    },
+
     deleteItem(item) {
       this.editedIndex = this.automations.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
+    async deleteItemConfirm() {
+      const id = this.editedItem.id;
+      await fetch(`http://127.0.0.1:5000/automation?id=${id}`, {
+        method: "DELETE",
+      });
       this.automations.splice(this.editedIndex, 1);
       this.closeDelete();
     },
@@ -587,21 +476,19 @@ export default {
 
       const logic = endComponent.toJsonLogic?.(endNode);
 
-      const dates = this.dates;
-      const both_dates = dates.toString().split('~');
-      const selectedDate = both_dates.toString().split(',')
+      const dates = this.editedItem.dates;
 
-      const startHour = this.time1;
-      const endHour = this.time2;
+      const startHour = this.editedItem.startHour;
+      const endHour = this.editedItem.endHour;
 
-      const startTime = selectedDate[0] + 'T' + startHour + ':00.000Z';
-      const endTime = selectedDate[1] + 'T' + endHour + ':00.000Z';
+      const startTime = dates[0] + "T" + startHour + ":00.000Z";
+      const endTime = dates[1] + "T" + endHour + ":00.000Z";
 
       const automation = {
         name: this.editedItem.name,
         startTime: startTime,
         endTime: endTime,
-        enable: this.editedItem.state,
+        enable: this.editedItem.enable,
         gpios: this.editedItem.gpios,
         rules: logic,
         blueprint: blueprint,
@@ -611,16 +498,37 @@ export default {
 
       console.log(file);
 
-      // Enviar POST
-      // OK -> Fechar o dialog, atualizar a tabela
-
       if (this.editedIndex > -1) {
+        const id = this.editedItem.id;
+        await fetch(`http://127.0.0.1:5000/automation?id=${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: file,
+        });
         Object.assign(this.automations[this.editedIndex], this.editedItem);
       } else {
+        await fetch("http://127.0.0.1:5000/automation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: file,
+        });
         this.automations.push(this.editedItem);
       }
 
       this.close();
+    },
+
+    async updateEnable(event, item) {
+      const id = item.id;
+
+      await fetch(`http://127.0.0.1:5000/automation?id=${id}`, {
+      method: "PATCH",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        enable: !!event
+      })
+    });
+      
     },
 
     async onExport() {
