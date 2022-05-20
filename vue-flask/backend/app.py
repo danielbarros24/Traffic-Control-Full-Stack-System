@@ -20,6 +20,7 @@ import random
 import hashlib
 import requests
 import time
+import re
 
 app = Flask(__name__)
 
@@ -146,9 +147,6 @@ def update_automation():
 @app.get('/automation')
 def get_automation():
     
-    gpios = db_gpios.get(query.gpios == 2)
-    print(gpios)
-
     automations = db_auto.all()
 
     for n in automations:
@@ -175,12 +173,14 @@ def delete_automation():
 @app.get('/pins')
 def get_used_pins():
 
-    data = db_general.all()
-    data_deserialized = json.loads(data)
-    gpios = data_deserialized.Used_GPIOs
+    used_gpios = [query.get('gpios') for query in db_gpios.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
+    values = [int(s) for s in re.findall(r'\b\d+\b', str(used_gpios))]          #GETS VALUES IN RETURNED STRING
+    Total_pins = list(range(1, 27))             #CREATES ARRAY WITH ALL PINS (1 - 26)
+    for j in values:                            #REMOVES FROM ARRAY USED GPIOS
+        Total_pins.remove(j)
+    print(Total_pins)
 
-    print(gpios)  
-    return jsonify()
+    return jsonify(Total_pins)
 
 @app.post("/dashboard")
 def chartData():

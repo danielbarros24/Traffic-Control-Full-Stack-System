@@ -381,9 +381,9 @@ export default {
   },
 
   async mounted() {
-    const response = await fetch("http://127.0.0.1:5000/automation");
-    const json = await response.json();
-    this.automations = json.map((val) => {
+    const responseAutomations = await fetch("http://127.0.0.1:5000/automation");
+    const jsonAutomations = await responseAutomations.json();
+    this.automations = jsonAutomations.map((val) => {
       const startTime = new Date(val.startTime);
       const endTime = new Date(val.endTime);
 
@@ -403,6 +403,11 @@ export default {
 
       return val;
     });
+
+    const responseGpios = await fetch("http://127.0.0.1:5000/pins");
+    const jsonGpios = await responseGpios.json();
+    
+    console.log(jsonGpios)
     
   },
 

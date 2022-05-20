@@ -2,3 +2,7 @@ source venv/bin/activate
 
 (pip freeze > requirements.txt)
 pip install -r requirements.txt
+
+Para iniciar:
+    export FLASK_ENV=development
+    flask run
