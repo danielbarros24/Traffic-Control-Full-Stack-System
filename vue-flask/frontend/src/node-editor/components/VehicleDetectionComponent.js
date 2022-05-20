@@ -35,7 +35,7 @@ export class VehicleDetectionComponent extends Rete.Component {
         const zone = node.data.type1;
 
         return {
-            "vehicle detection": [zone, type]
+            "vehicleDetection": [zone, type]
         }  
     }
 }

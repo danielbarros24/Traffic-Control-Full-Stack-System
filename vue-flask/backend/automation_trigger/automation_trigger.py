@@ -8,6 +8,9 @@
 from tinydb import TinyDB, Query, where
 from datetime import datetime
 from dateutil import parser
+import pytz
+
+
 
 # DATABASE
 db_camera = TinyDB('../database/camera_data.json')
@@ -25,14 +28,23 @@ def compare_datetime(current_date, start_time, end_time):
 
 def get_available_automations():
 
+    utc=pytz.UTC
+
     docs = db_auto.search(where('enable') == True)
 
     current_date = datetime.now()
-    print(current_date)
-
+    current_date = current_date.replace(tzinfo=utc)
+    print('[CURRENT DATE] ' + str(current_date) + '\n')
+ 
     for doc in docs:
-
         startTime = parser.parse(doc.get('startTime'))
-        print(startTime)
+
+        endTime = parser.parse(doc.get('endTime'))
+
+        if(compare_datetime(current_date, startTime, endTime)):
+
+            rules = doc.get('rules')
+            print(rules) 
+
        
 get_available_automations()

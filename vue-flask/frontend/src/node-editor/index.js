@@ -25,7 +25,6 @@ import { NOTComponent } from '@/node-editor/components/NOTComponent'
 import { ORComponent } from '@/node-editor/components/ORComponent'
 import { StayTimeComponent } from '@/node-editor/components/StayTimeComponent'
 import { VehicleDetectionComponent } from '@/node-editor/components/VehicleDetectionComponent'
-import { VehiclesComponent } from '@/node-editor/components/VehiclesComponent'
 import { EndComponent } from '@/node-editor/components/EndComponent'
 import { DurationComponent } from '@/node-editor/components/DurationComponent'
 
@@ -34,7 +33,7 @@ import Rete from "rete";
 
 
 export default async function(container) {
-    const components = [  new VehiclesComponent(), new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), 
+    const components = [ new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), 
         new JamComponent(), new DurationComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
         new DifferentThanComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
         new ANDComponent(), new ORComponent(), new NOTComponent(), new ConstantComponent(), new EndComponent()];
