@@ -52,7 +52,7 @@
             mx-auto
             rounded
             dark
-            @click="createItem"
+            @click="createItem(); getPins();"
           >
             <v-icon class="mr-3">mdi-plus</v-icon>Create automation
           </v-btn>
@@ -176,8 +176,8 @@
                       <h2>Outputs</h2>
                       <v-row>
                         <v-autocomplete
-                          v-model="editedItem.gpios"
-                          :items="gpios"
+                          v-model="orderEditedGpios"
+                          :items="allGpios"
                           chips
                           deletable-chips
                           multiple
@@ -265,17 +265,9 @@ export default {
   },
 
   data() {
-    const gpios = [];
-    for (let i = 1; i < 27; i++) {
-      gpios.push({
-        text: `GPIO ${i}`,
-        value: i,
-      });
-    }
 
     return {
-      gpios: gpios,
-      gpiosValues: [],
+      gpios: [],
       value: null,
 
       items: [
@@ -369,6 +361,20 @@ export default {
     dateRangeText() {
       return this.editedItem.dates.join(" ~ ");
     },
+    allGpios() {
+      if(this.editedIndex < 0) {
+        return this.gpios.sort((a, b) => a.value - b.value)
+      }
+      return this.gpios.concat(this.automations[this.editedIndex].gpios.map(value => ({ text: `GPIO ${value}`, value: value }))).sort((a, b) => a.value - b.value)
+    },
+    orderEditedGpios: {
+      get() {
+        return this.editedItem.gpios.sort((a, b) => a - b)
+      },
+      set(value) {
+        this.editedItem.gpios = value
+      }
+    }
   },
 
   watch: {
@@ -391,23 +397,16 @@ export default {
       delete val.endTime;
 
       val.dates = [
-        `${dayjs(startTime).format('YYYY')}-${
-          dayjs(startTime).format('MM')
-        }-${dayjs(startTime).format('DD')}`,
-        `${dayjs(endTime).format('YYYY')}-${
-          dayjs(endTime).format('MM')
-        }-${dayjs(endTime).format('DD')}`,
+        `${dayjs(startTime).format('YYYY-MM-DD')}`,
+        `${dayjs(endTime).format('YYYY-MM-DD')}`,
       ];
-      val.startHour = `${dayjs(startTime).format('HH')}:${dayjs(startTime).format('mm')}`;
-      val.endHour = `${dayjs(endTime).format('HH')}:${dayjs(endTime).format('mm')}`;
+      val.startHour = `${dayjs(startTime).format('HH:mm')}`;
+      val.endHour = `${dayjs(endTime).format('HH:mm')}`;
 
       return val;
     });
 
-    const responseGpios = await fetch("http://127.0.0.1:5000/pins");
-    const jsonGpios = await responseGpios.json();
-    
-    console.log(jsonGpios)
+    this.getPins()
     
   },
 
@@ -418,6 +417,13 @@ export default {
     },
     clickLogo() {
       this.$router.push("dashboard");
+    },
+
+    async getPins() {
+      const responseGpios = await fetch("http://127.0.0.1:5000/pins");
+      const jsonGpios = await responseGpios.json();
+    
+      this.gpios = jsonGpios.map(value => ({ text: `GPIO ${value}`, value: value }))
     },
 
     async editItem(item) {
@@ -486,8 +492,8 @@ export default {
       const startHour = this.editedItem.startHour;
       const endHour = this.editedItem.endHour;
 
-      const startTime = dates[0] + "T" + startHour + ":00.000Z";
-      const endTime = dates[1] + "T" + endHour + ":00.000Z";
+      const startTime = dayjs(dates[0] + ' ' + startHour).toISOString();
+      const endTime = dayjs(dates[1] + ' ' +  endHour).toISOString();
 
       const automation = {
         name: this.editedItem.name,

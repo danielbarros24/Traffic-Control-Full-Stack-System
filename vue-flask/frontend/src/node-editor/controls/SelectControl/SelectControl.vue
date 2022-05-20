@@ -6,6 +6,7 @@
     class="mr-6"
     :placeholder="placeholder"
     dense
+    clearable
   >
   </v-select>
 </template>

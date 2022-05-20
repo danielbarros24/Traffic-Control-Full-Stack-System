@@ -13,12 +13,6 @@ export class VehiclesComponent extends Rete.Component {
         var out1 = new Rete.Output('num', "Out", Socket.number);
         return node
 
-          .addControl(new SelectControl(this.editor, 'type', [
-            { text: 'All', value: 'ALL' },
-            { text: 'Car', value: 'CAR' },
-            { text: 'Truck', value: 'TRUCK' },
-            { text: 'Motocycle', value: 'MOTO' }
-          ], "Vehicle Type"))
           .addControl(new NumControl(this.editor, 'num1', false, 'Number of vehicles'))
           .addOutput(out1);
     }

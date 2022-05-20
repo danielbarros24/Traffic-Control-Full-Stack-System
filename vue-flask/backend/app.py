@@ -24,13 +24,13 @@ import re
 
 app = Flask(__name__)
 
+total_pins = 26
 
 # DATABASE
 db_camera = TinyDB('database/camera_data.json')
 db_auth = TinyDB('database/auth.json')
 db_auto = TinyDB('database/automations.json')
 db_general = TinyDB('database/general_info.json')
-db_gpios = TinyDB('database/gpios.json')
 
 query = Query()
 
@@ -118,11 +118,8 @@ def new_automation():
     automation = request.get_json()
     
     db_auto.insert(automation)
-    gpios = automation.get("gpios") 
     
     print("Automation inserted!")
-
-    db_gpios.update({'gpios': gpios})
 
     return jsonify(status='Success')
 
@@ -160,7 +157,7 @@ def get_automation():
 def delete_automation():
 
     automation_id = request.args.get('id')
-    if db_auto.contains(doc_id=int(automation_id)):    
+    if db_auto.contains(doc_id=int(automation_id)):   
         db_auto.remove(doc_ids=[int(automation_id)])
         res = "success"
         print("Automation deleted!")
@@ -169,18 +166,27 @@ def delete_automation():
 
     return jsonify(status=res)
 
+
 #####get used GPIOs########
 @app.get('/pins')
 def get_used_pins():
 
-    used_gpios = [query.get('gpios') for query in db_gpios.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
-    values = [int(s) for s in re.findall(r'\b\d+\b', str(used_gpios))]          #GETS VALUES IN RETURNED STRING
-    Total_pins = list(range(1, 27))             #CREATES ARRAY WITH ALL PINS (1 - 26)
-    for j in values:                            #REMOVES FROM ARRAY USED GPIOS
+    used_gpios = [query.get('gpios') for query in db_auto.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
+   
+
+    used_gpios = [item for sublist in used_gpios for item in sublist]
+
+
+    Total_pins = list(range(1, 27))                                                         #CREATES ARRAY WITH ALL PINS (1 - 26)
+
+    for j in used_gpios:                                                                    #REMOVES FROM ARRAY USED GPIOS
         Total_pins.remove(j)
     print(Total_pins)
 
     return jsonify(Total_pins)
+
+
+
 
 @app.post("/dashboard")
 def chartData():

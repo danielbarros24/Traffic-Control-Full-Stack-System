@@ -19,6 +19,12 @@ export class FlowComponent extends Rete.Component {
               { text: 'Sensor 1 - Route 1', value: 'T1-1' },
               { text: 'Sensor 1 - Route 2', value: 'T1-2' }
           ], "Zone"))
+          .addControl(new SelectControl(this.editor, 'type', [
+            { text: 'All', value: 'ALL' },
+            { text: 'Car', value: 'CAR' },
+            { text: 'Truck', value: 'TRUCK' },
+            { text: 'Motocycle', value: 'MOTO' }
+          ], "Vehicle Type"))
           .addControl(new TimeControl(this.editor, 'str'))
           .addOutput(out1);
     }
