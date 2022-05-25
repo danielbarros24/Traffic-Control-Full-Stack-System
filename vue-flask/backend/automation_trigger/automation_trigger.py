@@ -9,7 +9,7 @@ from tinydb import TinyDB, Query, where
 from datetime import datetime
 from dateutil import parser
 import pytz
-
+from json_logic import jsonLogic
 
 
 # DATABASE
@@ -19,6 +19,8 @@ db_auto = TinyDB('../database/automations.json')
 db_general = TinyDB('../database/general_info.json')
 
 query = Query()
+
+startTime = ""
 
 def compare_datetime(current_date, start_time, end_time):
     if current_date > start_time and current_date < end_time:
@@ -44,7 +46,11 @@ def get_available_automations():
         if(compare_datetime(current_date, startTime, endTime)):
 
             rules = doc.get('rules')
-            print(rules) 
+            send_startTime()
+            jsonLogic(rules)
 
+def send_startTime():
+
+    return startTime
        
 get_available_automations()

@@ -34,10 +34,11 @@ export class FlowComponent extends Rete.Component {
     }
     toJsonLogic(node) {
         const zone = node.data.type1;
+        const vehicleType = node.data.type;
         const duration = node.data.str;
 
         return {
-            "flow": [ zone, duration ]
+            "flow": [ zone, vehicleType, duration ]
         }  
     }
 }

@@ -144,25 +144,42 @@
             "gpios": [
                 15
             ],
-            "rules": {},
+            "rules": {
+                ">": [
+                    {
+                        "flow": [
+                            "T1-1",
+                            "CAR",
+                            "300"
+                        ]
+                    },
+                    "50"
+                ]
+            },
             "blueprint": {
                 "id": "demo@0.1.0",
                 "nodes": {
                     "33": {
                         "id": 33,
                         "data": {
-                            "str": "",
+                            "str": "300",
                             "type": "CAR",
                             "type1": "T1-1"
                         },
                         "inputs": {},
                         "outputs": {
                             "num": {
-                                "connections": []
+                                "connections": [
+                                    {
+                                        "node": 34,
+                                        "input": "num1",
+                                        "data": {}
+                                    }
+                                ]
                             }
                         },
                         "position": [
-                            -1325.0716325731353,
+                            -1323.9829630658376,
                             -389.3229044797462
                         ],
                         "name": "Flow"
@@ -172,15 +189,33 @@
                         "data": {},
                         "inputs": {
                             "num1": {
-                                "connections": []
+                                "connections": [
+                                    {
+                                        "node": 33,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
                             },
                             "num2": {
-                                "connections": []
+                                "connections": [
+                                    {
+                                        "node": 38,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
                             }
                         },
                         "outputs": {
                             "num": {
-                                "connections": []
+                                "connections": [
+                                    {
+                                        "node": 36,
+                                        "input": "num",
+                                        "data": {}
+                                    }
+                                ]
                             }
                         },
                         "position": [
@@ -194,7 +229,13 @@
                         "data": {},
                         "inputs": {
                             "num": {
-                                "connections": []
+                                "connections": [
+                                    {
+                                        "node": 34,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
                             }
                         },
                         "outputs": {},
@@ -203,6 +244,29 @@
                             -204.48136881788912
                         ],
                         "name": "End"
+                    },
+                    "38": {
+                        "id": 38,
+                        "data": {
+                            "num1": "50"
+                        },
+                        "inputs": {},
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 34,
+                                        "input": "num2",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -1191.70761242011,
+                            10.946829382820624
+                        ],
+                        "name": "Constant"
                     }
                 }
             }
