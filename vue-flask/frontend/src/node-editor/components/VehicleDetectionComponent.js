@@ -17,7 +17,7 @@ export class VehicleDetectionComponent extends Rete.Component {
             { text: 'All', value: 'ALL' },
             { text: 'Car', value: 'CAR' },
             { text: 'Truck', value: 'TRUCK' },
-            { text: 'Motocycle', value: 'MOTO' }
+            { text: 'Bicycle', value: 'BICYCLE' }
           ], "Vehicle Type"))
           .addControl(new SelectControl(this.editor, 'type1', [
             { text: 'Sensor 1 - Route 1', value: 'T1-1' },

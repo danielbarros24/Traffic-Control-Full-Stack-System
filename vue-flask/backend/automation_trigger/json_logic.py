@@ -150,23 +150,22 @@ def missing_some(data, min_required, args):
 
 def function_vehicle_detection(zone, vehicleType):
 
-    docs = db_camera.search(where('Task') == 'Counter')
+    if vehicleType == 'CAR':
+        vehicle = 'Car'
+    elif vehicleType == 'TRUCK':
+        vehicle = 'Truck'
+    elif vehicleType == 'BICYCLE':
+        vehicle = 'Bicycle'              
 
+    start_time = '2022-05-16T19:45:35.461Z'
 
-    #docs_zone = docs.search(where('Zone') == 'T1-1')
+    if vehicleType == 'ALL':
+        docs = db_camera.search((query.Task == 'Counter') & (query.Zone == zone) & (query.UtcTime > start_time))
+    else:
+        docs = db_camera.search((query.Task == 'Counter') & (query.Vehicle == vehicle) & (query.Zone == zone) & (query.UtcTime > start_time))
 
-    #if vehicleType == 'ALL':
-    #    docs_vehicle = docs_zone.search(where('Vehicle') == 'Truck' | where('Vehicle') == 'Car' | where('Vehicle') == 'Bicycle') 
-
-    #else:
-    #    docs_vehicle = docs_zone.search(where('Vehicle') == vehicleType)
-    
-    #startTime = send_startTime()
-
-    print(f"Zone {zone} | Type: {vehicleType}")
-    #print(f"Start Time {startTime}\n")
-    #print(f"Data with vehicles: {docs_vehicle}\n")
-
+    for doc in docs:
+        print(doc)
 
     return 0
 
