@@ -68,15 +68,14 @@ def parse_mqtt_message(topic, message):
 
             input_json_db(json_message)
 
-        elif Topic_array[4] == 'Occupancy Counter':
+        elif Topic_array[4] == 'OccupancyCounter':
             Rule = msg_deserialized['Source']['Rule']
             Rule_split = Rule.split()
 
             json_message = {
                 "Cam": Topic_array[0],
                 "UtcTime": msg_deserialized['UtcTime'],
-                "Task": Topic_array[4],
-                "Vehicle": Rule_split[0],
+                "Task": "Jam Detection",
                 "Zone": Topic_array[0] + '-' + Rule_split[2],
                 "Count": msg_deserialized['Data']['Count'],
             }
@@ -98,7 +97,7 @@ def parse_mqtt_message(topic, message):
                 json_message = {
                     "Cam": Topic_array[0],
                     "UtcTime": msg_deserialized['UtcTime'],
-                    "Task": Topic_array[4],
+                    "Task": 'IdleObject',
                     "Vehicle": 'Truck',
                     "State": msg_deserialized['Data']['State'],
                 }
@@ -108,7 +107,7 @@ def parse_mqtt_message(topic, message):
                 json_message = {
                     "Cam": Topic_array[0],
                     "UtcTime": msg_deserialized['UtcTime'],
-                    "Task": Topic_array[4],
+                    "Task": 'IdleObject',
                     "Vehicle": 'Car',
                     "State": msg_deserialized['Data']['State'],
                 }

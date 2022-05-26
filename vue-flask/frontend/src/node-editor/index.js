@@ -27,6 +27,7 @@ import { StayTimeComponent } from '@/node-editor/components/StayTimeComponent'
 import { VehicleDetectionComponent } from '@/node-editor/components/VehicleDetectionComponent'
 import { EndComponent } from '@/node-editor/components/EndComponent'
 import { DurationComponent } from '@/node-editor/components/DurationComponent'
+import { CrowdDetectionComponent } from '@/node-editor/components/CrowdDetectionComponent'
 
 
 import Rete from "rete";
@@ -34,7 +35,7 @@ import Rete from "rete";
 
 export default async function(container) {
     const components = [ new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), 
-        new JamComponent(), new DurationComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
+        new JamComponent(), new CrowdDetectionComponent(), new DurationComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
         new DifferentThanComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
         new ANDComponent(), new ORComponent(), new NOTComponent(), new ConstantComponent(), new EndComponent()];
   

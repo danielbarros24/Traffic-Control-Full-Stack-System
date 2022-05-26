@@ -4,9 +4,9 @@ import * as Socket from "../sockets";
 import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
 
 
-export class JamComponent extends Rete.Component {
+export class CrowdDetectionComponent extends Rete.Component {
     constructor(){
-        super("Jam Detection");
+        super("Crowd Detection");
     }
 
     builder(node) {
@@ -15,8 +15,7 @@ export class JamComponent extends Rete.Component {
         return node
 
             .addControl(new SelectControl(this.editor, 'type1', [
-                { text: 'Sensor 1 - Route 1', value: 'T1-1' },
-                { text: 'Sensor 1 - Route 2', value: 'T1-2' }
+                { text: 'Sensor 1', value: 'T1' },
             ], "Zone"))
           .addOutput(out1);
     }
@@ -29,7 +28,7 @@ export class JamComponent extends Rete.Component {
         const zone = node.data.type1;
 
         return {
-            "jamDetection": zone
+            "crowdDetection": zone
         }  
     }
 }

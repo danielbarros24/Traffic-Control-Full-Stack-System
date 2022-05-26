@@ -4,10 +4,16 @@ from __future__ import unicode_literals
 #from automation_trigger import send_startTime
 
 import sys
+from tracemalloc import start
+from more_itertools import difference, first
 from six.moves import reduce
 import logging
 
+import array as arr
 from tinydb import TinyDB, Query, where
+
+from datetime import datetime
+from dateutil import parser
 
 db_camera = TinyDB('../database/camera_data.json')
 
@@ -82,6 +88,7 @@ def to_numeric(arg):
             return int(arg)
     return arg
 
+
 def plus(*args):
     """Sum converts either to ints or to floats."""
     return sum(to_numeric(arg) for arg in args)
@@ -148,34 +155,112 @@ def missing_some(data, min_required, args):
     return ret
 
 
-def function_vehicle_detection(zone, vehicleType):
-
+def set_vehicleType_name(vehicleType):
     if vehicleType == 'CAR':
-        vehicle = 'Car'
+        return 'Car'
     elif vehicleType == 'TRUCK':
-        vehicle = 'Truck'
+        return 'Truck'
     elif vehicleType == 'BICYCLE':
-        vehicle = 'Bicycle'              
+        return 'Bicycle'
+
+
+def function_vehicle_detection(zone, vehicleType):
+    vehicle = set_vehicleType_name(vehicleType)
+    start_time = '2022-05-16T19:45:35.461Z'
+
+    if vehicleType == 'ALL':
+        docs = db_camera.search((query.Task == 'Counter') & (
+            query.Zone == zone) & (query.UtcTime > start_time))
+    else:
+        docs = db_camera.search((query.Task == 'Counter') & (
+            query.Vehicle == vehicle) & (query.Zone == zone) & (query.UtcTime > start_time))
+
+    i = 0
+    for doc in docs:
+        i += 1
+        if i == 1:
+            first_count = doc.get('Count')
+        count = doc.get('Count')
+
+    #IMCOMPLETO    
+
+    return abs(count-first_count)
+
+
+def function_flow(zone, vehicleType, duration):    
+    vehicle = set_vehicleType_name(vehicleType)
+    start_time = '2022-05-16T19:45:35.461Z'
+
+    count_flow = 0
+    first_count = 0
+
+    if vehicleType == 'ALL':
+        docs = db_camera.search((query.Task == 'Counter') & (
+            query.Zone == zone) & (query.UtcTime > start_time))
+    else:
+        docs = db_camera.search((query.Task == 'Counter') & (query.Zone == zone) & (
+            query.Vehicle == vehicle) & (query.UtcTime > start_time))
+
+    i = 0
+    start_time = parser.parse(start_time)
+
+    for doc in docs:
+        doc_time = parser.parse(doc.get('UtcTime'))
+        amount = doc_time - start_time
+        
+        if(amount.total_seconds() > 400):
+            i += 1
+            if i == 1:
+                first_count = doc.get('Count')
+
+            count_flow = doc.get('Count')
+    
+    first_count = int(first_count) 
+    detected_vehicles = abs(count_flow - first_count)
+
+    print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
+    return count_flow - first_count 
+
+
+def function_stay_time(zone, vehicleType):
+    vehicle = set_vehicleType_name(vehicleType)
 
     start_time = '2022-05-16T19:45:35.461Z'
 
     if vehicleType == 'ALL':
-        docs = db_camera.search((query.Task == 'Counter') & (query.Zone == zone) & (query.UtcTime > start_time))
+        docs = db_camera.search(
+            (query.Task == 'IdleObject') & (query.UtcTime > start_time))
     else:
-        docs = db_camera.search((query.Task == 'Counter') & (query.Vehicle == vehicle) & (query.Zone == zone) & (query.UtcTime > start_time))
+        docs = db_camera.search((query.Task == 'IdleObject') & (
+            query.Vehicle == vehicle) & (query.UtcTime > start_time))
 
-    for doc in docs:
-        print(doc)
+    stayTime = 0
+    #IMCOMPLETO
+    return stayTime
 
-    return 0
+def function_jam_detection(zone):
+    start_time = '2022-05-16T19:45:35.461Z'
 
-def function_flow(zone, duration):
-    print(f"Zone {zone} | Type: {duration}")
-    return 0
+    docs = db_camera.search((query.Task == 'Jam Detection') & (query.UtcTime > start_time) & (query.Zone == zone))
 
-def function_stay_time(zone, vehicleType, duration):
-    print(f"Zone {zone} | Zone {vehicleType} | Type: {duration}")
-    return 0
+    jam = False
+    if docs:
+        jam = True
+        print("There is a JAM")
+
+    return jam
+
+def function_crowd_detection(zone):
+    start_time = '2022-05-16T19:45:35.461Z'
+
+    docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
+
+    crowd = False
+    if docs:
+        crowd = True
+
+    return crowd
+
 
 operations = {
     "==": soft_equals,
@@ -206,7 +291,9 @@ operations = {
     "count": lambda *args: sum(1 if a else 0 for a in args),
     "vehicleDetection": function_vehicle_detection,
     "flow": function_flow,
-    "stayTime": function_stay_time
+    "stayTime": function_stay_time,
+    "jamDetection": function_jam_detection,
+    "crowdDetection": function_crowd_detection
 }
 
 

@@ -36,7 +36,6 @@ def get_available_automations():
 
     current_date = datetime.now()
     current_date = current_date.replace(tzinfo=utc)
-    print('[CURRENT DATE] ' + str(current_date) + '\n')
  
     for doc in docs:
         startTime = parser.parse(doc.get('startTime'))

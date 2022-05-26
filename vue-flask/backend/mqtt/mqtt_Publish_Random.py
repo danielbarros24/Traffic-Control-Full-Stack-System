@@ -15,6 +15,8 @@ Keep_Alive_Interval = 45
 
 MQTT_Topic_RuleEngine = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Truck Counter 1"
 MQTT_Topic_IVA = "T1/onvif-ej/IVA/IdleObject/Idle_Truck/&1"
+MQTT_Topic_JamDetection = "T1/onvif-ej/RuleEngine/CountAgregation/OccupancyCounter/&1/Jam Detection 1"
+
 
 MQTT_Topic_VideoSource = "BoschCam1/onvif-ej/VideoSource/"
 MQTT_Topic_Device = "BoschCam1/onvif-ej/Device/"
@@ -67,9 +69,9 @@ def publish_Cam_Events_to_MQTT():
 	threading.Timer(1.0, publish_Cam_Events_to_MQTT).start()
 	UtcTime = datetime.now()
 	Count = random.randint(0,500)
-
+	UtcTime = UtcTime.isoformat() + 'Z'
 	Cam_Data_IVA = {
-		"UtcTime": UtcTime.isoformat(),
+		"UtcTime": UtcTime,
 		"Source":
 			{"Source": "1"},
 		"Data":
@@ -79,7 +81,7 @@ def publish_Cam_Events_to_MQTT():
 	publish_To_Topic (MQTT_Topic_IVA, Cam_Data_json)
 
 	Cam_Data_Rule = {
-		"UtcTime": UtcTime.isoformat(),
+		"UtcTime": UtcTime,
 		"Source":
 			{"VideoSource":"1","Rule":"Truck Counter 1"},
 		"Data":
@@ -87,6 +89,16 @@ def publish_Cam_Events_to_MQTT():
 	}
 	Cam_Data_json = json.dumps(Cam_Data_Rule)
 	publish_To_Topic (MQTT_Topic_RuleEngine, Cam_Data_json)
+
+	Cam_Data_Jam = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"VideoSource":"1","Rule":"Jam Detection 1"},
+		"Data":
+			{"Count":"0"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_JamDetection, Cam_Data_json)
 
 
 publish_Cam_Events_to_MQTT()
