@@ -22,6 +22,11 @@ query = Query()
 
 startTime = ""
 
+def pin_activator(pins):
+    
+    #activate_pins
+    return print("Activated pins: " + str(pins))
+
 def compare_datetime(current_date, start_time, end_time):
     if current_date > start_time and current_date < end_time:
         return True
@@ -47,6 +52,9 @@ def get_available_automations():
             rules = doc.get('rules')
             send_startTime()
             jsonLogic(rules)
+
+            pins = doc.get('gpios')
+            pin_activator(pins)
 
 def send_startTime():
 

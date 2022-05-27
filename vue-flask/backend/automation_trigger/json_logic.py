@@ -189,10 +189,10 @@ def function_vehicle_detection(zone, vehicleType):
 
 def function_flow(zone, vehicleType, duration):    
     vehicle = set_vehicleType_name(vehicleType)
-    start_time = '2022-05-16T19:45:35.461Z'
+    start_time = '2022-05-26T15:24:30.577383Z'
 
-    count_flow = 0
-    first_count = 0
+    count_flow = -1
+    first_count = -1
 
     if vehicleType == 'ALL':
         docs = db_camera.search((query.Task == 'Counter') & (
@@ -202,24 +202,38 @@ def function_flow(zone, vehicleType, duration):
             query.Vehicle == vehicle) & (query.UtcTime > start_time))
 
     i = 0
+    j = 0 
+    timeout = 0
     start_time = parser.parse(start_time)
+    first_duration = -1
 
     for doc in docs:
         doc_time = parser.parse(doc.get('UtcTime'))
         amount = doc_time - start_time
-        
-        if(amount.total_seconds() > 400):
-            i += 1
-            if i == 1:
-                first_count = doc.get('Count')
-
-            count_flow = doc.get('Count')
+        print(doc)
+        i += 1
+        if i == 1:
+            first_count = doc.get('Count')
+        if(amount.total_seconds() > int(duration)):
+            j += 1
+            if j == 1:
+                count_flow = doc.get('Count')
+                first_duration = amount.total_seconds()
+                timeout = 1
     
-    first_count = int(first_count) 
+    first_count = int(first_count)
+    count_flow = int(count_flow)
+
     detected_vehicles = abs(count_flow - first_count)
 
-    print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
-    return count_flow - first_count 
+    print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))    
+
+    if timeout == 1:
+        print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
+        return count_flow - first_count 
+    else:
+        print("No timeout")
+        return 0 
 
 
 def function_stay_time(zone, vehicleType):
