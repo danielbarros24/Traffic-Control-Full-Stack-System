@@ -15,7 +15,9 @@ from tinydb import TinyDB, Query, where
 from datetime import datetime
 from dateutil import parser
 
+
 db_camera = TinyDB('../database/camera_data.json')
+db_general = TinyDB('../database/general_info.json')
 
 query = Query()
 
@@ -29,6 +31,13 @@ else:
     # Python 2 fallback.
     str = unicode
 
+def set_vehicleType_name(vehicleType):
+    if vehicleType == 'CAR':
+        return 'Car'
+    elif vehicleType == 'TRUCK':
+        return 'Truck'
+    elif vehicleType == 'BICYCLE':
+        return 'Bicycle'
 
 def if_(*args):
     """Implements the 'if' operator with support for multiple elseif-s."""
@@ -155,18 +164,11 @@ def missing_some(data, min_required, args):
     return ret
 
 
-def set_vehicleType_name(vehicleType):
-    if vehicleType == 'CAR':
-        return 'Car'
-    elif vehicleType == 'TRUCK':
-        return 'Truck'
-    elif vehicleType == 'BICYCLE':
-        return 'Bicycle'
-
-
 def function_vehicle_detection(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
-    start_time = '2022-05-16T19:45:35.461Z'
+    #start_time = '2022-05-16T19:45:35.461Z'
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
 
     if vehicleType == 'ALL':
         docs = db_camera.search((query.Task == 'Counter') & (
@@ -181,15 +183,18 @@ def function_vehicle_detection(zone, vehicleType):
         if i == 1:
             first_count = doc.get('Count')
         count = doc.get('Count')
-
-    #IMCOMPLETO    
+   
+    first_count = int(first_count)
+    count = int(count)
 
     return abs(count-first_count)
 
 
 def function_flow(zone, vehicleType, duration):    
     vehicle = set_vehicleType_name(vehicleType)
-    start_time = '2022-05-26T15:24:30.577383Z'
+    #start_time = '2022-05-26T15:24:30.577383Z'
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
 
     count_flow = -1
     first_count = -1
@@ -210,7 +215,7 @@ def function_flow(zone, vehicleType, duration):
     for doc in docs:
         doc_time = parser.parse(doc.get('UtcTime'))
         amount = doc_time - start_time
-        print(doc)
+        
         i += 1
         if i == 1:
             first_count = doc.get('Count')
@@ -238,8 +243,9 @@ def function_flow(zone, vehicleType, duration):
 
 def function_stay_time(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
-
-    start_time = '2022-05-16T19:45:35.461Z'
+    #start_time = '2022-05-16T19:45:35.461Z'
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
 
     if vehicleType == 'ALL':
         docs = db_camera.search(
@@ -252,9 +258,13 @@ def function_stay_time(zone, vehicleType):
     #IMCOMPLETO
     return stayTime
 
-def function_jam_detection(zone):
-    start_time = '2022-05-16T19:45:35.461Z'
 
+def function_jam_detection(zone):
+    #start_time = '2022-05-16T19:45:35.461Z'
+
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
+    
     docs = db_camera.search((query.Task == 'Jam Detection') & (query.UtcTime > start_time) & (query.Zone == zone))
 
     jam = False
@@ -264,8 +274,12 @@ def function_jam_detection(zone):
 
     return jam
 
+
 def function_crowd_detection(zone):
-    start_time = '2022-05-16T19:45:35.461Z'
+    #start_time = '2022-05-16T19:45:35.461Z'
+
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
 
     docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
 

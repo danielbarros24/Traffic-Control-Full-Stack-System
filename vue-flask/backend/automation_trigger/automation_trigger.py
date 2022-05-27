@@ -10,7 +10,7 @@ from datetime import datetime
 from dateutil import parser
 import pytz
 from json_logic import jsonLogic
-
+import json
 
 # DATABASE
 db_camera = TinyDB('../database/camera_data.json')
@@ -33,7 +33,7 @@ def compare_datetime(current_date, start_time, end_time):
     else:
         return False
 
-def get_available_automations():
+def test_automations():
 
     utc=pytz.UTC
 
@@ -43,21 +43,19 @@ def get_available_automations():
     current_date = current_date.replace(tzinfo=utc)
  
     for doc in docs:
-        startTime = parser.parse(doc.get('startTime'))
+        raw_start_time = doc.get('startTime')
 
+        startTime = parser.parse(raw_start_time)
         endTime = parser.parse(doc.get('endTime'))
 
         if(compare_datetime(current_date, startTime, endTime)):
 
+            db_general.update({"start_time": "{}".format(raw_start_time)})
             rules = doc.get('rules')
-            send_startTime()
             jsonLogic(rules)
 
             pins = doc.get('gpios')
             pin_activator(pins)
 
-def send_startTime():
-
-    return startTime
-       
-get_available_automations()
+      
+test_automations()
