@@ -571,7 +571,8 @@ export default {
         this.editedItem.gpios != [] &&
         this.editedItem.startHour != "" &&
         this.editedItem.endHour != "" &&
-        this.editedItem.dates != []
+        this.editedItem.dates != [] &&
+        endNode != null
       ) {
         //console.log(JSON.stringify(endComponent.toJsonLogic?.(endNode)));
         this.incorrectConfig = false
