@@ -280,7 +280,7 @@ def function_crowd_detection(zone):
 
     time = [query.get('start_time') for query in db_general.all()]
     start_time = time[0]
-
+    
     docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
 
     crowd = False

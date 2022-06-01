@@ -14,14 +14,18 @@
                       max-width="160"
                     ></v-img>
 
-                    <v-form>
+                    <v-form ref="form"
+                      v-model="valid"
+                      lazy-validation>
                       <v-text-field
                         v-model="username"
                         label="Username"
                         name="username"
                         prepend-icon="mdi-account"
                         type="text"
-                        color="deep-purple darken-3"
+                        color="primary"
+                        required
+                        :rules="[v => !!v || 'You must type username!']"
                       />
                       <v-text-field
                         v-model="password"
@@ -30,15 +34,15 @@
                         name="password"
                         prepend-icon="key"
                         type="password"
-                        color="deep-purple darken-3"
+                        color="primary"
                         :rules="[v => !!v || 'You must type password!']"
                       />
-                      <v-btn @click="postData()" rounded color="deep-purple darken-3" class="mt-4" block dark 
+                      <v-btn @click="postData()" rounded color="primary" class="mt-4" block dark 
                       >SIGN IN</v-btn
                     >
-                    <v-text-field v-show="login" color="red">
-                      data
-                    </v-text-field>
+                    <p class="red--text mt-3 mr-6" v-show="invalidCredentials" >
+                      Invalid Credentials!
+                    </p>
                     </v-form>
 
                   </v-card-text>
@@ -56,7 +60,8 @@ export default {
   data: () => ({
     username:'',
     password:'',
-    login: false
+    valid: true,
+    invalidCredentials: false,
   }),
   props: {
     source: String,
@@ -64,6 +69,7 @@ export default {
 
   methods:{
     async postData() {
+      this.$refs.form.validate()
       const postData = {
         username: this.username,
         password: this.password,
@@ -82,6 +88,7 @@ export default {
         console.log(data)
 
         if (data.access != "ok") {
+          this.invalidCredentials = true
           const message = `An error has occured: ${res.status} - ${res.statusText}`;
           throw new Error(message)
         }

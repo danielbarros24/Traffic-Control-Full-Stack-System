@@ -255,11 +255,11 @@ export default {
         },
       },
       {
-        title: "Automations",
+        title: "Processes",
         icon: "mdi-auto-fix",
         click() {
-          console.log("automations");
-          this.$router.push("automations");
+          console.log("processes");
+          this.$router.push("processes");
         },
       },
       {

@@ -20,13 +20,14 @@ export default {
 <style>
 
 .v-main {
-  background: rgb(63, 154, 251);
-  background: radial-gradient(
-    circle,
-    rgba(63, 154, 251, 1) 0%,
-    rgba(140, 91, 251, 1) 45%,
-    rgba(126, 70, 252, 1) 100%
-  );
+  background-image: linear-gradient(
+  180deg,
+  hsl(200deg 100% 37%) 0%,
+  hsl(209deg 50% 60%) 70%,
+  hsl(211deg 49% 74%) 86%,
+  hsl(213deg 49% 87%) 93%,
+  hsl(0deg 0% 100%) 100%
+);
 }
 
 </style>
