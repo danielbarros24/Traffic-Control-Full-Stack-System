@@ -163,7 +163,7 @@ def missing_some(data, min_required, args):
                 return []
     return ret
 
-
+######################################## ---NEW FUNCTIONS--- ########################################
 def function_vehicle_detection(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
     #start_time = '2022-05-16T19:45:35.461Z'
@@ -270,7 +270,6 @@ def function_jam_detection(zone):
     jam = False
     if docs:
         jam = True
-        print("There is a JAM")
 
     return jam
 
@@ -282,7 +281,7 @@ def function_crowd_detection(zone):
     start_time = time[0]
     
     docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
-
+    
     crowd = False
     if docs:
         crowd = True

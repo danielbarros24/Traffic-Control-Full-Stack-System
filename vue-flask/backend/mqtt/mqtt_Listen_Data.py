@@ -19,12 +19,15 @@ n_sensors = 1
 username = "daniel"
 password = "password"
 
+new_data = 0
 MQTT_Topics = []
 for i in range(n_sensors):
     j = i+1
     MQTT_Topics.append("T" + str(j) + "/onvif-ej/#")
 
 print(MQTT_Topics)
+
+
 # TOPICS
 
 def mqtt_data_received (msg):
@@ -34,6 +37,7 @@ def mqtt_data_received (msg):
     print("[MQTT MESSAGE]: " + str(msg.payload))
     print('\n\n')
     parse_mqtt_message(msg.topic, msg.payload)
+    
 
 
 def input_json_db(json_message):
@@ -42,8 +46,8 @@ def input_json_db(json_message):
     database_insert(json.loads(json_message_serialized))
     print(
         "==========================DATA INSERTED IN DATABASE==========================" + "\n\n")
+    
 
-# Parses the Mqtt Topic
 
 
 def parse_mqtt_message(topic, message):

@@ -5,12 +5,15 @@
 #### Retorna true ou false -> se true coloca pino x a 1
 
 
-from tinydb import TinyDB, Query, where
-from datetime import datetime
-from dateutil import parser
-import pytz
-from json_logic import jsonLogic
 import json
+from datetime import datetime
+from turtle import update
+import pytz
+from dateutil import parser
+from tinydb import Query, TinyDB, where
+
+from json_logic import jsonLogic
+
 
 # DATABASE
 db_camera = TinyDB('../database/camera_data.json')
@@ -21,11 +24,6 @@ db_general = TinyDB('../database/general_info.json')
 query = Query()
 
 startTime = ""
-
-def pin_activator(pins):
-    
-    #activate_pins
-    return print("Activated pins: " + str(pins))
 
 def compare_datetime(current_date, start_time, end_time):
     if current_date > start_time and current_date < end_time:
@@ -41,7 +39,7 @@ def test_automations():
 
     current_date = datetime.now()
     current_date = current_date.replace(tzinfo=utc)
- 
+
     for doc in docs:
         raw_start_time = doc.get('startTime')
 
@@ -51,11 +49,18 @@ def test_automations():
         if(compare_datetime(current_date, startTime, endTime)):
 
             db_general.update({"start_time": "{}".format(raw_start_time)})
-            rules = doc.get('rules')
-            jsonLogic(rules)
+            rules = doc.get('rules') 
+            if jsonLogic(rules):
+                #doc.update({'enable': False})
+                #db_auto.update(doc)
+                
+                print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(doc.get('gpios')))
 
-            pins = doc.get('gpios')
-            pin_activator(pins)
 
-      
-test_automations()
+            
+
+while True:
+    
+    test_automations()
+
+    #Awaits until new data is received

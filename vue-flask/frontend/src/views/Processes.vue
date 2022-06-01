@@ -481,6 +481,10 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.correctConfig = false
+      this.incorrectConfig = false
+      this.notValidated = false
+      this.canSave = false
     },
 
     closeDelete() {
@@ -489,6 +493,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      
     },
 
     async save() {
@@ -509,6 +514,7 @@ export default {
 
         const startTime = dayjs(dates[0] + " " + startHour).toISOString();
         const endTime = dayjs(dates[1] + " " + endHour).toISOString();
+
 
         const automation = {
           name: this.editedItem.name,

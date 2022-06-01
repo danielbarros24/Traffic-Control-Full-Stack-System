@@ -3331,6 +3331,362 @@
             "Task": "Jam Detection",
             "Zone": "T1-1",
             "Count": "0"
+        },
+        "455": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "456": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "457": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "458": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "459": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "460": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "461": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "462": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "463": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:17:18.520Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4903"
+        },
+        "464": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:08:49.208Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "1905"
+        },
+        "465": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:14:07.258Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3927"
+        },
+        "466": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T15:57:05.796Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-2",
+            "Count": "0"
+        },
+        "467": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:33:20.096Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-1",
+            "Count": "0"
+        },
+        "468": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "469": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:09.772Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4904"
+        },
+        "470": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:08:49.208Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "1905"
+        },
+        "471": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:03.288Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3928"
+        },
+        "472": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T15:57:05.796Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-2",
+            "Count": "0"
+        },
+        "473": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:33:20.096Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-1",
+            "Count": "0"
+        },
+        "474": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "475": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:09.772Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4904"
+        },
+        "476": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:18.708Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "1906"
+        },
+        "477": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:03.288Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3928"
+        },
+        "478": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T15:57:05.796Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-2",
+            "Count": "0"
+        },
+        "479": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:33:20.096Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-1",
+            "Count": "0"
+        },
+        "480": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:21:25.438Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3929"
+        },
+        "481": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:23:08.737Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4905"
+        },
+        "482": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:25:23.738Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4906"
+        },
+        "483": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "484": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:27:55.817Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4907"
+        },
+        "485": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:18.708Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "1906"
+        },
+        "486": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:29:42.598Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3933"
+        },
+        "487": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T15:57:05.796Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-2",
+            "Count": "0"
+        },
+        "488": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:33:20.096Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-1",
+            "Count": "0"
+        },
+        "489": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "490": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:27:55.817Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4907"
+        },
+        "491": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:18.708Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "1906"
+        },
+        "492": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:29:42.598Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3933"
+        },
+        "493": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T15:57:05.796Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-2",
+            "Count": "0"
+        },
+        "494": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:33:20.096Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-1",
+            "Count": "0"
+        },
+        "495": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:00:42.550Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": "869"
+        },
+        "496": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:27:55.817Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-2",
+            "Count": "4907"
+        },
+        "497": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:19:18.708Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-2",
+            "Count": "1906"
+        },
+        "498": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T18:29:42.598Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": "3933"
+        },
+        "499": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T15:57:05.796Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-2",
+            "Count": "0"
+        },
+        "500": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-01T17:33:20.096Z",
+            "Task": "Jam Detection",
+            "Zone": "T1-1",
+            "Count": "0"
         }
     }
 }
