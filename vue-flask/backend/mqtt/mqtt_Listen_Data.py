@@ -35,7 +35,7 @@ def mqtt_data_received (msg):
         "=============================MQTT DATA RECEIVED==============================")
     print("[MQTT TOPIC]: " + msg.topic)
     print("[MQTT MESSAGE]: " + str(msg.payload))
-    print('\n\n')
+    print('\n')
     parse_mqtt_message(msg.topic, msg.payload)
     
 
@@ -45,7 +45,7 @@ def input_json_db(json_message):
     print("[DATABASE INPUT]: " + str(json_message_serialized))
     database_insert(json.loads(json_message_serialized))
     print(
-        "==========================DATA INSERTED IN DATABASE==========================" + "\n\n")
+        "==========================DATA INSERTED IN DATABASE==========================" + "\n\n\n")
     
 
 
@@ -87,35 +87,44 @@ def parse_mqtt_message(topic, message):
             input_json_db(json_message)
 
     elif Topic_array[2] == 'IVA':
-        if msg_deserialized['Data']['State'] == 'true':
-            if Topic_array[2] == 'CrowdDetection':
-                json_message = {
-                    "Cam": Topic_array[0],
-                    "UtcTime": msg_deserialized['UtcTime'],
-                    "Task": 'Crowd Detection',
-                    "State": msg_deserialized['Data']['State'],
-                }
-                input_json_db(json_message)
+        if Topic_array[3] == 'CrowdDetection':
+            json_message = {
+                "Cam": Topic_array[0],
+                "UtcTime": msg_deserialized['UtcTime'],
+                "Task": 'Crowd Detection',
+                "State": msg_deserialized['Data']['State'],
+            }
+            input_json_db(json_message)
 
-            if Topic_array[4] == 'Idle_Truck':
-                json_message = {
-                    "Cam": Topic_array[0],
-                    "UtcTime": msg_deserialized['UtcTime'],
-                    "Task": 'IdleObject',
-                    "Vehicle": 'Truck',
-                    "State": msg_deserialized['Data']['State'],
-                }
-                input_json_db(json_message)
+        if Topic_array[4] == 'Idle_Truck':
+            json_message = {
+                "Cam": Topic_array[0],
+                "UtcTime": msg_deserialized['UtcTime'],
+                "Task": 'IdleObject',
+                "Vehicle": 'Truck',
+                "State": msg_deserialized['Data']['State'],
+            }
+            input_json_db(json_message)
 
-            if Topic_array[4] == 'Idle_Car':
-                json_message = {
-                    "Cam": Topic_array[0],
-                    "UtcTime": msg_deserialized['UtcTime'],
-                    "Task": 'IdleObject',
-                    "Vehicle": 'Car',
-                    "State": msg_deserialized['Data']['State'],
-                }
-                input_json_db(json_message)
+        if Topic_array[4] == 'Idle_Car':
+            json_message = {
+                "Cam": Topic_array[0],
+                "UtcTime": msg_deserialized['UtcTime'],
+                "Task": 'IdleObject',
+                "Vehicle": 'Car',
+                "State": msg_deserialized['Data']['State'],
+            }
+            input_json_db(json_message)
+
+        if Topic_array[4] == 'Idle_Bike':
+            json_message = {
+                "Cam": Topic_array[0],
+                "UtcTime": msg_deserialized['UtcTime'],
+                "Task": 'IdleObject',
+                "Vehicle": 'Bike',
+                "State": msg_deserialized['Data']['State'],
+            }
+            input_json_db(json_message)
 
 
 

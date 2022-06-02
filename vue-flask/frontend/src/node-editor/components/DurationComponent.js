@@ -9,7 +9,7 @@ export class DurationComponent extends Rete.Component {
     }
 
     builder(node) {
-        var out1 = new Rete.Output('num', "Out", Socket.number);
+        var out1 = new Rete.Output('num', "Out", Socket.constant);
         return node
 
           .addControl(new TimeControl(this.editor, 'str'))

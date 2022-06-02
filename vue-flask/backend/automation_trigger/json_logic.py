@@ -192,71 +192,82 @@ def function_vehicle_detection(zone, vehicleType):
 
 def function_flow(zone, vehicleType, duration):    
     vehicle = set_vehicleType_name(vehicleType)
-    #start_time = '2022-05-26T15:24:30.577383Z'
-    time = [query.get('start_time') for query in db_general.all()]
-    start_time = time[0]
+    start_time = datetime.utcnow().isoformat()[:-3]+'Z'
+    
+    print(start_time)
+    #time = [query.get('start_time') for query in db_general.all()]
+    #start_time = time[0]
 
     count_flow = -1
     first_count = -1
 
     if vehicleType == 'ALL':
         docs = db_camera.search((query.Task == 'Counter') & (
-            query.Zone == zone) & (query.UtcTime > start_time))
+            query.Zone == zone) & (query.UtcTime < start_time))
     else:
         docs = db_camera.search((query.Task == 'Counter') & (query.Zone == zone) & (
-            query.Vehicle == vehicle) & (query.UtcTime > start_time))
+            query.Vehicle == vehicle) & (query.UtcTime < start_time))
 
     i = 0
-    j = 0 
-    timeout = 0
+
     start_time = parser.parse(start_time)
     first_duration = -1
 
     for doc in docs:
         doc_time = parser.parse(doc.get('UtcTime'))
         amount = doc_time - start_time
-        
         i += 1
         if i == 1:
+            print(doc)
             first_count = doc.get('Count')
-        if(amount.total_seconds() > int(duration)):
-            j += 1
-            if j == 1:
-                count_flow = doc.get('Count')
-                first_duration = amount.total_seconds()
-                timeout = 1
-    
+
+        if(amount.total_seconds() <= int(duration)):
+            count_flow = doc.get('Count')
+            last_doc = doc
+
+    print(last_doc)
     first_count = int(first_count)
     count_flow = int(count_flow)
 
     detected_vehicles = abs(count_flow - first_count)
 
     print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))    
-
-    if timeout == 1:
-        print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
-        return count_flow - first_count 
-    else:
-        print("No timeout")
-        return 0 
+    print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
+    
+    return count_flow - first_count 
 
 
-def function_stay_time(zone, vehicleType):
+def function_stay_time(vehicleType, zone):
     vehicle = set_vehicleType_name(vehicleType)
-    #start_time = '2022-05-16T19:45:35.461Z'
+    #start_time = '2022-06-02T12:07:36.754733Z'
+
     time = [query.get('start_time') for query in db_general.all()]
     start_time = time[0]
 
     if vehicleType == 'ALL':
-        docs = db_camera.search(
-            (query.Task == 'IdleObject') & (query.UtcTime > start_time))
+        docs = db_camera.search((query.Task == 'IdleObject') & (query.UtcTime >= start_time) & (query.Cam == zone))
     else:
-        docs = db_camera.search((query.Task == 'IdleObject') & (
-            query.Vehicle == vehicle) & (query.UtcTime > start_time))
+        docs = db_camera.search((query.Task == 'IdleObject') & (query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Cam == zone))
+
 
     stayTime = 0
-    #IMCOMPLETO
-    return stayTime
+    end_time = 0
+
+    got_true = 0
+    i=0
+    for doc in docs:
+        i += 1
+        if i == 1 and doc.get('State') == 'true':
+            got_true = 1
+        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
+            end_time = doc.get('UtcTime')
+        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
+            i = 0
+
+
+    stayTime = parser.parse(end_time) - parser.parse(start_time)
+
+    return stayTime.total_seconds()
 
 
 def function_jam_detection(zone):
@@ -267,26 +278,40 @@ def function_jam_detection(zone):
     
     docs = db_camera.search((query.Task == 'Jam Detection') & (query.UtcTime > start_time) & (query.Zone == zone))
 
-    jam = False
-    if docs:
-        jam = True
-
-    return jam
+    got_true = 0
+    i=0
+    for doc in docs:
+        i += 1
+        if i == 1 and doc.get('State') == 'true':
+            got_true = 1
+            return True
+        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
+            return False
+        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
+            i = 0
 
 
 def function_crowd_detection(zone):
-    #start_time = '2022-05-16T19:45:35.461Z'
+    start_time = '2022-06-02T14:18:10.597768Z'
 
-    time = [query.get('start_time') for query in db_general.all()]
-    start_time = time[0]
+    #time = [query.get('start_time') for query in db_general.all()]
+    #start_time = time[0]
     
     docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
-    
-    crowd = False
-    if docs:
-        crowd = True
 
-    return crowd
+    got_true = 0
+    i=0
+    for doc in docs:
+        i += 1
+        if i == 1 and doc.get('State') == 'true':
+            got_true = 1
+            print(doc)
+            return True
+        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
+            return False
+        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
+            i = 0
+
 
 
 operations = {

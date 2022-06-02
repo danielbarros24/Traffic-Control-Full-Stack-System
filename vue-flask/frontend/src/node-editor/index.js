@@ -28,6 +28,8 @@ import { VehicleDetectionComponent } from '@/node-editor/components/VehicleDetec
 import { EndComponent } from '@/node-editor/components/EndComponent'
 import { DurationComponent } from '@/node-editor/components/DurationComponent'
 import { CrowdDetectionComponent } from '@/node-editor/components/CrowdDetectionComponent'
+import { MaxComponent } from '@/node-editor/components/MaxComponent'
+import { MinComponent } from '@/node-editor/components/MinComponent'
 
 
 import Rete from "rete";
@@ -35,9 +37,9 @@ import Rete from "rete";
 
 export default async function(container) {
     const components = [ new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), 
-        new JamComponent(), new CrowdDetectionComponent(), new DurationComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
-        new DifferentThanComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
-        new ANDComponent(), new ORComponent(), new NOTComponent(), new ConstantComponent(), new EndComponent()];
+        new JamComponent(), new CrowdDetectionComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
+        new DifferentThanComponent(), new MaxComponent(), new MinComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
+        new ANDComponent(), new ORComponent(), new NOTComponent(), new DurationComponent(), new ConstantComponent(), new EndComponent()];
   
     const editor = new Rete.NodeEditor("demo@0.1.0", container);
 

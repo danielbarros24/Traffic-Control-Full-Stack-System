@@ -50,17 +50,12 @@ def test_automations():
 
             db_general.update({"start_time": "{}".format(raw_start_time)})
             rules = doc.get('rules') 
+
             if jsonLogic(rules):
-                #doc.update({'enable': False})
-                #db_auto.update(doc)
-                
                 print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(doc.get('gpios')))
 
-
-            
-
-while True:
+#while True:
     
-    test_automations()
+test_automations()
 
     #Awaits until new data is received
