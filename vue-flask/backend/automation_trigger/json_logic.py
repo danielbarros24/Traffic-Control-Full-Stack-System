@@ -218,14 +218,12 @@ def function_flow(zone, vehicleType, duration):
         amount = doc_time - start_time
         i += 1
         if i == 1:
-            print(doc)
             first_count = doc.get('Count')
 
         if(amount.total_seconds() <= int(duration)):
             count_flow = doc.get('Count')
             last_doc = doc
 
-    print(last_doc)
     first_count = int(first_count)
     count_flow = int(count_flow)
 
@@ -311,7 +309,6 @@ def function_crowd_detection(zone):
             return False
         elif i == 1 and doc.get('State') == 'false' and got_true == 0:
             i = 0
-
 
 
 operations = {
