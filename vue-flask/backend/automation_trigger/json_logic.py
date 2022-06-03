@@ -193,8 +193,7 @@ def function_vehicle_detection(zone, vehicleType):
 def function_flow(zone, vehicleType, duration):    
     vehicle = set_vehicleType_name(vehicleType)
     start_time = datetime.utcnow().isoformat()[:-3]+'Z'
-    
-    print(start_time)
+
     #time = [query.get('start_time') for query in db_general.all()]
     #start_time = time[0]
 
@@ -222,15 +221,14 @@ def function_flow(zone, vehicleType, duration):
 
         if(amount.total_seconds() <= int(duration)):
             count_flow = doc.get('Count')
-            last_doc = doc
 
     first_count = int(first_count)
     count_flow = int(count_flow)
 
-    detected_vehicles = abs(count_flow - first_count)
+    #detected_vehicles = abs(count_flow - first_count)
 
-    print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))    
-    print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
+    #print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))    
+    #print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
     
     return count_flow - first_count 
 

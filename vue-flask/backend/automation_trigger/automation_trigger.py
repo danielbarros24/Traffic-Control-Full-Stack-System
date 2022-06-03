@@ -7,6 +7,7 @@
 
 import json
 from datetime import datetime
+from ssl import VerifyFlags
 import pytz
 from dateutil import parser
 from tinydb import Query, TinyDB, where
@@ -50,8 +51,13 @@ def test_automations():
             db_general.update({"start_time": "{}".format(raw_start_time)})
             rules = doc.get('rules') 
 
+            print("Verifying " + str(doc.get('name') + " process..."))
             if jsonLogic(rules):
                 print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(doc.get('gpios')))
+            else:
+                print("Conditions not ready!")
+        else:
+            print("No processes available!")
 
 #while True:
     
