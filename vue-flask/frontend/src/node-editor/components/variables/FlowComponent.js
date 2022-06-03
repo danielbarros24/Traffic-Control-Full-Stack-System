@@ -1,12 +1,14 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
 
 import { TimeControl } from "@/node-editor/controls/TimeControl/TimeControl";
 import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/variables/Node.vue";
 
 export class FlowComponent extends Rete.Component {
     constructor(){
         super("Flow");
+        this.data.component = Node;
     }
 
     builder(node) {
@@ -23,7 +25,7 @@ export class FlowComponent extends Rete.Component {
             { text: 'All', value: 'ALL' },
             { text: 'Car', value: 'CAR' },
             { text: 'Truck', value: 'TRUCK' },
-            { text: 'Motocycle', value: 'MOTO' }
+            { text: 'Bike', value: 'BIKE' }
           ], "Vehicle Type"))
           .addControl(new TimeControl(this.editor, 'str'))
           .addOutput(out1);

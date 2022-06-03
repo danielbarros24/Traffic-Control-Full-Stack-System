@@ -1,14 +1,16 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/logical-operators/Node.vue";
 
 export class DifferentThanComponent extends Rete.Component {
     constructor(){
-        super("!=");
+        super("A!=B");
+        this.data.component = Node;
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In1", Socket.number);
-        var inp2 = new Rete.Input('num2',"In2", Socket.number);
+        var inp1 = new Rete.Input('num1',"A", Socket.number);
+        var inp2 = new Rete.Input('num2',"B", Socket.number);
         var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node

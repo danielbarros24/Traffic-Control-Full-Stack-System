@@ -1,14 +1,16 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/arithmetic-operators/Node.vue";
 
-export class ANDComponent extends Rete.Component {
+export class SubComponent extends Rete.Component {
     constructor(){
-        super("AND");
+        super("-");
+        this.data.component = Node;
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In", Socket.boolean, true);
-        var out = new Rete.Output('num', "Out", Socket.boolean);
+        var inp1 = new Rete.Input('num1',"In1", Socket.number, true);
+        var out = new Rete.Output('num', "Out", Socket.number);
 
         return node
             .addInput(inp1)
@@ -16,8 +18,8 @@ export class ANDComponent extends Rete.Component {
     }
     
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.num;
-    }
+        outputs['num'] = node.data.num1;
+    } 
 
     toJsonLogic(node) {
         const { inputs } = node;
@@ -26,7 +28,7 @@ export class ANDComponent extends Rete.Component {
         const { connections } = inputNum;
 
         return {
-            "and": connections.map(connection => {
+            "-": connections.map(connection => {
                 const connectionNode = connection.output.node;
                 const connectionComponent = this.editor.getComponent(connectionNode.name);
                 return connectionComponent.toJsonLogic?.(connectionNode)

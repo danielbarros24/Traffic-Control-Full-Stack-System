@@ -1,11 +1,13 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
 
 import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/variables/Node.vue";
 
 export class StayTimeComponent extends Rete.Component {
     constructor(){
         super("Stay Time");
+        this.data.component = Node;
     }
 
     builder(node) {
@@ -16,7 +18,7 @@ export class StayTimeComponent extends Rete.Component {
                 { text: 'All', value: 'ALL' },
                 { text: 'Car', value: 'CAR' },
                 { text: 'Truck', value: 'TRUCK' },
-                { text: 'Motocycle', value: 'MOTO' }
+                { text: 'Bike', value: 'BIKE' }
             ], "Vehicle Type"))
             .addControl(new SelectControl(this.editor, 'type1', [
                 { text: 'Sensor 1', value: 'T1' },

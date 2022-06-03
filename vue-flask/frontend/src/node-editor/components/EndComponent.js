@@ -1,9 +1,12 @@
 import Rete from "rete";
 import * as Socket from "../sockets";
 
+import Node from "../../../node_modules/rete-vue-render-plugin/src/end/Node.vue";
+
 export class EndComponent extends Rete.Component {
     constructor(){
         super("End");
+        this.data.component = Node;
     }
 
     builder(node) {

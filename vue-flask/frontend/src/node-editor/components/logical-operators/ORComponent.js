@@ -1,22 +1,24 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/logical-operators/Node.vue";
 
-export class MultiplyComponent extends Rete.Component {
+export class ORComponent extends Rete.Component {
     constructor(){
-        super("x");
+        super("OR");
+        this.data.component = Node;
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In", Socket.number, true);
-        var out = new Rete.Output('num', "Out", Socket.number);
+        var inp1 = new Rete.Input('num1',"In", Socket.boolean, true);
+        var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
             .addInput(inp1)
             .addOutput(out);
     }
     
-    worker(node, inputs, outputs) {
-        outputs['num'] = inputs.num1;
+    worker(node, outputs) {
+        outputs['num'] = node.data.num;
     }
 
     toJsonLogic(node) {
@@ -26,7 +28,7 @@ export class MultiplyComponent extends Rete.Component {
         const { connections } = inputNum;
 
         return {
-            "*": connections.map(connection => {
+            "or": connections.map(connection => {
                 const connectionNode = connection.output.node;
                 const connectionComponent = this.editor.getComponent(connectionNode.name);
                 return connectionComponent.toJsonLogic?.(connectionNode)

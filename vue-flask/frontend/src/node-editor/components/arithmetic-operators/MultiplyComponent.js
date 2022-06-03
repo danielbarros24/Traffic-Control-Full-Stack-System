@@ -1,9 +1,11 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/arithmetic-operators/Node.vue";
 
-export class MaxComponent extends Rete.Component {
+export class MultiplyComponent extends Rete.Component {
     constructor(){
-        super("Max");
+        super("x");
+        this.data.component = Node;
     }
     
     builder(node) {
@@ -16,7 +18,7 @@ export class MaxComponent extends Rete.Component {
     }
     
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.num;
+        outputs['num'] = inputs.num1;
     }
 
     toJsonLogic(node) {
@@ -26,7 +28,7 @@ export class MaxComponent extends Rete.Component {
         const { connections } = inputNum;
 
         return {
-            "max": connections.map(connection => {
+            "*": connections.map(connection => {
                 const connectionNode = connection.output.node;
                 const connectionComponent = this.editor.getComponent(connectionNode.name);
                 return connectionComponent.toJsonLogic?.(connectionNode)

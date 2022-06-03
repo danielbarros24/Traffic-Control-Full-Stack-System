@@ -1,9 +1,11 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/logical-operators/Node.vue";
 
-export class GreaterThanOrEqualToComponent extends Rete.Component {
+export class GreaterThanComponent extends Rete.Component {
     constructor(){
-        super("A>=B");
+        super("A>B");
+        this.data.component = Node;
     }
     
     builder(node) {
@@ -42,6 +44,6 @@ export class GreaterThanOrEqualToComponent extends Rete.Component {
         const json1 = this._inputToJsonLogic(node, 'num1')
         const json2 = this._inputToJsonLogic(node, 'num2')
 
-        return {">=" : [json1, json2]}
+        return {">" : [json1, json2]}
     }
 }

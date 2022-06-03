@@ -7,39 +7,43 @@ import KeyboardPlugin from 'rete-keyboard-plugin';
 import router from '@/router'
 import vuetify from '@/plugins/vuetify'
 
-import { AddComponent } from '@/node-editor/components/AddComponent'
-import { SubComponent } from '@/node-editor/components/SubComponent'
-import { ANDComponent } from '@/node-editor/components/ANDComponent'
-import { ConstantComponent } from '@/node-editor/components/ConstantComponent'
-import { DifferentThanComponent } from '@/node-editor/components/DifferentThanComponent'
-import { DivisionComponent } from '@/node-editor/components/DivisionComponent'
-import { EqualToComponent } from '@/node-editor/components/EqualToComponent'
-import { JamComponent } from '@/node-editor/components/JamComponent'
-import { FlowComponent } from '@/node-editor/components/FlowComponent'
-import { GreaterThanComponent } from '@/node-editor/components/GreaterThanComponent'
-import { GreaterThanOrEqualToComponent } from '@/node-editor/components/GreaterThanOrEqualToComponent'
-import { LessThanComponent } from '@/node-editor/components/LessThanComponent'
-import { LessThanOrEqualToComponent } from '@/node-editor/components/LessThanOrEqualToComponent'
-import { MultiplyComponent } from '@/node-editor/components/MultiplyComponent'
-import { NOTComponent } from '@/node-editor/components/NOTComponent'
-import { ORComponent } from '@/node-editor/components/ORComponent'
-import { StayTimeComponent } from '@/node-editor/components/StayTimeComponent'
-import { VehicleDetectionComponent } from '@/node-editor/components/VehicleDetectionComponent'
-import { EndComponent } from '@/node-editor/components/EndComponent'
-import { DurationComponent } from '@/node-editor/components/DurationComponent'
-import { CrowdDetectionComponent } from '@/node-editor/components/CrowdDetectionComponent'
-import { MaxComponent } from '@/node-editor/components/MaxComponent'
-import { MinComponent } from '@/node-editor/components/MinComponent'
+import { AddComponent }      from '@/node-editor/components/arithmetic-operators/AddComponent'
+import { SubComponent }      from '@/node-editor/components/arithmetic-operators/SubComponent'
+import { MultiplyComponent } from '@/node-editor/components/arithmetic-operators/MultiplyComponent'
+import { DivisionComponent } from '@/node-editor/components/arithmetic-operators/DivisionComponent'
+import { MaxComponent }      from '@/node-editor/components/arithmetic-operators/MaxComponent'
+import { MinComponent }      from '@/node-editor/components/arithmetic-operators/MinComponent'
 
+import { ANDComponent }                  from '@/node-editor/components/logical-operators/ANDComponent'
+import { ORComponent }                   from '@/node-editor/components/logical-operators/ORComponent'
+import { NOTComponent }                  from '@/node-editor/components/logical-operators/NOTComponent'
+import { DifferentThanComponent }        from '@/node-editor/components/logical-operators/DifferentThanComponent'
+import { EqualToComponent }              from '@/node-editor/components/logical-operators/EqualToComponent'
+import { GreaterThanComponent }          from '@/node-editor/components/logical-operators/GreaterThanComponent'
+import { GreaterThanOrEqualToComponent } from '@/node-editor/components/logical-operators/GreaterThanOrEqualToComponent'
+import { LessThanComponent }             from '@/node-editor/components/logical-operators/LessThanComponent'
+import { LessThanOrEqualToComponent }    from '@/node-editor/components/logical-operators/LessThanOrEqualToComponent'
+
+import { ConstantComponent }         from '@/node-editor/components/variables/ConstantComponent'
+import { DurationComponent }         from '@/node-editor/components/variables/DurationComponent'
+import { JamComponent }              from '@/node-editor/components/variables/JamComponent'
+import { FlowComponent }             from '@/node-editor/components/variables/FlowComponent'
+import { CrowdDetectionComponent }   from '@/node-editor/components/variables/CrowdDetectionComponent'
+import { DoubleParkComponent }       from '@/node-editor/components/variables/DoubleParkComponent'
+import { StayTimeComponent }         from '@/node-editor/components/variables/StayTimeComponent'
+import { VehicleDetectionComponent } from '@/node-editor/components/variables/VehicleDetectionComponent'
+
+import { EndComponent } from '@/node-editor/components/EndComponent'
 
 import Rete from "rete";
 
 
 export default async function(container) {
-    const components = [ new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), 
-        new JamComponent(), new CrowdDetectionComponent(), new AddComponent(), new SubComponent(), new MultiplyComponent(), new DivisionComponent(), new EqualToComponent(), 
-        new DifferentThanComponent(), new MaxComponent(), new MinComponent(), new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
-        new ANDComponent(), new ORComponent(), new NOTComponent(), new DurationComponent(), new ConstantComponent(), new EndComponent()];
+    const components = [ new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), new DoubleParkComponent(),
+        new JamComponent(), new CrowdDetectionComponent(), new DurationComponent(), new ConstantComponent(), new AddComponent(), new SubComponent(), 
+        new MultiplyComponent(), new DivisionComponent(), new MaxComponent(), new MinComponent(), new EqualToComponent(), new DifferentThanComponent(), 
+        new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
+        new ANDComponent(), new ORComponent(), new NOTComponent(), new EndComponent()];
   
     const editor = new Rete.NodeEditor("demo@0.1.0", container);
 

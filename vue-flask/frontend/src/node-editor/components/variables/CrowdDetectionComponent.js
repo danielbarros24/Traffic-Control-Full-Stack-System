@@ -1,12 +1,13 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
 
 import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
-
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/variables/Node.vue";
 
 export class CrowdDetectionComponent extends Rete.Component {
     constructor(){
         super("Crowd Detection");
+        this.data.component = Node;
     }
 
     builder(node) {

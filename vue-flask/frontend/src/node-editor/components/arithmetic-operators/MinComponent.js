@@ -1,9 +1,11 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/arithmetic-operators/Node.vue";
 
-export class DivisionComponent extends Rete.Component {
+export class MinComponent extends Rete.Component {
     constructor(){
-        super("/");
+        super("Min");
+        this.data.component = Node;
     }
     
     builder(node) {
@@ -26,7 +28,7 @@ export class DivisionComponent extends Rete.Component {
         const { connections } = inputNum;
 
         return {
-            "-": connections.map(connection => {
+            "min": connections.map(connection => {
                 const connectionNode = connection.output.node;
                 const connectionComponent = this.editor.getComponent(connectionNode.name);
                 return connectionComponent.toJsonLogic?.(connectionNode)

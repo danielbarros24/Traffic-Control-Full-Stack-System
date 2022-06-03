@@ -1,11 +1,13 @@
 import Rete from "rete";
-import * as Socket from "../sockets";
+import * as Socket from "../../sockets";
+import Node from "../../../../node_modules/rete-vue-render-plugin/src/variables/Node.vue";
 
 import { NumControl } from '@/node-editor/controls/NumControl/NumControl'
 
 export class ConstantComponent extends Rete.Component {
     constructor(){
         super("Constant");
+        this.data.component = Node;
     }
 
     builder(node) {
