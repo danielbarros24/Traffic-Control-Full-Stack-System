@@ -7,7 +7,6 @@
 
 import json
 from datetime import datetime
-from turtle import update
 import pytz
 from dateutil import parser
 from tinydb import Query, TinyDB, where
