@@ -241,9 +241,9 @@ def function_stay_time(vehicleType, zone):
     start_time = time[0]
 
     if vehicleType == 'ALL':
-        docs = db_camera.search((query.Task == 'IdleObject') & (query.UtcTime >= start_time) & (query.Cam == zone))
+        docs = db_camera.search((query.Task == 'Idle Object') & (query.UtcTime >= start_time) & (query.Cam == zone))
     else:
-        docs = db_camera.search((query.Task == 'IdleObject') & (query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Cam == zone))
+        docs = db_camera.search((query.Task == 'Idle Object') & (query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Cam == zone))
 
 
     stayTime = 0
