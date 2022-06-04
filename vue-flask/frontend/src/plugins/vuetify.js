@@ -23,7 +23,7 @@ export default new Vuetify({
     theme: {
       themes: {
           light: {
-              primary: colors.lightBlue.darken2, // #E53935
+              primary: colors.lightBlue.darken2, // #E53935   DEVERIA SER #007CBB
               secondary: colors.lightBlue.darken1, // #FFCDD2
               accent: colors.indigo.base, // #3F51B5
               background: colors.grey.lighten2, // Not automatically applied
