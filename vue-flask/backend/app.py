@@ -181,7 +181,6 @@ def get_used_pins():
 
     for j in used_gpios:                                                                    #REMOVES FROM ARRAY USED GPIOS
         Total_pins.remove(j)
-    print(Total_pins)
 
     return jsonify(Total_pins)
 

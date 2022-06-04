@@ -241,9 +241,9 @@ def function_stay_time(zone, vehicleType):
     start_time = time[0]
 
     if vehicleType == 'ALL':
-        docs = db_camera.search((query.Task == 'Idle Object') & (query.UtcTime >= start_time) & (query.Cam == zone))
+        docs = db_camera.search((query.Task == 'Idle Object') & (query.UtcTime >= start_time) & (query.Zone == zone))
     else:
-        docs = db_camera.search((query.Task == 'Idle Object') & (query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Cam == zone))
+        docs = db_camera.search((query.Task == 'Idle Object') & (query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Zone == zone))
 
 
     stayTime = 0
@@ -311,20 +311,21 @@ def function_crowd_detection(zone):
 
 def function_double_park(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
-    start_time = '2022-06-02T14:18:10.597768Z'
+    #start_time = '2022-06-04T10:16:08.810034Z'
 
-    #time = [query.get('start_time') for query in db_general.all()]
-    #start_time = time[0]
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
     
-    docs = db_camera.search((query.Task == 'Double Park') & (query.UtcTime > start_time) & (query.Cam == zone) & (query.Vehicle == vehicle))
+    docs = db_camera.search((query.Task == 'Double Park') & (query.UtcTime > start_time) & (query.Vehicle == vehicle) & (query.Zone == zone))
 
     got_true = 0
     i=0
+
     for doc in docs:
+        print(doc)
         i += 1
         if i == 1 and doc.get('State') == 'true':
             got_true = 1
-            print(doc)
             return True
         elif i == 2 and doc.get('State') == 'false' and got_true == 1:
             return False

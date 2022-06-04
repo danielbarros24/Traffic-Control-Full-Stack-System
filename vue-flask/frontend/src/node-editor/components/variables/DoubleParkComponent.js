@@ -16,8 +16,8 @@ export class DoubleParkComponent extends Rete.Component {
         return node
 
             .addControl(new SelectControl(this.editor, 'type1', [
-                { text: 'Sensor 1 - Route 1', value: 'T1-1 ' },
-                { text: 'Sensor 1 - Route 2', value: 'T1-1' },
+                { text: 'Sensor 1 - Route 1', value: 'T1-1' },
+                { text: 'Sensor 1 - Route 2', value: 'T1-2' },
             ], "Zone"))
             .addControl(new SelectControl(this.editor, 'type', [
                 { text: 'All', value: 'ALL' },
@@ -34,7 +34,7 @@ export class DoubleParkComponent extends Rete.Component {
 
     toJsonLogic(node) {
         const zone = node.data.type1;
-        const vehicleType = node.data.type1;
+        const vehicleType = node.data.type;
 
         return {
             "doublePark": [ zone, vehicleType ] 

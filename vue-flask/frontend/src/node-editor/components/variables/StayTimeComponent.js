@@ -21,8 +21,8 @@ export class StayTimeComponent extends Rete.Component {
                 { text: 'Bike', value: 'BIKE' }
             ], "Vehicle Type"))
             .addControl(new SelectControl(this.editor, 'type1', [
-                { text: 'Sensor 1', value: 'T1' },
-                { text: 'Sensor 1', value: 'T1' }
+                { text: 'Sensor 1 - Route 1', value: 'T1-1' },
+                { text: 'Sensor 1 - Route 2', value: 'T1-2' }
             ], "Zone"))
             .addOutput(out);
     }

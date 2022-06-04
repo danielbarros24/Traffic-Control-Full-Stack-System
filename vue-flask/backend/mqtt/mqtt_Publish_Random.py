@@ -13,6 +13,8 @@ MQTT_Broker = "192.168.1.199"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 
+######################################  MQTT TOPICS ################################################
+ 
 #MQTT_Topic_JamDetection = "T1/onvif-ej/RuleEngine/CountAgregation/OccupancyCounter/&1/Jam 1"
 
 MQTT_Topic_truck_counter_1 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Truck 1"
@@ -50,6 +52,9 @@ MQTT_Topic_IVA_jam_2 = "T1/onvif-ej/IVA/ObjectInField/Jam 2/&1"
 
 
 MQTT_Topic_IVA_Crowd_Detection = "T1/onvif-ej/IVA/CrowdDetection/Crowd Detection/&1"
+
+##################################################################################################
+
 
 #Server Credentials
 username = "daniel"
