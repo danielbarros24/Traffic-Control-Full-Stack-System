@@ -6,7 +6,7 @@
     v-model="reteValue"
   ></v-text-field>
 </template>
-
+ 
 <script>
 export default {
   props: ['readonly', 'emitter', 'ikey', 'getData', 'putData', 'placeholder'],

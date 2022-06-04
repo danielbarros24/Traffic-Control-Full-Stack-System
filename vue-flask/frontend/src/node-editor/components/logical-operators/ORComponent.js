@@ -9,7 +9,7 @@ export class ORComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In", Socket.boolean, true);
+        var inp1 = new Rete.Input('num1',"Inputs", Socket.boolean, true);
         var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node

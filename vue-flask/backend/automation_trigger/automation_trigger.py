@@ -12,14 +12,14 @@ import pytz
 from dateutil import parser
 from tinydb import Query, TinyDB, where
 
-from json_logic import jsonLogic
+from .json_logic import jsonLogic
 
 
 # DATABASE
-db_camera = TinyDB('../database/camera_data.json')
-db_auth = TinyDB('../database/auth.json')
-db_auto = TinyDB('../database/automations.json')
-db_general = TinyDB('../database/general_info.json')
+db_camera = TinyDB('database/camera_data.json')
+db_auth = TinyDB('database/auth.json')
+db_auto = TinyDB('database/automations.json')
+db_general = TinyDB('database/general_info.json')
 
 query = Query()
 
@@ -52,15 +52,14 @@ def test_automations():
             rules = doc.get('rules') 
 
             print("Verifying " + str(doc.get('name') + " process..."))
-            if jsonLogic(rules):
-                print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(doc.get('gpios')))
-            else:
-                print("Conditions not ready!")
-        else:
-            print("No processes available!")
 
-#while True:
-    
-test_automations()
+            if jsonLogic(rules):
+                print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(doc.get('gpios')) + "\n")
+            else:
+                print("Conditions not ready!\n")
+        else:
+            print("No processes available!\n")
+
+
 
     #Awaits until new data is received

@@ -12,7 +12,7 @@ export class CrowdDetectionComponent extends Rete.Component {
 
     builder(node) {
 
-        var out1 = new Rete.Output('num', "Out", Socket.number);
+        var out1 = new Rete.Output('num', "Out", Socket.boolean);
         return node
 
             .addControl(new SelectControl(this.editor, 'type1', [

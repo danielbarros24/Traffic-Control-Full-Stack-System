@@ -29,7 +29,7 @@ export default new Vuetify({
               background: colors.grey.lighten2, // Not automatically applied
             },
           dark: {
-              background: colors.shades.white, // If not using lighten/darken, use base to return hex
+              background: colors.lightBlue.lighten5, // If not using lighten/darken, use base to return hex
           },
       },
     },

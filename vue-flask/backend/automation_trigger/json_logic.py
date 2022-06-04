@@ -16,8 +16,8 @@ from datetime import datetime
 from dateutil import parser
 
 
-db_camera = TinyDB('../database/camera_data.json')
-db_general = TinyDB('../database/general_info.json')
+db_camera = TinyDB('database/camera_data.json')
+db_general = TinyDB('database/general_info.json')
 
 query = Query()
 
@@ -322,7 +322,6 @@ def function_double_park(zone, vehicleType):
     i=0
 
     for doc in docs:
-        print(doc)
         i += 1
         if i == 1 and doc.get('State') == 'true':
             got_true = 1

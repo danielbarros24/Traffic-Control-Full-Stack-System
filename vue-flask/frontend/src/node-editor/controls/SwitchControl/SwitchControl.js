@@ -1,8 +1,8 @@
 import Rete from "rete";
-import VueSelectControl from "./SelectControl.vue";
+import VueSelectControl from "./SwitchControl.vue";
 
-export class SelectControl extends Rete.Control {
-  constructor(emitter, key, items, placeholder) {
+export class SwitchControl extends Rete.Control {
+  constructor(emitter, key, items) {
     super(key)
 
     this.component = VueSelectControl;
@@ -10,12 +10,11 @@ export class SelectControl extends Rete.Control {
     this.props = {
       emitter,
       ikey: key,
-      items,
-      placeholder
+      items
     };
   }
 
   setValue(val) {
     this.vueContext.value = val;
   }
-} 
+}

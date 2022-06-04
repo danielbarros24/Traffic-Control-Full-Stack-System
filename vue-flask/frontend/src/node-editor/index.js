@@ -34,6 +34,7 @@ import { StayTimeComponent }         from '@/node-editor/components/variables/St
 import { VehicleDetectionComponent } from '@/node-editor/components/variables/VehicleDetectionComponent'
 
 import { EndComponent } from '@/node-editor/components/EndComponent'
+import { GpioComponent } from '@/node-editor/components/GpioComponent'
 
 import Rete from "rete";
 
@@ -43,7 +44,7 @@ export default async function(container) {
         new JamComponent(), new CrowdDetectionComponent(), new DurationComponent(), new ConstantComponent(), new AddComponent(), new SubComponent(), 
         new MultiplyComponent(), new DivisionComponent(), new MaxComponent(), new MinComponent(), new EqualToComponent(), new DifferentThanComponent(), 
         new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
-        new ANDComponent(), new ORComponent(), new NOTComponent(), new EndComponent()];
+        new ANDComponent(), new ORComponent(), new NOTComponent(), new EndComponent(), new GpioComponent()];
   
     const editor = new Rete.NodeEditor("demo@0.1.0", container);
 

@@ -3,16 +3,13 @@
 # ------------------------------------------
 
 import paho.mqtt.client as mqtt
-from database_manager import database_insert, database_remove, database_create_query, database_get_all, database_iter, database_search, database_truncate, database_update
+from .database_manager import database_insert, database_remove, database_create_query, database_get_all, database_iter, database_search, database_truncate, database_update
 
 import json
 # from store_data_into_db import sensor_Data_Handler
 # from tiny_db_manager import Data_handler
 
-# MQTT Settings
-MQTT_Broker = "192.168.1.199"
-MQTT_Port = 1883
-Keep_Alive_Interval = 40
+
 n_sensors = 1
 
 # Server Credentials
@@ -205,9 +202,3 @@ client.on_subscribe = on_subscribe
 client.username_pw_set(username, password)
 
 
-# Connect
-client.connect(MQTT_Broker, int(MQTT_Port), int(Keep_Alive_Interval))
-
-
-# Continue the network loop
-client.loop_forever()

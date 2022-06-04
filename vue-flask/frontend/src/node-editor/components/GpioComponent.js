@@ -1,18 +1,25 @@
 import Rete from "rete";
 import * as Socket from "../sockets";
 
-import Node from "../../../node_modules/rete-vue-render-plugin/src/end/Node.vue";
+import Node from "rete-vue-render-plugin/src/end/Node.vue";
+import { SelectControl } from "@/node-editor/controls/SelectControl/SelectControl";
+import { SwitchControl } from "@/node-editor/controls/SwitchControl/SwitchControl";
 
-export class EndComponent extends Rete.Component {
+export class GpioComponent extends Rete.Component {
     constructor(){
-        super("End");
+        super("GPIO");
         this.data.component = Node;
     }
 
     builder(node) {
-        var input = new Rete.Input('num', "Input", Socket.boolean);
+        var input = new Rete.Input('num', "Input", Socket.boolean, true);
         return node
-          .addInput(input);
+          .addInput(input)
+          .addControl(new SelectControl(this.editor, 'type1', [
+            { text: 'GPIO 1', value: '1' },
+            { text: 'GPIO 2', value: '2' }
+        ], "GPIO"))
+          .addControl(new SwitchControl(this.editor, 'type'))
     }
 
     worker(node, inputs, outputs) {

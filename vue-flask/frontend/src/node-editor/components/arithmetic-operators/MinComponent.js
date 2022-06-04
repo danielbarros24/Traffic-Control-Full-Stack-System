@@ -9,7 +9,7 @@ export class MinComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In", Socket.number, true);
+        var inp1 = new Rete.Input('num1',"Inputs", Socket.number, true);
         var out = new Rete.Output('num', "Out", Socket.number);
 
         return node
