@@ -164,6 +164,7 @@ def missing_some(data, min_required, args):
     return ret
 
 ######################################## ---NEW FUNCTIONS--- ########################################
+
 def function_vehicle_detection(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
     #start_time = '2022-05-16T19:45:35.461Z'
@@ -210,7 +211,6 @@ def function_flow(zone, vehicleType, duration):
     i = 0
 
     start_time = parser.parse(start_time)
-    first_duration = -1
 
     for doc in docs:
         doc_time = parser.parse(doc.get('UtcTime'))
@@ -233,7 +233,7 @@ def function_flow(zone, vehicleType, duration):
     return count_flow - first_count 
 
 
-def function_stay_time(vehicleType, zone):
+def function_stay_time(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
     #start_time = '2022-06-02T12:07:36.754733Z'
 
@@ -309,6 +309,30 @@ def function_crowd_detection(zone):
             i = 0
 
 
+def function_double_park(zone, vehicleType):
+    vehicle = set_vehicleType_name(vehicleType)
+    start_time = '2022-06-02T14:18:10.597768Z'
+
+    #time = [query.get('start_time') for query in db_general.all()]
+    #start_time = time[0]
+    
+    docs = db_camera.search((query.Task == 'Double Park') & (query.UtcTime > start_time) & (query.Cam == zone) & (query.Vehicle == vehicle))
+
+    got_true = 0
+    i=0
+    for doc in docs:
+        i += 1
+        if i == 1 and doc.get('State') == 'true':
+            got_true = 1
+            print(doc)
+            return True
+        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
+            return False
+        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
+            i = 0
+
+
+
 operations = {
     "==": soft_equals,
     "===": hard_equals,
@@ -340,7 +364,8 @@ operations = {
     "flow": function_flow,
     "stayTime": function_stay_time,
     "jamDetection": function_jam_detection,
-    "crowdDetection": function_crowd_detection
+    "crowdDetection": function_crowd_detection,
+    "doublePark": function_double_park
 }
 
 

@@ -13,16 +13,17 @@ MQTT_Broker = "192.168.1.199"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 
+#MQTT_Topic_JamDetection = "T1/onvif-ej/RuleEngine/CountAgregation/OccupancyCounter/&1/Jam 1"
+
 MQTT_Topic_truck_counter_1 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Truck 1"
 MQTT_Topic_truck_counter_2 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Truck 1"
+
 MQTT_Topic_car_counter_1 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Car 1"
 MQTT_Topic_car_counter_2 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Car 2"
+
 MQTT_Topic_bike_counter_1 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Bike 1"
 MQTT_Topic_bike_counter_2 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Bike 2"
 
-MQTT_Topic_IVA = "T1/onvif-ej/IVA/IdleObject/Idle Truck 1/&1"
-#MQTT_Topic_JamDetection = "T1/onvif-ej/RuleEngine/CountAgregation/OccupancyCounter/&1/Jam 1"
-MQTT_Topic_IVA_Crowd_Detection = "T1/onvif-ej/IVA/CrowdDetection/CrowdDetection/&1"
 
 MQTT_Topic_IVA_double_park_car_1 = "T1/onvif-ej/IVA/IdleObject/DoublePark Car 1/&1"
 MQTT_Topic_IVA_double_park_car_2 = "T1/onvif-ej/IVA/IdleObject/DoublePark Car 2/&1"
@@ -33,9 +34,22 @@ MQTT_Topic_IVA_double_park_truck_2 = "T1/onvif-ej/IVA/IdleObject/DoublePark Truc
 MQTT_Topic_IVA_double_park_bike_1 = "T1/onvif-ej/IVA/IdleObject/DoublePark Bike 1/&1"
 MQTT_Topic_IVA_double_park_bike_2 = "T1/onvif-ej/IVA/IdleObject/DoublePark Bike 2/&1"
 
+
+MQTT_Topic_IVA_idle_car_1 = "T1/onvif-ej/IVA/IdleObject/Idle Car 1/&1"
+MQTT_Topic_IVA_idle_car_2 = "T1/onvif-ej/IVA/IdleObject/Idle Car 2/&1"
+
+MQTT_Topic_IVA_idle_truck_1 = "T1/onvif-ej/IVA/IdleObject/Idle Truck 1/&1"
+MQTT_Topic_IVA_idle_truck_2 = "T1/onvif-ej/IVA/IdleObject/Idle Truck 2/&1"
+
+MQTT_Topic_IVA_idle_bike_1 = "T1/onvif-ej/IVA/IdleObject/Idle Bike 1/&1"
+MQTT_Topic_IVA_idle_bike_2 = "T1/onvif-ej/IVA/IdleObject/Idle Bike 2/&1"
+
+
 MQTT_Topic_IVA_jam_1 = "T1/onvif-ej/IVA/ObjectInField/Jam 1/&1"
 MQTT_Topic_IVA_jam_2 = "T1/onvif-ej/IVA/ObjectInField/Jam 2/&1"
 
+
+MQTT_Topic_IVA_Crowd_Detection = "T1/onvif-ej/IVA/CrowdDetection/Crowd Detection/&1"
 
 #Server Credentials
 username = "daniel"
@@ -58,7 +72,6 @@ def on_disconnect(client, userdata, rc):
 	if rc !=0:
 		pass
 		
-
 client = mqtt.Client("mqtt-data-publisher")
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
@@ -84,28 +97,54 @@ def publish_Cam_Events_to_MQTT():
 	Count = random.randint(0,500)
 	UtcTime = UtcTime.isoformat() + 'Z'
 
-	Cam_Data_Jam = {
+	
+	Cam_Data_IVA_idle_car= {
 		"UtcTime": UtcTime,
 		"Source":
-			{"Source":"1"},
+			{"Source": "1"},
 		"Data":
 			{"State":"true"}
 	}
-	Cam_Data_json = json.dumps(Cam_Data_Jam)
-	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
+	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_car)
+	publish_To_Topic (MQTT_Topic_IVA_idle_car_1, Cam_Data_json)
 
 	time.sleep(1)
-
-	Cam_Data_Jam = {
+	Cam_Data_IVA_idle_car = {
 		"UtcTime": UtcTime,
 		"Source":
-			{"Source":"1"},
+			{"Source": "1"},
 		"Data":
 			{"State":"false"}
 	}
-	Cam_Data_json = json.dumps(Cam_Data_Jam)
-	publish_To_Topic (MQTT_Topic_IVA_jam_2, Cam_Data_json)
+	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_car)
+	publish_To_Topic (MQTT_Topic_IVA_idle_car_1, Cam_Data_json)
+
 	time.sleep(1)
+
+	Cam_Data_IVA_idle_truck = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source": "1"},
+		"Data":
+			{"State":"false"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_truck)
+	publish_To_Topic (MQTT_Topic_IVA_idle_truck_2, Cam_Data_json)
+
+	time.sleep(1)
+
+	Cam_Data_IVA_idle_truck = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source": "1"},
+		"Data":
+			{"State":"true"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_truck)
+	publish_To_Topic (MQTT_Topic_IVA_idle_car_2, Cam_Data_json)
+
+	time.sleep(1)
+
 
 	'''
 ################### DOUBLE PARK #################################
@@ -136,8 +175,7 @@ def publish_Cam_Events_to_MQTT():
 
 ################### CROWD DETECTION #################################
 
-	UtcTime = UtcTime.isoformat() + 'Z'
-	Cam_Data_IVA_Crowd_True = {
+	UCam_Data_IVA_Crowd_True = {
 		"UtcTime": UtcTime,
 		"Source":
 			{"Source": "1"},
@@ -147,7 +185,7 @@ def publish_Cam_Events_to_MQTT():
 	Cam_Data_json_1 = json.dumps(Cam_Data_IVA_Crowd_True)
 	publish_To_Topic (MQTT_Topic_IVA_Crowd_Detection, Cam_Data_json_1)
 
-	time.sleep(4)
+	time.sleep(1)
 
 	UtcTime = datetime.now()
 	UtcTime = UtcTime.isoformat() + 'Z'
@@ -161,7 +199,7 @@ def publish_Cam_Events_to_MQTT():
 	Cam_Data_json_2 = json.dumps(Cam_Data_IVA_Crowd_True)
 	publish_To_Topic (MQTT_Topic_IVA_Crowd_Detection, Cam_Data_json_2)
 
-	time.sleep(4)
+	time.sleep(1)
 	
 #####################################################################
 
@@ -225,32 +263,32 @@ def publish_Cam_Events_to_MQTT():
 	publish_To_Topic (MQTT_Topic_bike_counter_2, Cam_Data_json)
 	time.sleep(1)
 
+
 ########################## Jam #############################
 	Cam_Data_Jam = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"VideoSource":"1","Rule":"Jam 1"},
-		"Data":
-			{"Count":"0"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_Jam)
-	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"true"}
+		}
+		Cam_Data_json = json.dumps(Cam_Data_Jam)
+		publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
 
+		time.sleep(1)
 
-	time.sleep(1)
-
-	Cam_Data_Jam = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"VideoSource":"1","Rule":"Jam 2"},
-		"Data":
-			{"Count":"0"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_Jam)
-	publish_To_Topic (MQTT_Topic_IVA_jam_2, Cam_Data_json)
-	time.sleep(1)
-
+		Cam_Data_Jam = {
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"false"}
+		}
+		Cam_Data_json = json.dumps(Cam_Data_Jam)
+		publish_To_Topic (MQTT_Topic_IVA_jam_2, Cam_Data_json)
+		time.sleep(1)
 '''
+
 while True:
 
 	publish_Cam_Events_to_MQTT()

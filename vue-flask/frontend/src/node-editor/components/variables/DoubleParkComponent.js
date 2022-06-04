@@ -34,9 +34,10 @@ export class DoubleParkComponent extends Rete.Component {
 
     toJsonLogic(node) {
         const zone = node.data.type1;
+        const vehicleType = node.data.type1;
 
         return {
-            "doublePark": zone
+            "doublePark": [ zone, vehicleType ] 
         }  
     }
 }

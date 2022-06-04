@@ -146,15 +146,15 @@ def parse_mqtt_message(topic, message):
 
                 json_message = create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
                 input_json_db(json_message)
-
+ 
         elif Topic_array[3] == 'CrowdDetection':
             
-            if len(name_split) == 2:
+            if Topic_array[4].find('Crowd') != -1 and Topic_array[4].find('Detection') != -1:
                 _task = 'Crowd Detection'
                 _zone = _cam
                 _state = msg_deserialized['Data']['State']
 
-                create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
+                json_message = create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
                 input_json_db(json_message)
 
         elif Topic_array[3] == 'IdleObject' :
@@ -167,7 +167,7 @@ def parse_mqtt_message(topic, message):
                 elif name_split[0] == 'DoublePark':
                     _task = 'Double Park'
                 
-                if name_split[1] == 'Car': 
+                if name_split[1] in vehicles_list: 
                     _vehicle = name_split[1]
                     _zone = _cam + '-' + name_split[2]
 

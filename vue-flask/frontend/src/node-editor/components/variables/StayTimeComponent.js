@@ -32,11 +32,11 @@ export class StayTimeComponent extends Rete.Component {
     }
 
     toJsonLogic(node) {
-        const type = node.data.type;
+        const vehicleType = node.data.type;
         const zone = node.data.type1;
 
         return {
-            "stayTime": [ type, zone ]
+            "stayTime": [ zone, vehicleType ]
         }  
     }
 }
