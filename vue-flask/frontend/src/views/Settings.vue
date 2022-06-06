@@ -49,8 +49,9 @@
             <v-row>
               <v-col cols="5" md="2">
                 <v-text-field
-                  v-model="firstname"
-                  :rules="nameRules"
+                  v-model="password"
+                  type="password"
+                  :rules="passwordRules"
                   label="Set new password"
                   required
                 ></v-text-field>
@@ -58,8 +59,9 @@
 
               <v-col cols="5" md="2">
                 <v-text-field
-                  v-model="lastname"
-                  :rules="nameRules"
+                  v-model="confirmPassword"
+                  type="password"
+                  :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
                   label="Confirm new password"
                   required
                 ></v-text-field>
@@ -68,7 +70,9 @@
           </v-form>
         </v-card-text>
         <v-card-action>
-          <v-btn class="ml-4" @click="submit_password"> submit </v-btn>
+          <v-btn class="ml-4" :disabled="!valid" @click="submit_password;snackbar_password = true;">
+            submit
+          </v-btn>
         </v-card-action>
 
         <v-row class="mt-8">
@@ -77,26 +81,95 @@
               MQTT Broker Configuration
             </v-card-subtitle>
 
-            <v-card-text> 
+            <v-card-text>
               <p class="text-h6 font-weight-medium mt-8">
                 Change MQTT Broker IP
               </p>
-              <v-form>
-                <v-text-field label="Set new broker IP" required value="192.168.1.169"></v-text-field>
+              <v-form v-model="valid_mqtt">
+                <v-text-field
+                  v-model="mqtt_ip"
+                  label="Set new broker IP"
+                  required
+                  :rules="mqttRules"
+                ></v-text-field>
               </v-form>
             </v-card-text>
 
             <v-card-action>
-              <v-btn class="ml-4 mb-6" @click="submit_mqttIp"> submit </v-btn>
+              <v-btn
+                class="ml-4 mb-6"
+                :disabled="!valid_mqtt"
+                @click="submit_mqttIp;snackbar_mqtt = true;"
+              >
+                submit
+              </v-btn>
             </v-card-action>
           </v-col>
+          <v-col cols="9" md="5" sm="6" class="mr-16">
             <v-card-subtitle class="text-h6 font-weight-medium mt-3">
               Sensors Configuration
             </v-card-subtitle>
-          <v-col>
 
+            <v-card-text class="ma">
+              <p class="text-h6 font-weight-medium mt-8">
+                Change sensors number
+              </p>
+              <v-form v-model="valid_sensors">
+                <v-text-field
+                  v-model="n_sensors"
+                  label="Enter new number of sensors"
+                  required
+                  :rules="SensorsRules"
+                ></v-text-field>
+              </v-form>
+            </v-card-text>
+
+            <v-card-action>
+              <v-btn
+                class="ml-4 mb-6"
+                :disabled="!valid_sensors"
+                @click="submit_sensors;snackbar_sensors = true;"
+              >
+                submit
+              </v-btn>
+            </v-card-action>
           </v-col>
+
+          <v-col> </v-col>
         </v-row>
+        <div class="text-center">
+          <v-snackbar v-model="snackbar_password" :timeout="timeout">
+            {{ text_pass }}
+
+            <template v-slot:action="{ attrs }">
+              <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+        </div>
+        <div class="text-center">
+          <v-snackbar v-model="snackbar_mqtt" :timeout="timeout">
+            {{ text_mqtt }}
+
+            <template v-slot:action="{ attrs }">
+              <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+        </div>
+        <div class="text-center">
+          <v-snackbar v-model="snackbar_sensors" :timeout="timeout">
+            {{ text_sensors }}
+
+            <template v-slot:action="{ attrs }">
+              <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+        </div>
       </div>
     </v-card>
   </div>
@@ -105,6 +178,28 @@
 <script>
 export default {
   data: () => ({
+    snackbar_password: false,
+    snackbar_mqtt: false,
+    snackbar_sensors: false,
+    text_pass: "Password changed!",
+    text_mqtt: "Broker IP changed!",
+    text_sensors: "Number of sensors changed!",
+    timeout: 4000,
+
+    valid: true,
+    valid_mqtt: true,
+    password: "",
+    confirmPassword: "",
+    passwordRules: [(v) => !!v || "Password is required"],
+    confirmPasswordRules: [(v) => !!v || "Password is required"],
+
+    mqttRules: [(v) => !!v || "Cannot be empty"],
+    mqtt_ip: "192.168.1.199",
+
+    valid_sensors: true,
+    n_sensors: 1,
+    SensorsRules: [(v) => !!v || "Cannot be empty"],
+
     items: [
       {
         title: "Logout",
@@ -133,6 +228,10 @@ export default {
     ],
   }),
 
+  async mounted() {
+    this.getBrokerIP();
+  },
+
   methods: {
     clickLogo() {
       this.$router.push("dashboard");
@@ -140,11 +239,41 @@ export default {
     handleClick(index) {
       this.items[index].click.call(this);
     },
-    submit_password() {
-      this.$v.$touch();
+    async submit_password() {
+      const file = JSON.stringify({ password: this.confirmPassword });
+      await fetch(`http://127.0.0.1:5000/settings`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: file,
+      });
+      
     },
-    submit_mqttIp() {
-      this.$v.$touch();
+    async submit_mqttIp() {
+      const file = JSON.stringify({ Broker_IP: this.mqtt_ip });
+      await fetch(`http://127.0.0.1:5000/settings`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: file,
+      });
+    },
+    async submit_sensors() {
+      const file = JSON.stringify({ Sensors: this.n_sensors });
+      await fetch(`http://127.0.0.1:5000/settings`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: file,
+      });
+    },
+    async getBrokerIP() {
+      const responseIP = await fetch("http://127.0.0.1:5000/brokerIP");
+      this.mqtt_ip = await responseIP.json();
+    },
+  },
+
+  computed: {
+    passwordConfirmationRule() {
+      return () =>
+        this.password === this.confirmPassword || "Password must match";
     },
   },
 };
