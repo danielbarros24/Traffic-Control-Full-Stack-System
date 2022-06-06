@@ -27,10 +27,10 @@ app = Flask(__name__)
 total_pins = 26
 
 # DATABASE
-db_camera = TinyDB('../database/camera_data.json')
+db_camera = TinyDB('../database/camera.json')
 db_auth = TinyDB('../database/auth.json')
-db_auto = TinyDB('../database/automations.json')
-db_general = TinyDB('../database/general_info.json')
+db_auto = TinyDB('../database/processes.json')
+db_general = TinyDB('../database/system.json')
 
 query = Query()
 
@@ -113,20 +113,20 @@ def logout():
 ############# OTHER FUNCTIONS ################
 
 #####Create new automation########
-@app.post('/automation')
-def new_automation():
+@app.post('/process')
+def new_process():
     automation = request.get_json()
     
     db_auto.insert(automation)
     
-    print("Automation inserted!")
+    print("Process inserted!")
 
     return jsonify(status='Success')
 
 
 #####Update automation########
-@app.patch('/automation')
-def update_automation():
+@app.patch('/process')
+def update_process():
 
     automation = request.get_json()
     automation_id = request.args.get('id')
@@ -134,33 +134,33 @@ def update_automation():
     if db_auto.contains(doc_id=int(automation_id)):    
         db_auto.update(automation, doc_ids=[int(automation_id)])
         res = "success"
-        print("Automation updated!")
+        print("Process updated!")
     else:
         res = "not found" 
 
     return jsonify(status=res)
 
 #####get automations########
-@app.get('/automation')
-def get_automation():
+@app.get('/process')
+def get_process():
     
     automations = db_auto.all()
 
     for n in automations:
         n["id"] = n.doc_id
 
-    print("Automations returned!")    
+    print("Process returned!")    
     return jsonify(automations)
 
 #####delete automations########
-@app.delete('/automation')
-def delete_automation():
+@app.delete('/process')
+def delete_process():
 
     automation_id = request.args.get('id')
     if db_auto.contains(doc_id=int(automation_id)):   
         db_auto.remove(doc_ids=[int(automation_id)])
         res = "success"
-        print("Automation deleted!")
+        print("Process deleted!")
     else:
         res = "not found" 
 
@@ -169,7 +169,7 @@ def delete_automation():
 
 #####get used GPIOs########
 @app.get('/pins')
-def get_used_pins():
+def get_pins():
 
     used_gpios = [query.get('gpios') for query in db_auto.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
    

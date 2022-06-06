@@ -400,7 +400,7 @@ export default {
   },
 
   async mounted() {
-    const responseAutomations = await fetch("http://127.0.0.1:5000/automation");
+    const responseAutomations = await fetch("http://127.0.0.1:5000/process");
     const jsonAutomations = await responseAutomations.json();
     this.automations = jsonAutomations.map((val) => {
       const startTime = new Date(val.startTime);
@@ -468,7 +468,7 @@ export default {
 
     async deleteItemConfirm() {
       const id = this.editedItem.id;
-      await fetch(`http://127.0.0.1:5000/automation?id=${id}`, {
+      await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
         method: "DELETE",
       });
       this.automations.splice(this.editedIndex, 1);
@@ -530,14 +530,14 @@ export default {
 
         if (this.editedIndex > -1) {
           const id = this.editedItem.id;
-          await fetch(`http://127.0.0.1:5000/automation?id=${id}`, {
+          await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: file,
           });
           Object.assign(this.automations[this.editedIndex], this.editedItem);
         } else {
-          await fetch("http://127.0.0.1:5000/automation", {
+          await fetch("http://127.0.0.1:5000/process", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: file,
@@ -557,7 +557,7 @@ export default {
     async updateEnable(event, item) {
       const id = item.id;
 
-      await fetch(`http://127.0.0.1:5000/automation?id=${id}`, {
+      await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

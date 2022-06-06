@@ -16,8 +16,8 @@ from datetime import datetime
 from dateutil import parser
 
 
-db_camera = TinyDB('database/camera_data.json')
-db_general = TinyDB('database/general_info.json')
+db_camera = TinyDB('database/camera.json')
+db_general = TinyDB('database/system.json')
 
 query = Query()
 
@@ -240,6 +240,8 @@ def function_stay_time(zone, vehicleType):
     time = [query.get('start_time') for query in db_general.all()]
     start_time = time[0]
 
+    current_time = datetime.utcnow().isoformat()[:-3]+'Z'
+
     if vehicleType == 'ALL':
         docs = db_camera.search((query.Task == 'Idle Object') & (query.UtcTime >= start_time) & (query.Zone == zone))
     else:
@@ -249,19 +251,18 @@ def function_stay_time(zone, vehicleType):
     stayTime = 0
     end_time = 0
 
-    got_true = 0
-    i=0
+    last_state = False
     for doc in docs:
-        i += 1
-        if i == 1 and doc.get('State') == 'true':
-            got_true = 1
-        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
+        if doc.get('State') == 'true':
+            last_state = True
             end_time = doc.get('UtcTime')
-        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
-            i = 0
+        if doc.get('State') == 'true':
+            last_state = False
 
-
-    stayTime = parser.parse(end_time) - parser.parse(start_time)
+    if last_state == True:
+        stayTime = parser.parse(current_time) - parser.parse(end_time)
+    else: 
+        stayTime = 0
 
     return stayTime.total_seconds()
 
@@ -274,17 +275,14 @@ def function_jam_detection(zone):
     
     docs = db_camera.search((query.Task == 'Jam Detection') & (query.UtcTime > start_time) & (query.Zone == zone))
 
-    got_true = 0
-    i=0
+    last_state = False
     for doc in docs:
-        i += 1
-        if i == 1 and doc.get('State') == 'true':
-            got_true = 1
-            return True
-        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
-            return False
-        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
-            i = 0
+        if doc.get('State') == 'true':
+            last_state = True
+        if doc.get('State') == 'false':
+            last_state = False
+
+    return last_state
 
 
 def function_crowd_detection(zone):
@@ -295,18 +293,14 @@ def function_crowd_detection(zone):
     
     docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
 
-    got_true = 0
-    i=0
+    last_state = False
     for doc in docs:
-        i += 1
-        if i == 1 and doc.get('State') == 'true':
-            got_true = 1
-            print(doc)
-            return True
-        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
-            return False
-        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
-            i = 0
+        if doc.get('State') == 'true':
+            last_state = True
+        if doc.get('State') == 'false':
+            last_state = False
+
+    return last_state
 
 
 def function_double_park(zone, vehicleType):
@@ -318,19 +312,14 @@ def function_double_park(zone, vehicleType):
     
     docs = db_camera.search((query.Task == 'Double Park') & (query.UtcTime > start_time) & (query.Vehicle == vehicle) & (query.Zone == zone))
 
-    got_true = 0
-    i=0
-
+    last_state = False
     for doc in docs:
-        i += 1
-        if i == 1 and doc.get('State') == 'true':
-            got_true = 1
-            return True
-        elif i == 2 and doc.get('State') == 'false' and got_true == 1:
-            return False
-        elif i == 1 and doc.get('State') == 'false' and got_true == 0:
-            i = 0
+        if doc.get('State') == 'true':
+            last_state = True
+        if doc.get('State') == 'false':
+            last_state = False
 
+    return last_state
 
 
 operations = {

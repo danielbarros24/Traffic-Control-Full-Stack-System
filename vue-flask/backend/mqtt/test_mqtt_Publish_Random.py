@@ -150,6 +150,110 @@ def publish_Cam_Events_to_MQTT():
 
 	time.sleep(1)
 
+	Cam_Data_IVA_double_park= {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source": "1"},
+		"Data":
+			{"State":"true"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_IVA_double_park)
+	publish_To_Topic (MQTT_Topic_IVA_double_park_bike_1, Cam_Data_json)
+
+	time.sleep(1)
+	Cam_Data_IVA_double_park = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source": "1"},
+		"Data":
+			{"State":"true"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_IVA_double_park)
+	publish_To_Topic (MQTT_Topic_IVA_double_park_bike_2, Cam_Data_json)
+
+	time.sleep(1)
+
+	Cam_Data_IVA_Crowd_True = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source": "1"},
+		"Data":
+			{"State":"true"}
+	}
+	Cam_Data_json_1 = json.dumps(Cam_Data_IVA_Crowd_True)
+	publish_To_Topic (MQTT_Topic_IVA_Crowd_Detection, Cam_Data_json_1)
+
+	time.sleep(1)
+
+	UtcTime = datetime.now()
+	UtcTime = UtcTime.isoformat() + 'Z'
+	Cam_Data_IVA_Crowd_True = {
+		"UtcTime": UtcTime,
+		"Source": 
+			{"Source": "1"},
+		"Data":
+			{"State":"false"}
+	}
+	Cam_Data_json_2 = json.dumps(Cam_Data_IVA_Crowd_True)
+	publish_To_Topic (MQTT_Topic_IVA_Crowd_Detection, Cam_Data_json_2)
+
+	time.sleep(1)
+
+	Cam_Data_Rule = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"VideoSource":"1","Rule":"Counter Truck 1"},
+		"Data":
+			{"Count":Count}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_Rule)
+	publish_To_Topic (MQTT_Topic_truck_counter_1, Cam_Data_json)
+	time.sleep(1)
+
+	Cam_Data_Rule = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"VideoSource":"1","Rule":"Counter Car 1"},
+		"Data":
+			{"Count":Count}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_Rule)
+	publish_To_Topic (MQTT_Topic_car_counter_1, Cam_Data_json)
+	time.sleep(1)
+
+	Cam_Data_Rule = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"VideoSource":"1","Rule":"Counter bike 2"},
+		"Data":
+			{"Count":Count}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_Rule)
+	publish_To_Topic (MQTT_Topic_bike_counter_2, Cam_Data_json)
+	time.sleep(1)
+
+	Cam_Data_Jam = {
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"true"}
+		}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
+
+	time.sleep(1)
+
+	Cam_Data_Jam = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source":"1"},
+		"Data":
+			{"State":"false"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_2, Cam_Data_json)
+	time.sleep(1)
 
 	'''
 ################### DOUBLE PARK #################################
@@ -180,7 +284,7 @@ def publish_Cam_Events_to_MQTT():
 
 ################### CROWD DETECTION #################################
 
-	UCam_Data_IVA_Crowd_True = {
+	Cam_Data_IVA_Crowd_True = {
 		"UtcTime": UtcTime,
 		"Source":
 			{"Source": "1"},

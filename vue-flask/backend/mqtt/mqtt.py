@@ -3,30 +3,45 @@
 # ------------------------------------------
 
 import paho.mqtt.client as mqtt
-from .database_manager import database_insert, database_remove, database_create_query, database_get_all, database_iter, database_search, database_truncate, database_update
+from tinydb import TinyDB, Query
+
+db_system = TinyDB('database/system.json')
+db_camera = TinyDB('database/camera.json')
+
+query = Query()
 
 import json
 # from store_data_into_db import sensor_Data_Handler
 # from tiny_db_manager import Data_handler
 
 
-n_sensors = 1
+docs = db_system.all()
+for doc in docs:
+    n_sensors = doc.get('Sensors')
+
+print("Number of cameras: " + n_sensors)
+
 
 # Server Credentials
 username = "daniel"
 password = "password"
 
-new_data = 0
-MQTT_Topics = []
-for i in range(n_sensors):
+#new_data = 0
+
+MQTT_Topics = []   
+zones = []
+ 
+for i in range(int(n_sensors)):
     j = i+1
     MQTT_Topics.append("T" + str(j) + "/onvif-ej/#")
+    zones.append("T" + str(j) + '-' + '1')
+    zones.append("T" + str(j) + '-' + '2')
 
-print(MQTT_Topics)
+db_system.update({'Zones': zones})
 
 vehicles_list = ["Car", "Bike", "Truck"]
 zones_list = ["1", "2"]
-# TOPICS
+
 
 def mqtt_data_received(msg):
     print(
@@ -40,7 +55,7 @@ def mqtt_data_received(msg):
 def input_json_db(json_message):
     json_message_serialized = json.dumps(json_message)
     print("[DATABASE INPUT]: " + str(json_message_serialized))
-    database_insert(json.loads(json_message_serialized))
+    db_camera.insert(json.loads(json_message_serialized))
     print(
         "==========================DATA INSERTED IN DATABASE==========================" + "\n\n\n")
 
@@ -174,10 +189,8 @@ def parse_mqtt_message(topic, message):
 
 # Subscribe to all Sensors at Base Topic
 def on_connect(client, userdata, flags, rc):
-    for i in range(n_sensors):
+    for i in range(int(n_sensors)):
         client.subscribe(MQTT_Topics[i], 0)
-
-# Save Data into DB Table
 
 
 def on_message(client, userdata, msg):
@@ -187,7 +200,6 @@ def on_message(client, userdata, msg):
 
     if topic_array[2] == 'RuleEngine' or topic_array[2] == 'IVA':
         mqtt_data_received(msg)
-
 
 def on_subscribe(client, userdata, mid, granted_qos):
     pass

@@ -1,6 +1,6 @@
 import time
 from mqtt.mqtt import client
-from automation_trigger.automation_trigger import test_automations
+from process_trigger.process_trigger import test_automations
 
 # MQTT Settings
 MQTT_Broker = "192.168.1.199"

@@ -4,7 +4,6 @@
 #### Executa jsonLogic.apply(rules, data);
 #### Retorna true ou false -> se true coloca pino x a 1
 
-
 import json
 from datetime import datetime
 from ssl import VerifyFlags
@@ -16,10 +15,10 @@ from .json_logic import jsonLogic
 
 
 # DATABASE
-db_camera = TinyDB('database/camera_data.json')
+db_camera = TinyDB('database/camera.json')
 db_auth = TinyDB('database/auth.json')
-db_auto = TinyDB('database/automations.json')
-db_general = TinyDB('database/general_info.json')
+db_auto = TinyDB('database/processes.json')
+db_general = TinyDB('database/system.json')
 
 query = Query()
 
@@ -39,6 +38,9 @@ def test_automations():
 
     current_date = datetime.now()
     current_date = current_date.replace(tzinfo=utc)
+    
+    if not docs:
+        print("No process is enabled!")
 
     for doc in docs:
         raw_start_time = doc.get('startTime')
@@ -58,7 +60,7 @@ def test_automations():
             else:
                 print("Conditions not ready!\n")
         else:
-            print("No processes available!\n")
+            print("No more processes available!\n")
 
 
 

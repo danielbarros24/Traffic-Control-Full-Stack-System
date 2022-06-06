@@ -1,7 +1,7 @@
 <template>
   <v-switch
       v-model="reteValue"
-      :label="`Negative logic: ${reteValue.toString()}`"
+      :label="`Invert: ${reteValue.toString()}`"
       hide-details
       color="white"
       dark
