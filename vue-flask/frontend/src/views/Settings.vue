@@ -45,7 +45,7 @@
         </v-card-subtitle>
 
         <v-card-text>
-          <v-form v-model="valid">
+          <v-form v-model="valid" ref="myForm">
             <v-row>
               <v-col cols="5" md="2">
                 <v-text-field
@@ -53,7 +53,6 @@
                   type="password"
                   :rules="passwordRules"
                   label="Set new password"
-                  required
                 ></v-text-field>
               </v-col>
 
@@ -63,7 +62,6 @@
                   type="password"
                   :rules="confirmPasswordRules.concat(passwordConfirmationRule)"
                   label="Confirm new password"
-                  required
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -192,8 +190,8 @@ export default {
     valid_mqtt: true,
     password: "",
     confirmPassword: "",
-    passwordRules: [(v) => !!v || "Password is required"],
-    confirmPasswordRules: [(v) => !!v || "Password is required"],
+    passwordRules: [(v) => !!v],
+    confirmPasswordRules: [(v) => !!v],
 
     mqttRules: [(v) => !!v || "Cannot be empty"],
     mqtt_ip: "192.168.1.199",
@@ -252,6 +250,9 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: file,
       });
+      this.password = ""
+      this.confirmPassword = ""
+      this.$refs.myForm.reset();
       
     },
     async submit_mqttIp() {

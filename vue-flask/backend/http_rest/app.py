@@ -193,7 +193,7 @@ def update_password():
 
     db_auth.update({'password': "{}".format(password)})
     res = "success"
-    print("Password updated: " + str(password)) 
+    print("Password updated!") 
 
     return jsonify(status=res)
 
