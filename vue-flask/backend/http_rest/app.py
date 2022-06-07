@@ -211,10 +211,10 @@ def get_broker():
 @app.get('/settings-sensors')
 def get_sensors():
 
-    docs = db_system.all()
-    for doc in docs:
-        number = doc.get('Sensors')
-        print("[GET SENSORS]: " + str(number))
+    doc = db_system.get(doc_id=1)
+    
+    number = doc.get('Sensors')
+    print("[GET SENSORS]: " + str(number))
 
     return jsonify(Number=number)
 

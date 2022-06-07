@@ -63,18 +63,29 @@
                 <span class="text-h4 font-weight-bold">{{ formTitle }}</span>
               </v-card-title>
               <v-card-actions>
-                <v-btn color="primary" text @click="save"> Save </v-btn>
+                <v-btn
+                  color="primary"
+                  text
+                  :disabled="!all_valid"
+                  @click="
+                    save();
+                    triggerSavedProcess();
+                  "
+                >
+                  Save
+                </v-btn>
                 <v-btn color="primary" text @click="close"> Cancel </v-btn>
               </v-card-actions>
-              <v-card-text v-show="notValidated" class="red--text">Validate process configuration!</v-card-text>
               <v-card-text>
                 <v-row>
-                  <v-col cols="4" md="2">
+                  <v-form ref="form" v-model="valid">
+                    <v-col>
                     <h2 class="mt-8">Name</h2>
                     <v-text-field
                       v-model="editedItem.name"
                       label="Insert process Name Here!"
                       class="mt-3 mb-6"
+                      :rules="nameRules"
                       required
                     ></v-text-field>
 
@@ -98,6 +109,7 @@
                             v-on="on"
                             class="mt-3"
                             required
+                            :rules="nameRules"
                           ></v-text-field>
                         </template>
                         <v-date-picker
@@ -126,6 +138,7 @@
                             v-bind="attrs"
                             v-on="on"
                             required
+                            :rules="nameRules"
                           ></v-text-field>
                         </template>
                         <v-time-picker
@@ -208,15 +221,12 @@
                       ></v-switch>
                     </div>
 
-                    <v-btn @click="onValidate" 
-                      >Validate</v-btn
-                    >
-                    <p v-show="incorrectConfig" class="red--text mt-3">Incorrect configuration!</p>
-                     <p v-show="correctConfig" class="green--text mt-3">Correct configuration!</p>
+                    <v-btn @click="Validate(); all_valid = true;" :disabled="!valid">Validate Rule</v-btn>
                     <!-- <v-textarea v-model="editorJSON"></v-textarea> -->
                     <!-- <v-btn @click="onEditorSync">Sync</v-btn> -->
                     <!-- <v-btn @click="onEditorImport">Import</v-btn> -->
                   </v-col>
+                  </v-form>
                   <v-col md="10">
                     <ReteEditor v-model="editor" />
                   </v-col>
@@ -233,7 +243,13 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="primary" text @click="closeDelete">Cancel</v-btn>
-                <v-btn color="primary" text @click="deleteItemConfirm"
+                <v-btn
+                  color="primary"
+                  text
+                  @click="
+                    deleteItemConfirm();
+                    snackbar_deleted = true;
+                  "
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -256,6 +272,52 @@
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
     </v-data-table>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar_saved" :timeout="timeout">
+        Process saved!
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="blue"
+            text
+            v-bind="attrs"
+            @click="snackbar_saved = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+    <div class="text-center">
+      <v-snackbar v-model="snackbar_deleted" :timeout="timeout">
+        Process deleted!
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="blue"
+            text
+            v-bind="attrs"
+            @click="snackbar_deleted = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
+    <v-spacer></v-spacer>
+    <div>
+      <v-alert border="left" prominent type="info" class="mt-12" v-model="processTriger">
+        <v-row align="center">
+          <v-col class="grow">
+              {{ triggerProcessname }} process triggered! 
+          </v-col>
+          <v-col class="shrink">
+            <v-btn color="white" class="black--text" @click="processTriger = false">Dismiss</v-btn>
+          </v-col>
+        </v-row>
+      </v-alert>
+    </div>
+    
   </div>
 </template>
 
@@ -297,6 +359,18 @@ export default {
           },
         },
       ],
+      
+      nameRules: [(v) => !!v],
+
+      valid: true,
+      all_valid: false,
+
+      processTriger:true, 
+      triggerProcessname: "Jam",
+
+      snackbar_saved: false,
+      snackbar_deleted: false,
+      timeout: 4000,
 
       menuStart: false,
       menuEnd: false,
@@ -353,10 +427,7 @@ export default {
       editor: null,
       editorJSON: "",
 
-      notValidated: false,
-      incorrectConfig: false,
-      correctConfig: false,
-      canSave: false,
+      
     };
   },
 
@@ -402,6 +473,7 @@ export default {
   async mounted() {
     const responseAutomations = await fetch("http://127.0.0.1:5000/process");
     const jsonAutomations = await responseAutomations.json();
+
     this.automations = jsonAutomations.map((val) => {
       const startTime = new Date(val.startTime);
       const endTime = new Date(val.endTime);
@@ -423,10 +495,20 @@ export default {
   },
 
   methods: {
+    
+    triggerSavedProcess() {
+      snackbar_saved = true;
+    },
+
+    triggerDeletedProcess() {
+      snackbar_deleted = true;
+    },
+
     async createNodeClick() {},
     handleClick(index) {
       this.items[index].click.call(this);
     },
+
     clickLogo() {
       this.$router.push("dashboard");
     },
@@ -481,10 +563,8 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      this.correctConfig = false
-      this.incorrectConfig = false
-      this.notValidated = false
-      this.canSave = false
+      this.$refs.form.reset();
+      this.all_valid = false;
     },
 
     closeDelete() {
@@ -493,11 +573,11 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      
+      this.$refs.form.reset();
+      this.all_valid = false;
     },
 
     async save() {
-      if(this.canSave == true) {
         const editor = this.editor;
 
         const blueprint = await editor.toJSON();
@@ -514,7 +594,6 @@ export default {
 
         const startTime = dayjs(dates[0] + " " + startHour).toISOString();
         const endTime = dayjs(dates[1] + " " + endHour).toISOString();
-
 
         const automation = {
           name: this.editedItem.name,
@@ -545,13 +624,9 @@ export default {
           this.automations.push(this.editedItem);
         }
 
-          this.close();
-      }
-      
-      else {
-          this.notValidated = true
-      }
-      
+        this.close();
+        this.triggerSavedProcess();
+        this.resetValidate()
     },
 
     async updateEnable(event, item) {
@@ -566,40 +641,13 @@ export default {
       });
     },
 
-    async onValidate() {
+    async Validate() {
       const editor = this.editor;
 
       const endNode = this.editor.nodes.find((node) => node.name === "End");
       const endComponent = editor.getComponent("End");
-
-      if (
-        this.editedItem.name != "" &&
-        this.editedItem.gpios != [] &&
-        this.editedItem.startHour != "" &&
-        this.editedItem.endHour != "" &&
-        this.editedItem.dates != [] &&
-        endNode != null
-      ) {
-        //console.log(JSON.stringify(endComponent.toJsonLogic?.(endNode)));
-        this.incorrectConfig = false
-        this.correctConfig = true
-        this.notValidated = false
-        this.canSave = true
-
-      } else {
-        this.incorrectConfig = true
-        this.correctConfig = false
-      }
-      //this.$refs.form.validate();
+      
     },
-
-    /*async onEditorImport() {
-      await this.editor.fromJSON(JSON.parse(this.editorJSON));
-    },
-
-    async onEditorSync() {
-      this.editorJSON = JSON.stringify(await this.editor.toJSON());
-    },*/
   },
 };
 </script>
