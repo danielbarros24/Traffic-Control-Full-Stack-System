@@ -29,8 +29,8 @@ total_pins = 26
 # DATABASE
 db_camera = TinyDB('../database/camera.json')
 db_auth = TinyDB('../database/auth.json')
-db_auto = TinyDB('../database/processes.json')
-db_general = TinyDB('../database/system.json')
+db_processes = TinyDB('../database/processes.json')
+db_system = TinyDB('../database/system.json')
 
 query = Query()
 
@@ -117,7 +117,7 @@ def logout():
 def new_process():
     automation = request.get_json()
     
-    db_auto.insert(automation)
+    db_processes.insert(automation)
     
     print("Process inserted!")
 
@@ -131,8 +131,8 @@ def update_process():
     automation = request.get_json()
     automation_id = request.args.get('id')
 
-    if db_auto.contains(doc_id=int(automation_id)):    
-        db_auto.update(automation, doc_ids=[int(automation_id)])
+    if db_processes.contains(doc_id=int(automation_id)):    
+        db_processes.update(automation, doc_ids=[int(automation_id)])
         res = "success"
         print("Process updated!")
     else:
@@ -144,7 +144,7 @@ def update_process():
 @app.get('/process')
 def get_process():
     
-    automations = db_auto.all()
+    automations = db_processes.all()
 
     for n in automations:
         n["id"] = n.doc_id
@@ -157,8 +157,8 @@ def get_process():
 def delete_process():
 
     automation_id = request.args.get('id')
-    if db_auto.contains(doc_id=int(automation_id)):   
-        db_auto.remove(doc_ids=[int(automation_id)])
+    if db_processes.contains(doc_id=int(automation_id)):   
+        db_processes.remove(doc_ids=[int(automation_id)])
         res = "success"
         print("Process deleted!")
     else:
@@ -171,7 +171,7 @@ def delete_process():
 @app.get('/pins')
 def get_pins():
 
-    used_gpios = [query.get('gpios') for query in db_auto.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
+    used_gpios = [query.get('gpios') for query in db_processes.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
    
 
     used_gpios = [item for sublist in used_gpios for item in sublist]
@@ -183,6 +183,68 @@ def get_pins():
         Total_pins.remove(j)
 
     return jsonify(Total_pins)
+
+######## UPDATE PASSWORD #################################
+@app.patch('/settings')
+def update_password():
+
+    credentials = request.get_json()
+    password = credentials.get('password')
+
+    db_auth.update({'password': "{}".format(password)})
+    res = "success"
+    print("Password updated: " + str(password)) 
+
+    return jsonify(status=res)
+
+######## GET BROKER MQTT #################################
+@app.get('/settings-broker')
+def get_broker():
+
+    doc = db_system.get(doc_id=1)
+    broker = doc.get('Broker_IP')
+    print("[GET BROKER]: " + str(broker))
+
+    return jsonify(Broker=broker)
+
+######## GET SENSORS NUMBER #################################
+@app.get('/settings-sensors')
+def get_sensors():
+
+    docs = db_system.all()
+    for doc in docs:
+        number = doc.get('Sensors')
+        print("[GET SENSORS]: " + str(number))
+
+    return jsonify(Number=number)
+
+######## UPDATE BROKER #################################
+@app.patch('/settings-broker')
+def update_broker():
+
+    new_broker = request.get_json()
+    broker = new_broker.get('Broker_IP')
+
+    db_system.update({'Broker_IP': "{}".format(broker)})
+    res = "success"
+    print("Broker updated: " + str(broker)) 
+
+    return jsonify(status=res)
+
+######## UPDATE SENSORS #################################
+@app.patch('/settings-sensors')
+def update_sensors():
+
+    new_sensors = request.get_json()
+    sensors = new_sensors.get('Sensors')
+
+    db_system.update({'Sensors': "{}".format(sensors)})
+    res = "success"
+    print("Sensors number updated: " + str(sensors)) 
+
+    return jsonify(status=res)
+
+
 
 
 @app.post("/dashboard")

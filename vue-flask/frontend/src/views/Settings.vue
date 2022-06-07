@@ -70,7 +70,7 @@
           </v-form>
         </v-card-text>
         <v-card-action>
-          <v-btn class="ml-4" :disabled="!valid" @click="submit_password;snackbar_password = true;">
+          <v-btn class="ml-4" :disabled="!valid" @click="submit_password(); snackbar_password = true;">
             submit
           </v-btn>
         </v-card-action>
@@ -99,7 +99,7 @@
               <v-btn
                 class="ml-4 mb-6"
                 :disabled="!valid_mqtt"
-                @click="submit_mqttIp;snackbar_mqtt = true;"
+                @click="submit_mqttIp();snackbar_mqtt = true;"
               >
                 submit
               </v-btn>
@@ -128,7 +128,7 @@
               <v-btn
                 class="ml-4 mb-6"
                 :disabled="!valid_sensors"
-                @click="submit_sensors;snackbar_sensors = true;"
+                @click="submit_sensors();snackbar_sensors = true;"
               >
                 submit
               </v-btn>
@@ -142,7 +142,7 @@
             {{ text_pass }}
 
             <template v-slot:action="{ attrs }">
-              <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+              <v-btn color="blue" text v-bind="attrs" @click="snackbar_password = false">
                 Close
               </v-btn>
             </template>
@@ -153,7 +153,7 @@
             {{ text_mqtt }}
 
             <template v-slot:action="{ attrs }">
-              <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+              <v-btn color="blue" text v-bind="attrs" @click="snackbar_mqtt = false">
                 Close
               </v-btn>
             </template>
@@ -164,7 +164,7 @@
             {{ text_sensors }}
 
             <template v-slot:action="{ attrs }">
-              <v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+              <v-btn color="blue" text v-bind="attrs" @click="snackbar_sensors = false">
                 Close
               </v-btn>
             </template>
@@ -176,13 +176,15 @@
 </template>
 
 <script>
+import { consoleError } from 'vuetify/lib/util/console';
+
 export default {
   data: () => ({
     snackbar_password: false,
     snackbar_mqtt: false,
     snackbar_sensors: false,
     text_pass: "Password changed!",
-    text_mqtt: "Broker IP changed!",
+    text_mqtt: "Broker IP changed! Please restart the system!",
     text_sensors: "Number of sensors changed!",
     timeout: 4000,
 
@@ -197,7 +199,7 @@ export default {
     mqtt_ip: "192.168.1.199",
 
     valid_sensors: true,
-    n_sensors: 1,
+    n_sensors: "1" ,
     SensorsRules: [(v) => !!v || "Cannot be empty"],
 
     items: [
@@ -230,6 +232,7 @@ export default {
 
   async mounted() {
     this.getBrokerIP();
+    this.getSensors();
   },
 
   methods: {
@@ -240,7 +243,10 @@ export default {
       this.items[index].click.call(this);
     },
     async submit_password() {
-      const file = JSON.stringify({ password: this.confirmPassword });
+      const password = {
+        password: this.confirmPassword
+      }
+      const file = JSON.stringify(password);
       await fetch(`http://127.0.0.1:5000/settings`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -249,24 +255,36 @@ export default {
       
     },
     async submit_mqttIp() {
-      const file = JSON.stringify({ Broker_IP: this.mqtt_ip });
-      await fetch(`http://127.0.0.1:5000/settings`, {
+      const broker = {
+        Broker_IP: this.mqtt_ip
+      }
+      const file = JSON.stringify(broker);
+      await fetch(`http://127.0.0.1:5000/settings-broker`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
       });
     },
     async submit_sensors() {
-      const file = JSON.stringify({ Sensors: this.n_sensors });
-      await fetch(`http://127.0.0.1:5000/settings`, {
+      const sensor = {
+        Sensors: this.n_sensors
+      }
+      const file = JSON.stringify(sensor);
+      await fetch(`http://127.0.0.1:5000/settings-sensors`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
       });
     },
     async getBrokerIP() {
-      const responseIP = await fetch("http://127.0.0.1:5000/brokerIP");
-      this.mqtt_ip = await responseIP.json();
+      const response = await fetch("http://127.0.0.1:5000/settings-broker");
+      const ip= await response.json();
+      this.mqtt_ip = JSON.parse(ip);
+    },
+    async getSensors() {
+      const response = await fetch("http://127.0.0.1:5000/settings-sensors");
+      const number= await response.json();
+      this.n_sensors = JSON.parse(number);
     },
   },
 
