@@ -33,6 +33,7 @@ db_processes = TinyDB('../database/processes.json')
 db_system = TinyDB('../database/system.json')
 
 query = Query()
+Gpio = Query()
 
 # CORS
 Cors = CORS(app)
@@ -171,17 +172,20 @@ def delete_process():
 @app.get('/pins')
 def get_pins():
 
-    used_gpios = [query.get('gpios') for query in db_processes.search(query.gpios.exists())]    #GETS USED GPIOS IN AUTOMATIONS
-   
+    docs = [query.get('gpios') for query in db_processes.all()]    #GETS USED GPIOS IN AUTOMATIONS
 
-    used_gpios = [item for sublist in used_gpios for item in sublist]
+    docs = [item for sublist in docs for item in sublist]
 
+    used_pins = []
+
+    for doc in docs:
+        used_pins.append(doc.get('gpio'))
 
     Total_pins = list(range(1, 27))                                                         #CREATES ARRAY WITH ALL PINS (1 - 26)
 
-    for j in used_gpios:                                                                    #REMOVES FROM ARRAY USED GPIOS
-        Total_pins.remove(j)
-
+    for j in used_pins:                                                                    #REMOVES FROM ARRAY USED GPIOS
+       Total_pins.remove(j)
+       
     return jsonify(Total_pins)
 
 ######## UPDATE PASSWORD #################################

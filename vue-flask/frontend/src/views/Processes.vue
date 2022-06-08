@@ -68,8 +68,7 @@
                   text
                   :disabled="!all_valid"
                   @click="
-                    save();
-                    triggerSavedProcess();
+                    save
                   "
                 >
                   Save
@@ -78,155 +77,165 @@
               </v-card-actions>
               <v-card-text>
                 <v-row>
-                  <v-form ref="form" v-model="valid">
-                    <v-col>
-                    <h2 class="mt-8">Name</h2>
-                    <v-text-field
-                      v-model="editedItem.name"
-                      label="Insert process Name Here!"
-                      class="mt-3 mb-6"
-                      :rules="nameRules"
-                      required
-                    ></v-text-field>
+                  <v-col>
+                    <v-form ref="form" v-model="valid">
+                      <h2 class="mt-8">Name</h2>
+                      <v-text-field
+                        v-model="editedItem.name"
+                        label="Insert process Name Here!"
+                        class="mt-3 mb-6"
+                        :rules="nameRules"
+                        required
+                      ></v-text-field>
 
-                    <div>
-                      <h2>Time</h2>
-                      <v-menu
-                        v-model="menu2"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="dateRangeText"
-                            label="Select date range"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                            class="mt-3"
-                            required
-                            :rules="nameRules"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
-                          v-model="editedItem.dates"
-                          range
-                        ></v-date-picker>
-                      </v-menu>
-
-                      <v-menu
-                        ref="menu1"
-                        v-model="menuStart"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        :return-value.sync="editedItem.startHour"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="editedItem.startHour"
-                            label="Start Time"
-                            prepend-icon="mdi-clock-time-four-outline"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                            required
-                            :rules="nameRules"
-                          ></v-text-field>
-                        </template>
-                        <v-time-picker
-                          v-if="menuStart"
-                          v-model="editedItem.startHour"
-                          format="24h"
-                          scrollable
-                          full-width
-                          @click:minute="$refs.menu1.save(editedItem.startHour)"
-                        ></v-time-picker>
-                      </v-menu>
-
-                      <v-menu
-                        ref="menu2"
-                        v-model="menuEnd"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        :return-value.sync="editedItem.endHour"
-                        transition="scale-transition"
-                        offset-y
-                        max-width="290px"
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="editedItem.endHour"
-                            label="End Time"
-                            prepend-icon="mdi-clock-time-four-outline"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                            class="mb-6"
-                            required
-                          ></v-text-field>
-                        </template>
-                        <v-time-picker
-                          v-if="menuEnd"
-                          v-model="editedItem.endHour"
-                          format="24h"
-                          scrollable
-                          full-width
-                          @click:minute="$refs.menu2.save(editedItem.endHour)"
-                        ></v-time-picker>
-                      </v-menu>
-                    </div>
-
-                    <div>
-                      <h2>Outputs</h2>
-                      <v-row>
-                        <v-autocomplete
-                          v-model="orderEditedGpios"
-                          :items="allGpios"
-                          chips
-                          deletable-chips
-                          multiple
-                          label="Select GPIOS as outputs"
-                          class="ml-3 mt-3 mb-6"
-                          required
+                      <div>
+                        <h2>Time</h2>
+                        <v-menu
+                          v-model="menu2"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto"
                         >
-                          <template v-slot:item="{ item, on, attrs }">
-                            <v-list-item v-on="on" v-bind="attrs">
-                              <v-list-item-content>
-                                <v-list-item-title>
-                                  <v-chip dark color="primary">
-                                    {{ item.text }}
-                                  </v-chip>
-                                </v-list-item-title>
-                              </v-list-item-content>
-                            </v-list-item>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="dateRangeText"
+                              label="Select date range"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                              class="mt-3"
+                              required
+                              :rules="nameRules"
+                            ></v-text-field>
                           </template>
-                        </v-autocomplete>
-                      </v-row>
-                    </div>
+                          <v-date-picker
+                            v-model="editedItem.dates"
+                            range
+                          ></v-date-picker>
+                        </v-menu>
 
-                    <div>
-                      <h2>Enable</h2>
-                      <v-switch
-                        color="primary"
-                        v-model="editedItem.enable"
-                      ></v-switch>
-                    </div>
+                        <v-menu
+                          ref="menu1"
+                          v-model="menuStart"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          :return-value.sync="editedItem.startHour"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="290px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="editedItem.startHour"
+                              label="Start Time"
+                              prepend-icon="mdi-clock-time-four-outline"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                              required
+                              :rules="nameRules"
+                            ></v-text-field>
+                          </template>
+                          <v-time-picker
+                            v-if="menuStart"
+                            v-model="editedItem.startHour"
+                            format="24h"
+                            scrollable
+                            full-width
+                            @click:minute="
+                              $refs.menu1.save(editedItem.startHour)
+                            "
+                          ></v-time-picker>
+                        </v-menu>
 
-                    <v-btn @click="Validate(); all_valid = true;" :disabled="!valid">Validate Rule</v-btn>
-                    <!-- <v-textarea v-model="editorJSON"></v-textarea> -->
-                    <!-- <v-btn @click="onEditorSync">Sync</v-btn> -->
-                    <!-- <v-btn @click="onEditorImport">Import</v-btn> -->
+                        <v-menu
+                          ref="menu2"
+                          v-model="menuEnd"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          :return-value.sync="editedItem.endHour"
+                          transition="scale-transition"
+                          offset-y
+                          max-width="290px"
+                          min-width="290px"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="editedItem.endHour"
+                              label="End Time"
+                              prepend-icon="mdi-clock-time-four-outline"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                              class="mb-6"
+                              required
+                            ></v-text-field>
+                          </template>
+                          <v-time-picker
+                            v-if="menuEnd"
+                            v-model="editedItem.endHour"
+                            format="24h"
+                            scrollable
+                            full-width
+                            @click:minute="$refs.menu2.save(editedItem.endHour)"
+                          ></v-time-picker>
+                        </v-menu>
+                      </div>
+
+                      <div>
+                        <h2>Outputs</h2>
+                        <v-row>
+                          <v-autocomplete
+                            v-model="orderEditedGpios"
+                            :items="allGpios"
+                            chips
+                            deletable-chips
+                            multiple
+                            label="Select GPIOS as outputs"
+                            class="ml-3 mt-3 mb-6"
+                            required
+                          >
+                            <template v-slot:item="{ item, on, attrs }">
+                              <v-list-item v-on="on" v-bind="attrs">
+                                <v-list-item-content>
+                                  <v-list-item-title>
+                                    <v-chip dark color="primary">
+                                      {{ item.text }}
+                                    </v-chip>
+                                  </v-list-item-title>
+                                </v-list-item-content>
+                              </v-list-item>
+                            </template>
+                          </v-autocomplete>
+                        </v-row>
+                      </div>
+
+                      <div>
+                        <h2>Enable</h2>
+                        <v-switch
+                          color="primary"
+                          v-model="editedItem.enable"
+                        ></v-switch>
+                      </div>
+
+                      <v-btn
+                        @click="
+                          Validate();
+                          all_valid = true;
+                        "
+                        :disabled="!valid"
+                        >Validate Rule</v-btn
+                      >
+                      <!-- <v-textarea v-model="editorJSON"></v-textarea> -->
+                      <!-- <v-btn @click="onEditorSync">Sync</v-btn> -->
+                      <!-- <v-btn @click="onEditorImport">Import</v-btn> -->
+                    </v-form>
                   </v-col>
-                  </v-form>
+
                   <v-col md="10">
                     <ReteEditor v-model="editor" />
                   </v-col>
@@ -306,18 +315,28 @@
     </div>
     <v-spacer></v-spacer>
     <div>
-      <v-alert border="left" prominent type="info" class="mt-12" v-model="processTriger">
+      <v-alert
+        border="left"
+        prominent
+        type="info"
+        class="mt-12"
+        v-model="processTriger"
+      >
         <v-row align="center">
           <v-col class="grow">
-              {{ triggerProcessname }} process triggered! 
+            {{ triggerProcessname }} process triggered!
           </v-col>
           <v-col class="shrink">
-            <v-btn color="white" class="black--text" @click="processTriger = false">Dismiss</v-btn>
+            <v-btn
+              color="white"
+              class="black--text"
+              @click="processTriger = false"
+              >Dismiss</v-btn
+            >
           </v-col>
         </v-row>
       </v-alert>
     </div>
-    
   </div>
 </template>
 
@@ -359,13 +378,13 @@ export default {
           },
         },
       ],
-      
+
       nameRules: [(v) => !!v],
 
       valid: true,
       all_valid: false,
 
-      processTriger:true, 
+      processTriger: true,
       triggerProcessname: "Jam",
 
       snackbar_saved: false,
@@ -426,8 +445,6 @@ export default {
 
       editor: null,
       editorJSON: "",
-
-      
     };
   },
 
@@ -495,13 +512,12 @@ export default {
   },
 
   methods: {
-    
     triggerSavedProcess() {
-      snackbar_saved = true;
+      this.snackbar_saved = true;
     },
 
     triggerDeletedProcess() {
-      snackbar_deleted = true;
+      this.snackbar_deleted = true;
     },
 
     async createNodeClick() {},
@@ -578,55 +594,58 @@ export default {
     },
 
     async save() {
-        const editor = this.editor;
+      const editor = this.editor;
 
-        const blueprint = await editor.toJSON();
+      const blueprint = await editor.toJSON();
 
-        const endNode = this.editor.nodes.find((node) => node.name === "End");
-        const endComponent = editor.getComponent("End");
+      const endNode = this.editor.nodes.find((node) => node.name === "GPIO");
+      const endComponent = editor.getComponent("GPIO");
 
-        const logic = endComponent.toJsonLogic?.(endNode);
+      const gpios = this.editor.nodes.filter((node) => node.name === "GPIO").map((node) => this.editor.getComponent(node.name).toGPIO(node))
 
-        const dates = this.editedItem.dates;
+      const logic = endComponent.toJsonLogic?.(endNode);
 
-        const startHour = this.editedItem.startHour;
-        const endHour = this.editedItem.endHour;
+      const dates = this.editedItem.dates;
 
-        const startTime = dayjs(dates[0] + " " + startHour).toISOString();
-        const endTime = dayjs(dates[1] + " " + endHour).toISOString();
+      const startHour = this.editedItem.startHour;
+      const endHour = this.editedItem.endHour;
 
-        const automation = {
-          name: this.editedItem.name,
-          startTime: startTime,
-          endTime: endTime,
-          enable: this.editedItem.enable,
-          gpios: this.editedItem.gpios,
-          rules: logic,
-          blueprint: blueprint,
-        };
+      const startTime = dayjs(dates[0] + " " + startHour).toISOString();
+      const endTime = dayjs(dates[1] + " " + endHour).toISOString();
 
-        const file = JSON.stringify(automation);
+      const automation = {
+        name: this.editedItem.name,
+        startTime: startTime,
+        endTime: endTime,
+        enable: this.editedItem.enable,
+        gpios: gpios,
+        rules: logic,
+        blueprint: blueprint,
+      };
 
-        if (this.editedIndex > -1) {
-          const id = this.editedItem.id;
-          await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: file,
-          });
-          Object.assign(this.automations[this.editedIndex], this.editedItem);
-        } else {
-          await fetch("http://127.0.0.1:5000/process", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: file,
-          });
-          this.automations.push(this.editedItem);
-        }
+      const file = JSON.stringify(automation);
+      console.log(file)
 
-        this.close();
-        this.triggerSavedProcess();
-        this.resetValidate()
+      if (this.editedIndex > -1) {
+        const id = this.editedItem.id;
+        const response = await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: file,
+        });
+        Object.assign(this.automations[this.editedIndex], this.editedItem);
+      } else {
+        const response = await fetch("http://127.0.0.1:5000/process", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: file,
+        });
+        this.automations.push(this.editedItem);
+      }
+
+      this.close();
+      this.triggerSavedProcess();
+      this.resetValidate();
     },
 
     async updateEnable(event, item) {
@@ -642,11 +661,50 @@ export default {
     },
 
     async Validate() {
-      const editor = this.editor;
+      console.log("start validate")
+      const endNodes = this.editor.nodes.filter((node) => node.name === "GPIO");
+      console.log(endNodes.length)
+      if (endNodes.length <= 0) {
+        this.all_valid = false;
 
-      const endNode = this.editor.nodes.find((node) => node.name === "End");
-      const endComponent = editor.getComponent("End");
-      
+        return;
+      }
+
+      const inputNum0 = endNodes[0].inputs.get("num");
+
+      if (inputNum0.connections.length == 0) {
+        this.all_valid = false;
+        return;
+      }
+
+      const connection0 = inputNum0.connections[0];
+      const connectionNode0 = connection0.output.node;
+      const connectionComponent0 = this.editor.getComponent(
+        connectionNode0.name
+      );
+
+      for (let i = 1; i < endNodes.length; i++) {
+        const inputNum = endNodes[i].inputs.get("num");
+        const { connections } = inputNum;
+
+        if (connections.length == 0) {
+          this.all_valid = false;
+          return;
+        }
+
+        const connection = connections[0];
+        const connectionNode = connection.output.node;
+        const connectionComponent = this.editor.getComponent(
+          connectionNode.name
+        );
+
+        if (connectionComponent0 !== connectionComponent) {
+          this.all_valid = false;
+          return;
+        }
+      }
+      this.all_valid = true;
+      console.log("sucess")
     },
   },
 };

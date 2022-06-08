@@ -11,14 +11,18 @@ export class GpioComponent extends Rete.Component {
         this.data.component = Node;
     }
 
-    builder(node) {
+    async builder(node) {
+      const responseGpios = await fetch("http://127.0.0.1:5000/pins");
+      const jsonGpios = await responseGpios.json();
+
+      
         var input = new Rete.Input('num', "Input", Socket.boolean, true);
         return node
           .addInput(input)
-          .addControl(new SelectControl(this.editor, 'type1', [
-            { text: 'GPIO 1', value: '1' },
-            { text: 'GPIO 2', value: '2' }
-        ], "GPIO"))
+          .addControl(new SelectControl(this.editor, 'type1', jsonGpios.map((value) => ({
+            text: `GPIO ${value}`,
+            value: value,
+          })), "GPIO"))
           .addControl(new SwitchControl(this.editor, 'type'))
     }
 
@@ -44,5 +48,12 @@ export class GpioComponent extends Rete.Component {
         const connectionComponent = this.editor.getComponent(connectionNode.name);
 
         return connectionComponent.toJsonLogic?.(connectionNode);
+    }
+
+    toGPIO(node) {
+        const gpio = parseInt(node.data.type1)
+        const inverted = node.data.type
+
+        return {gpio, inverted}
     }
 }

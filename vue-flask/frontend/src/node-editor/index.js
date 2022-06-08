@@ -40,11 +40,11 @@ import Rete from "rete";
 
 
 export default async function(container) {
-    const components = [ new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), new DoubleParkComponent(),
+    const components = [new GpioComponent(), new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), new DoubleParkComponent(),
         new JamComponent(), new CrowdDetectionComponent(), new DurationComponent(), new ConstantComponent(), new AddComponent(), new SubComponent(), 
         new MultiplyComponent(), new DivisionComponent(), new MaxComponent(), new MinComponent(), new EqualToComponent(), new DifferentThanComponent(), 
         new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 
-        new ANDComponent(), new ORComponent(), new NOTComponent(), new EndComponent(), new GpioComponent()];
+        new ANDComponent(), new ORComponent(), new NOTComponent()];
   
     const editor = new Rete.NodeEditor("demo@0.1.0", container);
 

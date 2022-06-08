@@ -197,7 +197,7 @@ export default {
     broker_ip: "",
 
     valid_sensors: true,
-    n_sensors: "" ,
+    n_sensors: "1" ,
     SensorsRules: [(v) => !!v || "Cannot be empty"],
 
     items: [
@@ -229,11 +229,8 @@ export default {
   }),
 
   async mounted() {
-    console.log("1")
-    this.getSensors();
-    console.log("2")
-    this.getBrokerIP();
-    console.log("3")
+    await this.getSensors();
+    await this.getBrokerIP();
   },
 
   methods: {
@@ -260,7 +257,7 @@ export default {
     },
     async submit_mqttIp() {
       const broker = {
-        Broker_IP: this.mqtt_ip
+        Broker_IP: this.broker_ip
       }
       const file = JSON.stringify(broker);
       await fetch(`http://127.0.0.1:5000/settings-broker`, {
@@ -285,13 +282,14 @@ export default {
     async getBrokerIP() {
       const response = await fetch("http://127.0.0.1:5000/settings-broker");
       const ip= await response.json();
-      this.broker_ip = JSON.parse(ip);
+      this.broker_ip = ip.Broker;
     },
 
     async getSensors() {
       const response = await fetch("http://127.0.0.1:5000/settings-sensors");
       const number = await response.json();
-      this.n_sensors = JSON.parse(number);
+      this.n_sensors = number.Number;
+      
     },
   },
 
