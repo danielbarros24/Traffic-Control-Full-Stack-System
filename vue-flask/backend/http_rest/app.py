@@ -185,7 +185,7 @@ def get_pins():
 
     for j in used_pins:                                                                    #REMOVES FROM ARRAY USED GPIOS
        Total_pins.remove(j)
-       
+
     return jsonify(Total_pins)
 
 ######## UPDATE PASSWORD #################################
@@ -211,7 +211,7 @@ def get_broker():
 
     return jsonify(Broker=broker)
 
-######## GET SENSORS NUMBER #################################
+######## GET SENSORS #################################
 @app.get('/settings-sensors')
 def get_sensors():
 
@@ -240,15 +240,24 @@ def update_broker():
 def update_sensors():
 
     new_sensors = request.get_json()
-    sensors = new_sensors.get('Sensors')
 
-    db_system.update({'Sensors': "{}".format(sensors)})
+    db_system.update(new_sensors)
+
     res = "success"
-    print("Sensors number updated: " + str(sensors)) 
+    print("Sensors number updated: " + str(new_sensors)) 
 
     return jsonify(status=res)
 
+######## GET ZONES #################################
+@app.get('/settings-zones')
+def get_zones():
 
+    doc = db_system.get(doc_id=1)
+    
+    zones = doc.get('Zones')
+    print("[GET ZONES]: " + str(zones))
+
+    return jsonify(Zones=zones)
 
 
 @app.post("/dashboard")

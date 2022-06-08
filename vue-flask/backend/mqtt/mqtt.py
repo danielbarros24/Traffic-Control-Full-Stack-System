@@ -40,7 +40,6 @@ for i in range(int(n_sensors)):
 db_system.update({'Zones': zones})
 
 vehicles_list = ["Car", "Bike", "Truck"]
-zones_list = ["1", "2"]
 
 
 def mqtt_data_received(msg):
@@ -149,9 +148,7 @@ def parse_mqtt_message(topic, message):
         name = Topic_array[4]
         name_split = name.split()
 
-        if Topic_array[4] == 'Jam 1' or Topic_array[4] == 'Jam 2':
-
-            if len(name_split) == 2:
+        if len(name_split) == 2 and name_split[0] == 'Jam':
                 _task = 'Jam Detection'
                 _zone = _cam + '-' + name_split[1]
                 _state = msg_deserialized['Data']['State']

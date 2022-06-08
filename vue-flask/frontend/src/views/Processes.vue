@@ -51,8 +51,7 @@
             rounded
             dark
             @click="
-              createItem();
-              getPins();
+              createProcess
             "
           >
             <v-icon class="mr-3">mdi-plus</v-icon>Create process
@@ -79,7 +78,7 @@
                 <v-row>
                   <v-col>
                     <v-form ref="form" v-model="valid">
-                      <h2 class="mt-8">Name</h2>
+                      <h2 class="mt-12">Name</h2>
                       <v-text-field
                         v-model="editedItem.name"
                         label="Insert process Name Here!"
@@ -89,7 +88,7 @@
                       ></v-text-field>
 
                       <div>
-                        <h2>Time</h2>
+                        <h2 class="mt-12">Time</h2>
                         <v-menu
                           v-model="menu2"
                           :close-on-content-click="false"
@@ -136,8 +135,8 @@
                               readonly
                               v-bind="attrs"
                               v-on="on"
-                              required
                               :rules="nameRules"
+                              required
                             ></v-text-field>
                           </template>
                           <v-time-picker
@@ -172,6 +171,7 @@
                               v-bind="attrs"
                               v-on="on"
                               class="mb-6"
+                              :rules="nameRules"
                               required
                             ></v-text-field>
                           </template>
@@ -186,7 +186,7 @@
                         </v-menu>
                       </div>
 
-                      <div>
+                      <!--<div>
                         <h2>Outputs</h2>
                         <v-row>
                           <v-autocomplete
@@ -212,10 +212,10 @@
                             </template>
                           </v-autocomplete>
                         </v-row>
-                      </div>
+                      </div>-->
 
                       <div>
-                        <h2>Enable</h2>
+                        <h2 class = "mt-12">Enable</h2>
                         <v-switch
                           color="primary"
                           v-model="editedItem.enable"
@@ -223,6 +223,7 @@
                       </div>
 
                       <v-btn
+                        class = "mt-12"
                         @click="
                           Validate();
                           all_valid = true;
@@ -423,7 +424,6 @@ export default {
         id: 0,
         name: "",
         rule: 0,
-        gpios: [],
         enable: false,
         dates: [],
         startHour: "",
@@ -435,7 +435,6 @@ export default {
         id: 0,
         name: "",
         rule: 0,
-        gpios: [],
         enable: false,
         dates: [],
         startHour: "",
@@ -455,7 +454,7 @@ export default {
     dateRangeText() {
       return this.editedItem.dates.join(" ~ ");
     },
-    allGpios() {
+    /*allGpios() {
       if (this.editedIndex < 0) {
         return this.gpios.sort((a, b) => a.value - b.value);
       }
@@ -475,7 +474,7 @@ export default {
       set(value) {
         this.editedItem.gpios = value;
       },
-    },
+    },*/
   },
 
   watch: {
@@ -512,6 +511,12 @@ export default {
   },
 
   methods: {
+
+    createProcess() {
+      this.createItem()
+      this.getPins()
+      this.$refs.form.reset()
+    },
     triggerSavedProcess() {
       this.snackbar_saved = true;
     },
@@ -579,7 +584,6 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      this.$refs.form.reset();
       this.all_valid = false;
     },
 
@@ -589,7 +593,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      this.$refs.form.reset();
+      
       this.all_valid = false;
     },
 
@@ -645,7 +649,6 @@ export default {
 
       this.close();
       this.triggerSavedProcess();
-      this.resetValidate();
     },
 
     async updateEnable(event, item) {

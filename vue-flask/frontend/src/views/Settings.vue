@@ -193,7 +193,10 @@ export default {
     passwordRules: [(v) => !!v],
     confirmPasswordRules: [(v) => !!v],
 
-    mqttRules: [(v) => !!v || "Cannot be empty"],
+    mqttRules: [
+      v => !!v || "Cannot be empty",
+      v =>  /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/.test(v) || 'Enter a valid IP address',],
+
     broker_ip: "",
 
     valid_sensors: true,
@@ -205,26 +208,24 @@ export default {
         title: "Logout",
         icon: "mdi-logout",
         click() {
-          console.log("logout");
           this.$router.push("/");
+        },
+      },
+      {
+        title: "Dashboard",
+        icon: "mdi-view-dashboard",
+        click() {
+          this.$router.push("dashboard");
         },
       },
       {
         title: "Processes",
         icon: "mdi-auto-fix",
         click() {
-          console.log("processes");
           this.$router.push("processes");
         },
       },
-      {
-        title: "Settings",
-        icon: "mdi-cogs",
-        click() {
-          console.log("settings");
-          this.$router.push("settings");
-        },
-      },
+      
     ],
   }),
 

@@ -33,7 +33,6 @@ import { DoubleParkComponent }       from '@/node-editor/components/variables/Do
 import { StayTimeComponent }         from '@/node-editor/components/variables/StayTimeComponent'
 import { VehicleDetectionComponent } from '@/node-editor/components/variables/VehicleDetectionComponent'
 
-import { EndComponent } from '@/node-editor/components/EndComponent'
 import { GpioComponent } from '@/node-editor/components/GpioComponent'
 
 import Rete from "rete";

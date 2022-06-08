@@ -20,8 +20,7 @@ export class GpioComponent extends Rete.Component {
         return node
           .addInput(input)
           .addControl(new SelectControl(this.editor, 'type1', jsonGpios.map((value) => ({
-            text: `GPIO ${value}`,
-            value: value,
+            text: `GPIO ${value}`, value: value,
           })), "GPIO"))
           .addControl(new SwitchControl(this.editor, 'type'))
     }

@@ -18,8 +18,8 @@ export class FlowComponent extends Rete.Component {
         return node
 
           .addControl(new SelectControl(this.editor, 'type1', [
-              { text: 'Sensor 1 - Route 1', value: 'T1-1' },
-              { text: 'Sensor 1 - Route 2', value: 'T1-2' }
+              { text: 'Sensor 1 - Lane 1', value: 'T1-1' },
+              { text: 'Sensor 1 - Lane 2', value: 'T1-2' }
           ], "Zone"))
           .addControl(new SelectControl(this.editor, 'type', [
             { text: 'All', value: 'ALL' },
