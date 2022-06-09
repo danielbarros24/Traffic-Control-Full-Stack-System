@@ -29,8 +29,6 @@ export class DoubleParkComponent extends Rete.Component {
             all.push(aux)
         }
 
-
-        console.log(all)
         var out1 = new Rete.Output('num', "Out", Socket.boolean);
         return node
 
