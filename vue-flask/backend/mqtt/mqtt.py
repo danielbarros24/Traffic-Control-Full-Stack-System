@@ -119,7 +119,7 @@ def parse_mqtt_message(topic, message):
             rule = msg_deserialized['Source']['Rule']
             rule_split = rule.split()
 
-            if len(rule_split) == 3 and rule_split[1] in vehicles_list and rule_split[2] in zones_list :
+            if len(rule_split) == 3 and rule_split[1] in vehicles_list:
                 _task = 'Counter'
                 _vehicle = rule_split[1]
                 _zone = _cam + '-' + rule_split[2]

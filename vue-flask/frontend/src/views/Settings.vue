@@ -246,11 +246,18 @@ export default {
         password: this.confirmPassword
       }
       const file = JSON.stringify(password);
-      await fetch(`http://127.0.0.1:5000/settings`, {
+      const response = await fetch(`http://127.0.0.1:5000/settings`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
       });
+      if (!response.ok) {
+          this.text_pass = `An error has occured: ${response.status}`
+        }
+      else {
+        this.text_pass = "Password changed!"
+      }
+
       this.password = ""
       this.confirmPassword = ""
       this.$refs.myForm.reset();
@@ -261,11 +268,18 @@ export default {
         Broker_IP: this.broker_ip
       }
       const file = JSON.stringify(broker);
-      await fetch(`http://127.0.0.1:5000/settings-broker`, {
+      const response = await fetch(`http://127.0.0.1:5000/settings-broker`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
       });
+
+      if (!response.ok) {
+          this.text_mqtt = `An error has occured: ${response.status}`
+        }
+      else {
+        this.text_mqtt = "Broker IP changed! Please restart the system!"
+      }
     },
 
     async submit_sensors() {
@@ -273,11 +287,18 @@ export default {
         Sensors: this.n_sensors
       }
       const file = JSON.stringify(sensor);
-      await fetch(`http://127.0.0.1:5000/settings-sensors`, {
+      const response = await fetch(`http://127.0.0.1:5000/settings-sensors`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
       });
+
+      if (!response.ok) {
+          this.text_mqtt = `An error has occured: ${response.status}`
+        }
+      else {
+        this.text_mqtt = "Broker IP changed! Please restart the system!"
+      }
 
     },
     async getBrokerIP() {

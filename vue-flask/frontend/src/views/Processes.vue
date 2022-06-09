@@ -50,9 +50,7 @@
             mx-auto
             rounded
             dark
-            @click="
-              createProcess
-            "
+            @click="createProcess"
           >
             <v-icon class="mr-3">mdi-plus</v-icon>Create process
           </v-btn>
@@ -65,10 +63,8 @@
                 <v-btn
                   color="primary"
                   text
-                  :disabled="!all_valid"
-                  @click="
-                    save
-                  "
+                  :disabled="!all_valid && !valid"
+                  @click="save"
                 >
                   Save
                 </v-btn>
@@ -107,7 +103,7 @@
                               v-on="on"
                               class="mt-3"
                               required
-                              :rules="nameRules"
+                              :rules="dateRules"
                             ></v-text-field>
                           </template>
                           <v-date-picker
@@ -215,7 +211,7 @@
                       </div>-->
 
                       <div>
-                        <h2 class = "mt-12">Enable</h2>
+                        <h2 class="mt-12">Enable</h2>
                         <v-switch
                           color="primary"
                           v-model="editedItem.enable"
@@ -223,10 +219,9 @@
                       </div>
 
                       <v-btn
-                        class = "mt-12"
+                        class="mt-12"
                         @click="
-                          Validate();
-                          all_valid = true;
+                          Validate 
                         "
                         :disabled="!valid"
                         >Validate Rule</v-btn
@@ -284,7 +279,7 @@
     </v-data-table>
     <div class="text-center">
       <v-snackbar v-model="snackbar_saved" :timeout="timeout">
-        Process saved!
+        {{ process_save }}
 
         <template v-slot:action="{ attrs }">
           <v-btn
@@ -300,7 +295,7 @@
     </div>
     <div class="text-center">
       <v-snackbar v-model="snackbar_deleted" :timeout="timeout">
-        Process deleted!
+        {{ process_delete }}
 
         <template v-slot:action="{ attrs }">
           <v-btn
@@ -381,9 +376,19 @@ export default {
       ],
 
       nameRules: [(v) => !!v],
+      dateRules: [
+        (v) => !!v || "Insert 2 dates",
+        (v) =>
+          /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])~\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/.test(
+            v
+          ) || "Insert 2 dates!",
+      ],
 
       valid: true,
       all_valid: false,
+
+      process_save: "Process Saved!",
+      process_delete: "Process Deleted!",
 
       processTriger: true,
       triggerProcessname: "Jam",
@@ -452,7 +457,7 @@ export default {
       return this.editedIndex === -1 ? "New Process" : "Edit Processes";
     },
     dateRangeText() {
-      return this.editedItem.dates.join(" ~ ");
+      return this.editedItem.dates.join("~");
     },
     /*allGpios() {
       if (this.editedIndex < 0) {
@@ -511,11 +516,10 @@ export default {
   },
 
   methods: {
-
     createProcess() {
-      this.createItem()
-      this.getPins()
-      this.$refs.form.reset()
+      this.createItem();
+      this.getPins();
+      this.$refs.form.reset();
     },
     triggerSavedProcess() {
       this.snackbar_saved = true;
@@ -571,10 +575,15 @@ export default {
 
     async deleteItemConfirm() {
       const id = this.editedItem.id;
-      await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
+      const response = await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
         method: "DELETE",
       });
       this.automations.splice(this.editedIndex, 1);
+      if (!response.ok) {
+        this.process_delete = `An error has occured: ${response.status}`;
+      } else {
+        this.process_delete = "Process Deleted!";
+      }
       this.closeDelete();
     },
 
@@ -593,7 +602,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-      
+
       this.all_valid = false;
     },
 
@@ -605,7 +614,9 @@ export default {
       const endNode = this.editor.nodes.find((node) => node.name === "GPIO");
       const endComponent = editor.getComponent("GPIO");
 
-      const gpios = this.editor.nodes.filter((node) => node.name === "GPIO").map((node) => this.editor.getComponent(node.name).toGPIO(node))
+      const gpios = this.editor.nodes
+        .filter((node) => node.name === "GPIO")
+        .map((node) => this.editor.getComponent(node.name).toGPIO(node));
 
       const logic = endComponent.toJsonLogic?.(endNode);
 
@@ -628,7 +639,7 @@ export default {
       };
 
       const file = JSON.stringify(automation);
-      console.log(file)
+      console.log(file);
 
       if (this.editedIndex > -1) {
         const id = this.editedItem.id;
@@ -638,6 +649,13 @@ export default {
           body: file,
         });
         Object.assign(this.automations[this.editedIndex], this.editedItem);
+
+        if (!response.ok) {
+          this.process_save = `An error has occured: ${response.status}`;
+          this.close();
+        } else {
+          this.process_save = "Process Saved!";
+        }
       } else {
         const response = await fetch("http://127.0.0.1:5000/process", {
           method: "POST",
@@ -645,8 +663,13 @@ export default {
           body: file,
         });
         this.automations.push(this.editedItem);
+        if (!response.ok) {
+          this.process_save = `An error has occured: ${response.status}`;
+          this.close();
+        } else {
+          this.process_save = "Process Saved!";
+        }
       }
-
       this.close();
       this.triggerSavedProcess();
     },
@@ -664,12 +687,12 @@ export default {
     },
 
     async Validate() {
-      console.log("start validate")
+      console.log("start validate");
       const endNodes = this.editor.nodes.filter((node) => node.name === "GPIO");
-      console.log(endNodes.length)
+      console.log(endNodes.length);
+
       if (endNodes.length <= 0) {
         this.all_valid = false;
-
         return;
       }
 
@@ -692,6 +715,7 @@ export default {
 
         if (connections.length == 0) {
           this.all_valid = false;
+          console.log("3")
           return;
         }
 
@@ -703,11 +727,12 @@ export default {
 
         if (connectionComponent0 !== connectionComponent) {
           this.all_valid = false;
+          console.log("4")
           return;
         }
       }
       this.all_valid = true;
-      console.log("sucess")
+      console.log("sucess");
     },
   },
 };
