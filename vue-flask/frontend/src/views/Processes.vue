@@ -63,7 +63,7 @@
                 <v-btn
                   color="primary"
                   text
-                  :disabled="!all_valid && !valid"
+                  :disabled="!(all_valid & valid)"
                   @click="save"
                 >
                   Save
@@ -181,35 +181,6 @@
                           ></v-time-picker>
                         </v-menu>
                       </div>
-
-                      <!--<div>
-                        <h2>Outputs</h2>
-                        <v-row>
-                          <v-autocomplete
-                            v-model="orderEditedGpios"
-                            :items="allGpios"
-                            chips
-                            deletable-chips
-                            multiple
-                            label="Select GPIOS as outputs"
-                            class="ml-3 mt-3 mb-6"
-                            required
-                          >
-                            <template v-slot:item="{ item, on, attrs }">
-                              <v-list-item v-on="on" v-bind="attrs">
-                                <v-list-item-content>
-                                  <v-list-item-title>
-                                    <v-chip dark color="primary">
-                                      {{ item.text }}
-                                    </v-chip>
-                                  </v-list-item-title>
-                                </v-list-item-content>
-                              </v-list-item>
-                            </template>
-                          </v-autocomplete>
-                        </v-row>
-                      </div>-->
-
                       <div>
                         <h2 class="mt-12">Enable</h2>
                         <v-switch
@@ -218,12 +189,7 @@
                         ></v-switch>
                       </div>
 
-                      <v-btn
-                        class="mt-12"
-                        @click="
-                          Validate 
-                        "
-                        :disabled="!valid"
+                      <v-btn class="mt-12" @click="Validate" :disabled="!valid"
                         >Validate Rule</v-btn
                       >
                       <!-- <v-textarea v-model="editorJSON"></v-textarea> -->
@@ -310,28 +276,17 @@
       </v-snackbar>
     </div>
     <v-spacer></v-spacer>
-    <div>
-      <v-alert
-        border="left"
-        prominent
-        type="info"
-        class="mt-12"
-        v-model="processTriger"
-      >
-        <v-row align="center">
-          <v-col class="grow">
-            {{ triggerProcessname }} process triggered!
-          </v-col>
-          <v-col class="shrink">
-            <v-btn
-              color="white"
-              class="black--text"
-              @click="processTriger = false"
-              >Dismiss</v-btn
-            >
-          </v-col>
-        </v-row>
-      </v-alert>
+    <div class="text-center">
+    
+      <v-snackbar v-model="processTriger" color="red darken-3" :timeout="timeout" elevation="24" class="mb-12 mr-12">
+        <h2 class="font-weight-medium">{{ textProcessTrigger }} </h2>
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="processTriger = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </div>
 </template>
@@ -390,8 +345,8 @@ export default {
       process_save: "Process Saved!",
       process_delete: "Process Deleted!",
 
-      processTriger: true,
-      triggerProcessname: "Jam",
+      processTriger: false,
+      textProcessTrigger: "",
 
       snackbar_saved: false,
       snackbar_deleted: false,
@@ -421,6 +376,16 @@ export default {
           align: "start",
           value: "name",
         },
+        {
+          text: "Triggering",
+          align: "center",
+          value: "triggering",
+        },
+        {
+          text: "Last Trigger",
+          align: "center",
+          value: "lastTimeTriggerStartDisplay",
+        },
         { text: "Actions", value: "actions", sortable: false },
       ],
       automations: [],
@@ -433,6 +398,10 @@ export default {
         dates: [],
         startHour: "",
         endHour: "",
+        triggering: false,
+        lastTimeTriggerStart: "",
+        lastTimeTriggerStartDisplay: "Never",
+        notification: false,
         blueprint: {},
       },
 
@@ -444,6 +413,10 @@ export default {
         dates: [],
         startHour: "",
         endHour: "",
+        triggering: false,
+        lastTimeTriggerStart: "",
+        lastTimeTriggerStartDisplay: "Never",
+        notification: false,
         blueprint: {},
       },
 
@@ -498,9 +471,29 @@ export default {
     this.automations = jsonAutomations.map((val) => {
       const startTime = new Date(val.startTime);
       const endTime = new Date(val.endTime);
+      const triggering = val.triggering;
+      const notification = val.notification;
+      const processName = val.name;
 
+      if (this.isIsoDate(val.lastTimeTriggerStart)) {
+        val.lastTimeTriggerStartDisplay = dayjs(
+          val.lastTimeTriggerStart
+        ).fromNow();
+      } else {
+        val.lastTimeTriggerStartDisplay = "Never";
+      }
+
+      if (notification) {
+        this.processTriger = false;
+        this.textProcessTrigger = `${processName} process triggered!`
+        this.processTriger = true;
+
+      }
+
+      delete val.notification;
       delete val.startTime;
       delete val.endTime;
+      delete val.triggering;
 
       val.dates = [
         `${dayjs(startTime).format("YYYY-MM-DD")}`,
@@ -508,6 +501,7 @@ export default {
       ];
       val.startHour = `${dayjs(startTime).format("HH:mm")}`;
       val.endHour = `${dayjs(endTime).format("HH:mm")}`;
+      val.triggering = triggering;
 
       return val;
     });
@@ -516,6 +510,11 @@ export default {
   },
 
   methods: {
+    isIsoDate(str) {
+      if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
+      const d = new Date(str);
+      return d.toISOString() === str;
+    },
     createProcess() {
       this.createItem();
       this.getPins();
@@ -634,6 +633,9 @@ export default {
         endTime: endTime,
         enable: this.editedItem.enable,
         gpios: gpios,
+        triggering: this.editedItem.triggering,
+        lastTimeTriggerStart: this.editedItem.lastTimeTriggerStart,
+        notification: this.editedItem.notification,
         rules: logic,
         blueprint: blueprint,
       };
@@ -715,7 +717,7 @@ export default {
 
         if (connections.length == 0) {
           this.all_valid = false;
-          console.log("3")
+          console.log("3");
           return;
         }
 
@@ -727,7 +729,7 @@ export default {
 
         if (connectionComponent0 !== connectionComponent) {
           this.all_valid = false;
-          console.log("4")
+          console.log("4");
           return;
         }
       }

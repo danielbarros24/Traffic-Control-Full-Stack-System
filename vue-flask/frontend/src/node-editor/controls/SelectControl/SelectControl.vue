@@ -1,6 +1,6 @@
 <template>
   <v-select 
-    :items="items" 
+    :items="items"
     v-model="reteValue"
     solo
     class="mr-6"
@@ -36,6 +36,12 @@ export default {
         this.putData(this.ikey, newValue);
         this.emitter.trigger('process');
       }
+    },
+    itemsProxy() {
+      const data = [...this.items, this.value]
+      console.log(data)
+
+      return data
     }
   },
 

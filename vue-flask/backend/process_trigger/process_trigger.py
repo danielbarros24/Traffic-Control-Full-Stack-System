@@ -17,7 +17,7 @@ from .json_logic import jsonLogic
 # DATABASE
 db_camera = TinyDB('database/camera.json')
 db_auth = TinyDB('database/auth.json')
-db_auto = TinyDB('database/processes.json')
+db_processes = TinyDB('database/processes.json')
 db_general = TinyDB('database/system.json')
 
 query = Query()
@@ -30,25 +30,42 @@ def compare_datetime(current_date, start_time, end_time):
     else:
         return False
 
+
 def test_automations():
 
     utc=pytz.UTC
 
-    docs = db_auto.search(where('enable') == True)
-
+    #docs = db_auto.search(where('enable') == True)
+    docs = db_processes.all()
     current_date = datetime.now()
     current_date = current_date.replace(tzinfo=utc)
     
+    
     if not docs:
-        print("No process is enabled!")
+        print("No processes configured")
 
     for doc in docs:
         raw_start_time = doc.get('startTime')
 
         startTime = parser.parse(raw_start_time)
         endTime = parser.parse(doc.get('endTime'))
+        enable = doc.get('enable')
 
-        if(compare_datetime(current_date, startTime, endTime)):
+        pins_info = doc.get('gpios')
+        pins = []
+
+        for item in pins_info:
+            pin = item.get('gpio')
+            pins.append(pin)
+
+        
+
+        if(compare_datetime(current_date, startTime, endTime) and enable == True):
+
+            
+
+            triggering = doc.get('triggering')
+
 
             db_general.update({"start_time": "{}".format(raw_start_time)})
             rules = doc.get('rules') 
@@ -56,12 +73,29 @@ def test_automations():
             print("Verifying " + str(doc.get('name') + " process..."))
 
             if jsonLogic(rules):
-                print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(doc.get('gpios')) + "\n")
+                print("Process Triggered: " + str(doc.get('name')) + " | " "Activated pins: " + str(pins) + "\n")
+
+                if(triggering == True):             #PROCESS IS STILL TRUE
+                    print("PROCESS IS STILL TRUE")
+                    doc.update({"notification": False})
+
+                else:                               #RISING EDGE - PROCESS WAS FALSE AND NOW IS TRUE
+                    doc.update({"triggering": True})
+                    doc.update({"notification": True})
+                    doc.update({"lastTimeTriggerStart": "{}".format(current_date)})
+                    
+                    print("RISING EDGE")
             else:
-                print("Conditions not ready!\n")
-        else:
-            print("No more processes available!\n")
+                if(triggering == True):             #FALLING EDGE - PROCESS NOT TRUE ANYMORE
+                    doc.update({"triggering": False}) 
+                    doc.update({"notification": False})
+                    doc.update({"lastTimeTriggerStop": "{}".format(current_date)})
+                    print("FALLING EDGE")
+                    #TURN OFF PROCESS PINS
+                else:                               #PROCESS IS STILL FALSE
+                    print("PROCESS IS STILL FALSE\n")
+
+        #elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
+            #TURN OFF pins[]
 
 
-
-    #Awaits until new data is received

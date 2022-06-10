@@ -12,22 +12,35 @@ export class FlowComponent extends Rete.Component {
     }
 
     async builder(node) {
-        const responseZones = await fetch("http://127.0.0.1:5000/settings-zones");
-        const zones = await responseZones.json();
 
-        
+        const responseZones = await fetch("http://127.0.0.1:5000/sensors");
+        const sensors = await responseZones.json();
+
         const all = []
 
-        for (const x in zones.Zones) {
-            const sensor = zones.Zones[x].split('-')
-            const sensorNumber = sensor[0].replace( /[^\d.]/g, '' )
+
+        for (const x in sensors) {
+
+            const sensor = sensors[x]
+            const lanes = sensor.lanes
+
+            const n = 1
 
             const aux = []
-            aux.push(sensorNumber)
-            aux.push(sensor[1])
 
-            all.push(aux)
-        }
+            while (lanes > 0) {
+
+                aux = [];
+                aux.push(sensor.name);
+                aux.push(n);
+
+                all.push(aux);
+
+                n ++;
+                lanes --;
+
+            }
+        } 
         var out1 = new Rete.Output('num', "Out", Socket.number);
 
         return node
@@ -39,8 +52,8 @@ export class FlowComponent extends Rete.Component {
             { text: 'Bike', value: 'BIKE' }
           ], "Vehicle Type"))
           .addControl(new SelectControl(this.editor, 'type1', all.map((value) => ({
-            text: `Sensor ${value[0]} - Lane ${value[1]}`, value: `T${value[0]}-${value[1]}`,
-          })), "Zone"))
+            text: `${value[0]} - Lane ${value[1]}`, value: `${value[0]}-${value[1]}`,
+        })), "Zone"))
           .addControl(new TimeControl(this.editor, 'str'))
           .addOutput(out1);
     }

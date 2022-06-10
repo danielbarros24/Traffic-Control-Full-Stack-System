@@ -5,8 +5,8 @@
 import paho.mqtt.client as mqtt
 from tinydb import TinyDB, Query
 
-db_system = TinyDB('database/system.json')
 db_camera = TinyDB('database/camera.json')
+db_sensors = TinyDB('database/sensors.json')
 
 query = Query()
 
@@ -14,12 +14,6 @@ import json
 # from store_data_into_db import sensor_Data_Handler
 # from tiny_db_manager import Data_handler
 
-
-docs = db_system.all()
-for doc in docs:
-    n_sensors = doc.get('Sensors')
-
-print("Number of cameras: " + n_sensors)
 
 
 # Server Credentials
@@ -30,16 +24,18 @@ password = "password"
 
 MQTT_Topics = []   
 zones = []
- 
-for i in range(int(n_sensors)):
-    j = i+1
-    MQTT_Topics.append("T" + str(j) + "/onvif-ej/#")
-    zones.append("T" + str(j) + '-' + '1')
-    zones.append("T" + str(j) + '-' + '2')
-
-db_system.update({'Zones': zones})
-
+sensors_list = []
 vehicles_list = ["Car", "Bike", "Truck"]
+
+n_sensors = len(db_sensors)
+docs = db_sensors.all()
+
+for doc in docs:
+    sensor = doc.get('name')
+    MQTT_Topics.append(sensor + "/onvif-ej/#")
+    sensors_list.append(sensor)
+
+
 
 
 def mqtt_data_received(msg):
@@ -114,78 +110,64 @@ def parse_mqtt_message(topic, message):
     _cam = Topic_array[0]
     _utc_time = msg_deserialized['UtcTime']
 
-    if Topic_array[2] == 'RuleEngine':
-        if Topic_array[4] == 'Counter':
-            rule = msg_deserialized['Source']['Rule']
-            rule_split = rule.split()
+    if _cam in sensors_list:
+        if Topic_array[2] == 'RuleEngine':
+            if Topic_array[4] == 'Counter':
+                rule = msg_deserialized['Source']['Rule']
+                rule_split = rule.split()
 
-            if len(rule_split) == 3 and rule_split[1] in vehicles_list:
-                _task = 'Counter'
-                _vehicle = rule_split[1]
-                _zone = _cam + '-' + rule_split[2]
-                _count = msg_deserialized['Data']['Count']
+                if len(rule_split) == 3 and rule_split[1] in vehicles_list:
+                    _task = 'Counter'
+                    _vehicle = rule_split[1]
+                    _zone = _cam + '-' + rule_split[2]
+                    _count = msg_deserialized['Data']['Count']
 
-                json_message = create_RuleEngine_message(_cam, _utc_time, _task, _vehicle, _zone, _count)
-                input_json_db(json_message)
+                    json_message = create_RuleEngine_message(_cam, _utc_time, _task, _vehicle, _zone, _count)
+                    input_json_db(json_message)   
+        elif Topic_array[2] == 'IVA':
+            name = Topic_array[4]
+            name_split = name.split()
 
-        '''
-        elif Topic_array[4] == 'OccupancyCounter':
-            Rule = msg_deserialized['Source']['Rule']
-            Rule_split = Rule.split()
+            if len(name_split) == 2 and name_split[0] == 'Jam':
+                    _task = 'Jam Detection'
+                    _zone = _cam + '-' + name_split[1]
+                    _state = msg_deserialized['Data']['State']
 
-            json_message = {
-                "Cam": Topic_array[0],
-                "UtcTime": msg_deserialized['UtcTime'],
-                "Task": "Jam Detection",
-                "Zone": Topic_array[0] + '-' + Rule_split[2],
-                "Count": msg_deserialized['Data']['Count'],
-            }
-
-            input_json_db(json_message)
-        '''   
-    
-    elif Topic_array[2] == 'IVA':
-        name = Topic_array[4]
-        name_split = name.split()
-
-        if len(name_split) == 2 and name_split[0] == 'Jam':
-                _task = 'Jam Detection'
-                _zone = _cam + '-' + name_split[1]
-                _state = msg_deserialized['Data']['State']
-
-                json_message = create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
-                input_json_db(json_message)
- 
-        elif Topic_array[3] == 'CrowdDetection':
-            
-            if Topic_array[4].find('Crowd') != -1 and Topic_array[4].find('Detection') != -1:
-                _task = 'Crowd Detection'
-                _zone = _cam
-                _state = msg_deserialized['Data']['State']
-
-                json_message = create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
-                input_json_db(json_message)
-
-        elif Topic_array[3] == 'IdleObject' :
-            _state = msg_deserialized['Data']['State']
-
-            if len(name_split) == 3:
-
-                if name_split[0] == 'Idle':
-                    _task = 'Idle Object'
-                elif name_split[0] == 'DoublePark':
-                    _task = 'Double Park'
-                
-                if name_split[1] in vehicles_list: 
-                    _vehicle = name_split[1]
-                    _zone = _cam + '-' + name_split[2]
-
-                    json_message = create_IVA_message(_cam, _utc_time, _task, _vehicle, _zone, _state)
+                    json_message = create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
                     input_json_db(json_message)
+
+            elif Topic_array[3] == 'CrowdDetection':
+                
+                if Topic_array[4].find('Crowd') != -1 and Topic_array[4].find('Detection') != -1:
+                    _task = 'Crowd Detection'
+                    _zone = _cam
+                    _state = msg_deserialized['Data']['State']
+
+                    json_message = create_noVehicle_message(_cam, _utc_time, _task, _zone, _state)
+                    input_json_db(json_message)
+
+            elif Topic_array[3] == 'IdleObject' :
+                _state = msg_deserialized['Data']['State']
+
+                if len(name_split) == 3:
+
+                    if name_split[0] == 'Idle':
+                        _task = 'Idle Object'
+                    elif name_split[0] == 'DoublePark':
+                        _task = 'Double Park'
+                    
+                    if name_split[1] in vehicles_list: 
+                        _vehicle = name_split[1]
+                        _zone = _cam + '-' + name_split[2]
+
+                        json_message = create_IVA_message(_cam, _utc_time, _task, _vehicle, _zone, _state)
+                        input_json_db(json_message)
+    
 
 
 # Subscribe to all Sensors at Base Topic
 def on_connect(client, userdata, flags, rc):
+    print("Number of connected sensors: " + str(n_sensors))
     for i in range(int(n_sensors)):
         client.subscribe(MQTT_Topics[i], 0)
 

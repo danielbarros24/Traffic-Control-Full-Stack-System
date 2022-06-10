@@ -1,1 +1,1 @@
-{"_default": {"1": {"name": "T1", "lanes": 2}}}
+{"_default": {"1": {"name": "T1", "lanes": 2}, "2": {"name": "T2", "lanes": 2}}}

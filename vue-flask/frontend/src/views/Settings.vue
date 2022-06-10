@@ -140,28 +140,27 @@
                       </v-card-title>
 
                       <v-card-text>
-                        <v-container>
-                          <v-col cols="12" sm="8" md="6">
-                            <v-form ref="form" v-model="valid">
-                              <v-text-field
-                                v-model="editedItem.name"
-                                label="Sensor name"
-                                required
-                                :rules="sensorRules"
-                              ></v-text-field>
-                              <v-select
-                                class="mt-3"
-                                v-model="editedItem.lanes"
-                                :items="lanesList"
-                                label="Number of lanes"
-                                solo
-                                dense
-                                required
-                                :rules="sensorRules"
-                              ></v-select>
-                            </v-form>
-                          </v-col>
-                        </v-container>
+                        <v-form ref="form" v-model="valid">
+                          <v-text-field
+                            v-model="editedItem.name"
+                            label="Sensor name"
+                            required
+                            :rules="sensorRules"
+                            hint="Sensor name must be the same as MQTT topic prefix"
+                            persistent-hint
+                          ></v-text-field>
+                          <v-select
+                            class="mt-3"
+                            v-model="editedItem.lanes"
+                            :items="lanesList"
+                            label="Number of lanes"
+                            solo
+                            clearable
+                            dense
+                            required
+                            :rules="sensorRules"
+                          ></v-select>
+                        </v-form>
                       </v-card-text>
 
                       <v-card-actions>
@@ -385,11 +384,11 @@ export default {
         method: "DELETE",
       });
       if (!response.ok) {
-          this.text_sensors = `An error has occured: ${response.status}`;
-          //this.close();
-        } else {
-          this.text_sensors = "Sensor Deleted!";
-        }
+        this.text_sensors = `An error has occured: ${response.status}`;
+        //this.close();
+      } else {
+        this.text_sensors = "Sensor Deleted!";
+      }
       this.snackbar_sensors = true;
       this.sensors.splice(this.editedIndex, 1);
       this.closeDelete();
@@ -443,7 +442,7 @@ export default {
         if (!response.ok) {
           this.text_sensors = `An error has occured: ${response.status}`;
         } else {
-          this.text_sensors = "Process Saved!";
+          this.text_sensors = "Sensor Inserted! Please restart the system";
         }
       }
       this.snackbar_sensors = true;

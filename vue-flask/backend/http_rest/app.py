@@ -175,8 +175,10 @@ def get_pins():
 
     docs = [query.get('gpios') for query in db_processes.all()]    #GETS USED GPIOS IN AUTOMATIONS
 
+    print(docs)
     docs = [item for sublist in docs for item in sublist]
-
+    print("---------------------------------------------------------------------------------------------")
+    print(docs)
     used_pins = []
 
     for doc in docs:
@@ -284,18 +286,6 @@ def delete_sensor():
         res = "not found" 
 
     return jsonify(status=res)
-
-######## GET ZONES #################################
-@app.get('/settings-zones')
-def get_zones():
-
-    doc = db_system.get(doc_id=1)
-    
-    zones = doc.get('Zones')
-    print("[GET ZONES]: " + str(zones))
-
-    return jsonify(Zones=zones)
-
 
 @app.post("/dashboard")
 def chartData():

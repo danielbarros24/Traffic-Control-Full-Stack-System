@@ -4,13 +4,15 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib';
-
 import colors from 'vuetify/lib/util/colors'
+
+
 
 // Translation provided by Vuetify (javascript)
 import en from 'vuetify/lib/locale/en'
 
 Vue.use(Vuetify);
+
 
 export default new Vuetify({
     lang: {
