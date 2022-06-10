@@ -142,19 +142,26 @@ def update_process():
 
     return jsonify(status=res)
 
-#####get automations########
+#####GET PROCESSES########
 @app.get('/process')
 def get_process():
     
-    automations = db_processes.all()
-
-    for n in automations:
+    processes = db_processes.all()
+    
+    for n in processes:
         n["id"] = n.doc_id
 
     print("Process returned!")    
-    return jsonify(automations)
 
-#####delete automations########
+    new_processes = db_processes.all()
+
+    for process in new_processes:
+        process.update({"notification": False})
+        db_processes.update(process)
+
+    return jsonify(processes)
+
+#####DELETE PROCESSES########
 @app.delete('/process')
 def delete_process():
 
@@ -169,7 +176,7 @@ def delete_process():
     return jsonify(status=res)
 
 
-#####get used GPIOs########
+#####GET AVAILABLE GPIOs########
 @app.get('/pins')
 def get_pins():
 
@@ -286,6 +293,27 @@ def delete_sensor():
         res = "not found" 
 
     return jsonify(status=res)
+
+
+##### UPDATE PROCESS NOTIFICATION########
+@app.patch('/process-notification')
+def update_process_notification():
+
+    process = request.get_json()
+    process_id = request.args.get('id')
+
+    if db_processes.contains(doc_id=int(process_id)):    
+        db_processes.update(process, doc_ids=[int(process_id)])
+        res = "success"
+        print("Process updated!")
+    else:
+        res = "not found" 
+
+    return jsonify(status=res)
+
+
+
+
 
 @app.post("/dashboard")
 def chartData():

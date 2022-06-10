@@ -77,7 +77,6 @@ def test_automations():
 
                 if(triggering == True):             #PROCESS IS STILL TRUE
                     print("PROCESS IS STILL TRUE")
-                    doc.update({"notification": False})
 
                 else:                               #RISING EDGE - PROCESS WAS FALSE AND NOW IS TRUE
                     doc.update({"triggering": True})
@@ -88,7 +87,6 @@ def test_automations():
             else:
                 if(triggering == True):             #FALLING EDGE - PROCESS NOT TRUE ANYMORE
                     doc.update({"triggering": False}) 
-                    doc.update({"notification": False})
                     doc.update({"lastTimeTriggerStop": "{}".format(current_date)})
                     print("FALLING EDGE")
                     #TURN OFF PROCESS PINS

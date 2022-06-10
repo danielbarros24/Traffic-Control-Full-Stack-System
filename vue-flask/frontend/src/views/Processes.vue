@@ -394,7 +394,7 @@ export default {
         id: 0,
         name: "",
         rule: 0,
-        enable: false,
+        enable: true,
         dates: [],
         startHour: "",
         endHour: "",
@@ -409,7 +409,7 @@ export default {
         id: 0,
         name: "",
         rule: 0,
-        enable: false,
+        enable: true,
         dates: [],
         startHour: "",
         endHour: "",
@@ -465,48 +465,13 @@ export default {
   },
 
   async mounted() {
-    const responseAutomations = await fetch("http://127.0.0.1:5000/process");
-    const jsonAutomations = await responseAutomations.json();
-
-    this.automations = jsonAutomations.map((val) => {
-      const startTime = new Date(val.startTime);
-      const endTime = new Date(val.endTime);
-      const triggering = val.triggering;
-      const notification = val.notification;
-      const processName = val.name;
-
-      if (this.isIsoDate(val.lastTimeTriggerStart)) {
-        val.lastTimeTriggerStartDisplay = dayjs(
-          val.lastTimeTriggerStart
-        ).fromNow();
-      } else {
-        val.lastTimeTriggerStartDisplay = "Never";
-      }
-
-      if (notification) {
-        this.processTriger = false;
-        this.textProcessTrigger = `${processName} process triggered!`
-        this.processTriger = true;
-
-      }
-
-      delete val.notification;
-      delete val.startTime;
-      delete val.endTime;
-      delete val.triggering;
-
-      val.dates = [
-        `${dayjs(startTime).format("YYYY-MM-DD")}`,
-        `${dayjs(endTime).format("YYYY-MM-DD")}`,
-      ];
-      val.startHour = `${dayjs(startTime).format("HH:mm")}`;
-      val.endHour = `${dayjs(endTime).format("HH:mm")}`;
-      val.triggering = triggering;
-
-      return val;
-    });
-
+    
+    this.getProcesses();
     this.getPins();
+  },
+
+  async created() {
+    //this.interval = setInterval(() => this.getProcesses(), 1000);
   },
 
   methods: {
@@ -515,11 +480,56 @@ export default {
       const d = new Date(str);
       return d.toISOString() === str;
     },
+
+    async getProcesses() {
+      const responseAutomations = await fetch("http://127.0.0.1:5000/process");
+      const jsonAutomations = await responseAutomations.json();
+
+      this.automations = jsonAutomations.map((val) => {
+        const startTime = new Date(val.startTime);
+        const endTime = new Date(val.endTime);
+        const triggering = val.triggering;
+        const notification = val.notification;
+        const processName = val.name;
+        
+
+        if (this.isIsoDate(val.lastTimeTriggerStart)) {
+          val.lastTimeTriggerStartDisplay = dayjs(
+            val.lastTimeTriggerStart
+          ).fromNow();
+        } else {
+          val.lastTimeTriggerStartDisplay = "Never";
+        }
+
+        if (notification) {
+          this.processTriger = false;
+          this.textProcessTrigger = `${processName} process triggered!`
+          this.processTriger = true;
+        }
+
+        delete val.notification;
+        delete val.startTime;
+        delete val.endTime;
+        delete val.triggering;
+
+        val.dates = [
+          `${dayjs(startTime).format("YYYY-MM-DD")}`,
+          `${dayjs(endTime).format("YYYY-MM-DD")}`,
+        ];
+        val.startHour = `${dayjs(startTime).format("HH:mm")}`;
+        val.endHour = `${dayjs(endTime).format("HH:mm")}`;
+        val.triggering = triggering;
+
+        return val;
+      });
+    },
+
     createProcess() {
       this.createItem();
       this.getPins();
       this.$refs.form.reset();
     },
+
     triggerSavedProcess() {
       this.snackbar_saved = true;
     },
