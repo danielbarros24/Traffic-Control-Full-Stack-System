@@ -31,6 +31,7 @@ db_camera = TinyDB('../database/camera.json')
 db_auth = TinyDB('../database/auth.json')
 db_processes = TinyDB('../database/processes.json')
 db_system = TinyDB('../database/system.json')
+db_sensors =TinyDB('../database/sensors.json')
 
 query = Query()
 Gpio = Query()
@@ -122,7 +123,7 @@ def new_process():
     
     print("Process inserted!")
 
-    return jsonify(status='Success')
+    return jsonify(status='ok')
 
 
 #####Update automation########
@@ -196,7 +197,7 @@ def update_password():
     password = credentials.get('password')
 
     db_auth.update({'password': "{}".format(password)})
-    res = "success"
+    res = "ok"
     print("Password updated!") 
 
     return jsonify(status=res)
@@ -211,16 +212,6 @@ def get_broker():
 
     return jsonify(Broker=broker)
 
-######## GET SENSORS #################################
-@app.get('/settings-sensors')
-def get_sensors():
-
-    doc = db_system.get(doc_id=1)
-    
-    number = doc.get('Sensors')
-    print("[GET SENSORS]: " + str(number))
-
-    return jsonify(Number=number)
 
 ######## UPDATE BROKER #################################
 @app.patch('/settings-broker')
@@ -230,21 +221,67 @@ def update_broker():
     broker = new_broker.get('Broker_IP')
 
     db_system.update({'Broker_IP': "{}".format(broker)})
-    res = "success"
+    res = "ok"
     print("Broker updated: " + str(broker)) 
 
     return jsonify(status=res)
 
-######## UPDATE SENSORS #################################
-@app.patch('/settings-sensors')
-def update_sensors():
+######## GET SENSORS #################################
+@app.get('/sensors')
+def get_sensors():
+    
+    sensors = db_sensors.all()
 
-    new_sensors = request.get_json()
+    for n in sensors:
+        n["id"] = n.doc_id
 
-    db_system.update(new_sensors)
+    print("Process returned!")    
+    return jsonify(sensors)
 
-    res = "success"
-    print("Sensors number updated: " + str(new_sensors)) 
+
+######## INSERT SENSORS #################################
+@app.post('/sensors')
+def create_sensors():
+
+    sensor = request.get_json()
+
+    db_sensors.insert(sensor)
+    print(sensor)
+
+    print("Process inserted!")
+    res = "ok"
+    return jsonify(status=res)
+
+##### UPDATE  SENSOR ########
+@app.patch('/sensors')
+def update_sensor():
+
+    sensor = request.get_json()
+    sensor_id = request.args.get('id')
+    print(sensor_id)
+
+    if db_sensors.contains(doc_id=int(sensor_id)):    
+        db_sensors.update(sensor, doc_ids=[int(sensor_id)])
+        res = "success"
+        print("Sensor updated!")
+    else:
+        res = "not found" 
+
+    return jsonify(status=res)
+
+##### DELETE SENSORS ########
+@app.delete('/sensors')
+def delete_sensor():
+
+    sensor_id = request.args.get('id')
+    print(sensor_id)
+
+    if db_sensors.contains(doc_id=int(sensor_id)):   
+        db_sensors.remove(doc_ids=[int(sensor_id)])
+        res = "success"
+        print("Sensor deleted!")
+    else:
+        res = "not found" 
 
     return jsonify(status=res)
 

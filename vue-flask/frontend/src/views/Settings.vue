@@ -37,7 +37,7 @@
       <v-card-title class="text-h4 font-weight-bold">
         Administrator
       </v-card-title>
-      <v-space></v-space>
+      <v-spacer></v-spacer>
 
       <div class="ml-3">
         <v-card-subtitle class="text-h6 font-weight-medium">
@@ -68,7 +68,14 @@
           </v-form>
         </v-card-text>
         <v-card-action>
-          <v-btn class="ml-4" :disabled="!valid" @click="submit_password(); snackbar_password = true;">
+          <v-btn
+            class="ml-4"
+            :disabled="!valid"
+            @click="
+              submit_password();
+              snackbar_password = true;
+            "
+          >
             submit
           </v-btn>
         </v-card-action>
@@ -97,7 +104,10 @@
               <v-btn
                 class="ml-4 mb-6"
                 :disabled="!valid_mqtt"
-                @click="submit_mqttIp();snackbar_mqtt = true;"
+                @click="
+                  submit_mqttIp();
+                  snackbar_mqtt = true;
+                "
               >
                 submit
               </v-btn>
@@ -108,29 +118,95 @@
               Sensors Configuration
             </v-card-subtitle>
 
-            <v-card-text class="ma">
-              <p class="text-h6 font-weight-medium mt-8">
-                Change sensors number
-              </p>
-              <v-form v-model="valid_sensors">
-                <v-text-field
-                  v-model="n_sensors"
-                  label="Enter new number of sensors"
-                  required
-                  :rules="SensorsRules"
-                ></v-text-field>
-              </v-form>
-            </v-card-text>
+            <v-data-table :headers="headers" :items="sensors" sort-by="sensors">
+              <template v-slot:top>
+                <v-toolbar flat>
+                  <v-dialog v-model="dialog" max-width="500px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        color="primary"
+                        dark
+                        class="mb-2"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="resetForm"
+                      >
+                        New Sensor
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <span class="text-h5">{{ formTitle }}</span>
+                      </v-card-title>
 
-            <v-card-action>
-              <v-btn
-                class="ml-4 mb-6"
-                :disabled="!valid_sensors"
-                @click="submit_sensors();snackbar_sensors = true;"
-              >
-                submit
-              </v-btn>
-            </v-card-action>
+                      <v-card-text>
+                        <v-container>
+                          <v-col cols="12" sm="8" md="6">
+                            <v-form ref="form" v-model="valid">
+                              <v-text-field
+                                v-model="editedItem.name"
+                                label="Sensor name"
+                                required
+                                :rules="sensorRules"
+                              ></v-text-field>
+                              <v-select
+                                class="mt-3"
+                                v-model="editedItem.lanes"
+                                :items="lanesList"
+                                label="Number of lanes"
+                                solo
+                                dense
+                                required
+                                :rules="sensorRules"
+                              ></v-select>
+                            </v-form>
+                          </v-col>
+                        </v-container>
+                      </v-card-text>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" text @click="close">
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          color="primary"
+                          text
+                          @click="save"
+                          :disabled="!valid"
+                        >
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-dialog v-model="dialogDelete" max-width="500px">
+                    <v-card>
+                      <v-card-title class="text-h5"
+                        >Are you sure you want to delete this
+                        item?</v-card-title
+                      >
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" text @click="closeDelete"
+                          >Cancel</v-btn
+                        >
+                        <v-btn color="primary" text @click="deleteItemConfirm"
+                          >OK</v-btn
+                        >
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-toolbar>
+              </template>
+              <template v-slot:item.actions="{ item }">
+                <v-icon small class="mr-2" @click="editItem(item)">
+                  mdi-pencil
+                </v-icon>
+                <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+              </template>
+            </v-data-table>
           </v-col>
 
           <v-col> </v-col>
@@ -140,7 +216,12 @@
             {{ text_pass }}
 
             <template v-slot:action="{ attrs }">
-              <v-btn color="blue" text v-bind="attrs" @click="snackbar_password = false">
+              <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar_password = false"
+              >
                 Close
               </v-btn>
             </template>
@@ -151,7 +232,12 @@
             {{ text_mqtt }}
 
             <template v-slot:action="{ attrs }">
-              <v-btn color="blue" text v-bind="attrs" @click="snackbar_mqtt = false">
+              <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar_mqtt = false"
+              >
                 Close
               </v-btn>
             </template>
@@ -162,7 +248,12 @@
             {{ text_sensors }}
 
             <template v-slot:action="{ attrs }">
-              <v-btn color="blue" text v-bind="attrs" @click="snackbar_sensors = false">
+              <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar_sensors = false"
+              >
                 Close
               </v-btn>
             </template>
@@ -174,10 +265,44 @@
 </template>
 
 <script>
-import { consoleError } from 'vuetify/lib/util/console';
+import { consoleError } from "vuetify/lib/util/console";
 
 export default {
   data: () => ({
+    //TABLE/////////////////////////////////////////////////////////////////
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        text: "Sensor",
+        align: "start",
+        sortable: true,
+        value: "name",
+      },
+      { text: "Number of Lanes", align: "center", value: "lanes" },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+
+    editedIndex: -1,
+    editedItem: {
+      id: 0,
+      name: "",
+      lanes: 0,
+    },
+    defaultItem: {
+      id: 0,
+      name: "",
+      lanes: 0,
+    },
+    sensors: [],
+    lanesList: [
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    ],
+
+    sensorRules: [(v) => !!v || "Cannot be empty!"],
+    valid: true,
+    text_sensors: "",
+    /////////////////////////////////////////////////////////////////
     snackbar_password: false,
     snackbar_mqtt: false,
     snackbar_sensors: false,
@@ -194,13 +319,14 @@ export default {
     confirmPasswordRules: [(v) => !!v],
 
     mqttRules: [
-      v => !!v || "Cannot be empty",
-      v =>  /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/.test(v) || 'Enter a valid IP address',],
+      (v) => !!v || "Cannot be empty",
+      (v) =>
+        /\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/.test(v) ||
+        "Enter a valid IP address",
+    ],
 
     broker_ip: "",
 
-    valid_sensors: true,
-    n_sensors: "1" ,
     SensorsRules: [(v) => !!v || "Cannot be empty"],
 
     items: [
@@ -225,16 +351,105 @@ export default {
           this.$router.push("processes");
         },
       },
-      
     ],
   }),
 
   async mounted() {
-    await this.getSensors();
+    const responseSensors = await fetch("http://127.0.0.1:5000/sensors");
+    const sensors_res = await responseSensors.json();
+    this.sensors = sensors_res;
+
+    console.log(this.sensors);
     await this.getBrokerIP();
   },
 
   methods: {
+    resetForm() {
+      this.$refs.form.reset();
+    },
+    editItem(item) {
+      this.editedIndex = this.sensors.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.sensors.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    async deleteItemConfirm() {
+      const id = this.editedItem.id;
+      const response = await fetch(`http://127.0.0.1:5000/sensors?id=${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+          this.text_sensors = `An error has occured: ${response.status}`;
+          //this.close();
+        } else {
+          this.text_sensors = "Sensor Deleted!";
+        }
+      this.snackbar_sensors = true;
+      this.sensors.splice(this.editedIndex, 1);
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    async save() {
+      const sensor = {
+        name: this.editedItem.name,
+        lanes: this.editedItem.lanes,
+      };
+
+      const file = JSON.stringify(sensor);
+
+      if (this.editedIndex > -1) {
+        const id = this.editedItem.id;
+        const response = await fetch(`http://127.0.0.1:5000/sensors?id=${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: file,
+        });
+        Object.assign(this.sensors[this.editedIndex], this.editedItem);
+        if (!response.ok) {
+          this.text_sensors = `An error has occured: ${response.status}`;
+          //this.close();
+        } else {
+          this.text_sensors = "Sensor Edited!";
+        }
+      } else {
+        const response = await fetch("http://127.0.0.1:5000/sensors", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: file,
+        });
+        this.sensors.push(this.editedItem);
+        if (!response.ok) {
+          this.text_sensors = `An error has occured: ${response.status}`;
+        } else {
+          this.text_sensors = "Process Saved!";
+        }
+      }
+      this.snackbar_sensors = true;
+      this.close();
+    },
+
     clickLogo() {
       this.$router.push("dashboard");
     },
@@ -243,8 +458,8 @@ export default {
     },
     async submit_password() {
       const password = {
-        password: this.confirmPassword
-      }
+        password: this.confirmPassword,
+      };
       const file = JSON.stringify(password);
       const response = await fetch(`http://127.0.0.1:5000/settings`, {
         method: "PATCH",
@@ -252,21 +467,19 @@ export default {
         body: file,
       });
       if (!response.ok) {
-          this.text_pass = `An error has occured: ${response.status}`
-        }
-      else {
-        this.text_pass = "Password changed!"
+        this.text_pass = `An error has occured: ${response.status}`;
+      } else {
+        this.text_pass = "Password changed!";
       }
 
-      this.password = ""
-      this.confirmPassword = ""
+      this.password = "";
+      this.confirmPassword = "";
       this.$refs.myForm.reset();
-      
     },
     async submit_mqttIp() {
       const broker = {
-        Broker_IP: this.broker_ip
-      }
+        Broker_IP: this.broker_ip,
+      };
       const file = JSON.stringify(broker);
       const response = await fetch(`http://127.0.0.1:5000/settings-broker`, {
         method: "PATCH",
@@ -275,50 +488,35 @@ export default {
       });
 
       if (!response.ok) {
-          this.text_mqtt = `An error has occured: ${response.status}`
-        }
-      else {
-        this.text_mqtt = "Broker IP changed! Please restart the system!"
+        this.text_mqtt = `An error has occured: ${response.status}`;
+      } else {
+        this.text_mqtt = "Broker IP changed! Please restart the system!";
       }
     },
 
-    async submit_sensors() {
-      const sensor = {
-        Sensors: this.n_sensors
-      }
-      const file = JSON.stringify(sensor);
-      const response = await fetch(`http://127.0.0.1:5000/settings-sensors`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: file,
-      });
-
-      if (!response.ok) {
-          this.text_mqtt = `An error has occured: ${response.status}`
-        }
-      else {
-        this.text_mqtt = "Broker IP changed! Please restart the system!"
-      }
-
-    },
     async getBrokerIP() {
       const response = await fetch("http://127.0.0.1:5000/settings-broker");
-      const ip= await response.json();
+      const ip = await response.json();
       this.broker_ip = ip.Broker;
-    },
-
-    async getSensors() {
-      const response = await fetch("http://127.0.0.1:5000/settings-sensors");
-      const number = await response.json();
-      this.n_sensors = number.Number;
-      
     },
   },
 
   computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Sensor" : "Edit Sensor";
+    },
     passwordConfirmationRule() {
       return () =>
         this.password === this.confirmPassword || "Password must match";
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
     },
   },
 };

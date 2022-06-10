@@ -578,12 +578,12 @@ export default {
       const response = await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
         method: "DELETE",
       });
-      this.automations.splice(this.editedIndex, 1);
       if (!response.ok) {
         this.process_delete = `An error has occured: ${response.status}`;
       } else {
         this.process_delete = "Process Deleted!";
       }
+      this.automations.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
