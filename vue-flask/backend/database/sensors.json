@@ -1,1 +1,1 @@
-{"_default": {"1": {"name": "T1", "lanes": 2}}}
+{"_default": {"1": {"name": "Camera 1", "lanes": 2}, "2": {"name": "Street 2", "lanes": 3}, "4": {"name": "teste", "lanes": 2}, "5": {"name": "aaa", "lanes": 3}, "6": {"name": "sss", "lanes": 1}}}

@@ -218,6 +218,7 @@
               <v-btn
                 color="blue"
                 text
+                dense
                 v-bind="attrs"
                 @click="snackbar_password = false"
               >
