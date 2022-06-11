@@ -1,1 +1,356 @@
-{"_default": {"7": {"name": "rrrr", "startTime": "2022-06-01T22:02:00.000Z", "endTime": "2022-06-16T22:05:00.000Z", "enable": true, "gpios": [{"gpio": 1}], "triggering": false, "lastTimeTriggerStart": "", "notification": false, "rules": {"doublePark": ["T1-1", "ALL"]}, "blueprint": {"id": "demo@0.1.0", "nodes": {"4": {"id": 4, "data": {"type1": 1}, "inputs": {"num": {"connections": [{"node": 5, "output": "num", "data": {}}]}}, "outputs": {}, "position": [-254, -182], "name": "GPIO"}, "5": {"id": 5, "data": {"type1": "T1-1", "type": "ALL"}, "inputs": {}, "outputs": {"num": {"connections": [{"node": 4, "input": "num", "data": {}}]}}, "position": [-671, -230], "name": "Double-Park"}}}}}}
+{
+    "_default": {
+        "2": {
+            "name": "Car detection",
+            "startTime": "2022-06-01T11:08:00.000Z",
+            "endTime": "2022-06-09T11:07:00.000Z",
+            "enable": true,
+            "gpios": [
+                {
+                    "gpio": 3,
+                    "inverted": false
+                }
+            ],
+            "triggering": false,
+            "lastTimeTriggerStart": "",
+            "notification": false,
+            "rules": {
+                ">": [
+                    {
+                        "vehicleDetection": [
+                            "teste-2",
+                            "CAR"
+                        ]
+                    },
+                    "34"
+                ]
+            },
+            "blueprint": {
+                "id": "demo@0.1.0",
+                "nodes": {
+                    "4": {
+                        "id": 4,
+                        "data": {
+                            "num1": "34"
+                        },
+                        "inputs": {},
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 6,
+                                        "input": "num2",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -616,
+                            -43
+                        ],
+                        "name": "Constant"
+                    },
+                    "5": {
+                        "id": 5,
+                        "data": {
+                            "type": "CAR",
+                            "type1": "teste-2"
+                        },
+                        "inputs": {},
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 6,
+                                        "input": "num1",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -637,
+                            -302
+                        ],
+                        "name": "Vehicle Detection"
+                    },
+                    "6": {
+                        "id": 6,
+                        "data": {},
+                        "inputs": {
+                            "num1": {
+                                "connections": [
+                                    {
+                                        "node": 5,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            },
+                            "num2": {
+                                "connections": [
+                                    {
+                                        "node": 4,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 7,
+                                        "input": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -157,
+                            -333
+                        ],
+                        "name": "A>B"
+                    },
+                    "7": {
+                        "id": 7,
+                        "data": {
+                            "type": false,
+                            "type1": 3
+                        },
+                        "inputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 6,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "outputs": {},
+                        "position": [
+                            244,
+                            -265
+                        ],
+                        "name": "GPIO"
+                    }
+                }
+            }
+        },
+        "3": {
+            "name": "Traffic flow",
+            "startTime": "2022-06-01T11:06:00.000Z",
+            "endTime": "2022-06-09T07:52:00.000Z",
+            "enable": true,
+            "gpios": [
+                {
+                    "gpio": 2,
+                    "inverted": true
+                }
+            ],
+            "triggering": false,
+            "lastTimeTriggerStart": "",
+            "notification": false,
+            "rules": {
+                "crowdDetection": "T1"
+            },
+            "blueprint": {
+                "id": "demo@0.1.0",
+                "nodes": {
+                    "4": {
+                        "id": 4,
+                        "data": {
+                            "type1": "T1"
+                        },
+                        "inputs": {},
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 5,
+                                        "input": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -462,
+                            -173
+                        ],
+                        "name": "Crowd Detection"
+                    },
+                    "5": {
+                        "id": 5,
+                        "data": {
+                            "type": true,
+                            "type1": 2
+                        },
+                        "inputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 4,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "outputs": {},
+                        "position": [
+                            -42,
+                            -182.42857142857142
+                        ],
+                        "name": "GPIO"
+                    }
+                }
+            }
+        },
+        "5": {
+            "name": "Double-Park",
+            "startTime": "2022-06-01T22:09:00.000Z",
+            "endTime": "2022-06-09T20:59:00.000Z",
+            "enable": true,
+            "gpios": [
+                {
+                    "gpio": 5
+                }
+            ],
+            "triggering": false,
+            "lastTimeTriggerStart": "",
+            "notification": false,
+            "rules": {
+                "doublePark": [
+                    "T1-1",
+                    "CAR"
+                ]
+            },
+            "blueprint": {
+                "id": "demo@0.1.0",
+                "nodes": {
+                    "16": {
+                        "id": 16,
+                        "data": {
+                            "type1": "T1-1",
+                            "type": "CAR"
+                        },
+                        "inputs": {},
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 17,
+                                        "input": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -663,
+                            -217
+                        ],
+                        "name": "Double-Park"
+                    },
+                    "17": {
+                        "id": 17,
+                        "data": {
+                            "type1": 5
+                        },
+                        "inputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 16,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "outputs": {},
+                        "position": [
+                            -78,
+                            -227
+                        ],
+                        "name": "GPIO"
+                    }
+                }
+            }
+        },
+        "6": {
+            "name": "CrowdDetection",
+            "startTime": "2022-06-01T21:04:00.000Z",
+            "endTime": "2022-06-23T21:06:00.000Z",
+            "enable": true,
+            "gpios": [
+                {
+                    "gpio": 6
+                }
+            ],
+            "triggering": false,
+            "lastTimeTriggerStart": "",
+            "notification": false,
+            "rules": {
+                "jamDetection": "T1-2"
+            },
+            "blueprint": {
+                "id": "demo@0.1.0",
+                "nodes": {
+                    "18": {
+                        "id": 18,
+                        "data": {
+                            "type1": "T1-2"
+                        },
+                        "inputs": {},
+                        "outputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 19,
+                                        "input": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "position": [
+                            -674,
+                            -199
+                        ],
+                        "name": "Jam Detection"
+                    },
+                    "19": {
+                        "id": 19,
+                        "data": {
+                            "type1": 6
+                        },
+                        "inputs": {
+                            "num": {
+                                "connections": [
+                                    {
+                                        "node": 18,
+                                        "output": "num",
+                                        "data": {}
+                                    }
+                                ]
+                            }
+                        },
+                        "outputs": {},
+                        "position": [
+                            -133,
+                            -226
+                        ],
+                        "name": "GPIO"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -114,7 +114,7 @@ def logout():
 
 ############# OTHER FUNCTIONS ################
 
-#####Create new automation########
+#####CREATE NEW PROCESS########
 @app.post('/process')
 def new_process():
     automation = request.get_json()
@@ -125,8 +125,7 @@ def new_process():
 
     return jsonify(status='ok')
 
-
-#####Update automation########
+#####UPDATE PROCESS########
 @app.patch('/process')
 def update_process():
 
@@ -153,12 +152,13 @@ def get_process():
 
     print("Process returned!")    
 
-    new_processes = db_processes.all()
+    new_processes = processes
 
-    for process in new_processes:
-        process.update({"notification": False})
-        db_processes.update(process)
-
+    for new_process in new_processes:
+        id = new_process.doc_id
+        if(new_process.get('notification') == True):
+            db_processes.update({"notification": False}, doc_ids=[int(id)])
+ 
     return jsonify(processes)
 
 #####DELETE PROCESSES########
@@ -175,17 +175,14 @@ def delete_process():
 
     return jsonify(status=res)
 
-
 #####GET AVAILABLE GPIOs########
 @app.get('/pins')
 def get_pins():
 
     docs = [query.get('gpios') for query in db_processes.all()]    #GETS USED GPIOS IN AUTOMATIONS
 
-    print(docs)
     docs = [item for sublist in docs for item in sublist]
-    print("---------------------------------------------------------------------------------------------")
-    print(docs)
+
     used_pins = []
 
     for doc in docs:
@@ -193,8 +190,9 @@ def get_pins():
 
     Total_pins = list(range(1, 27))                                                         #CREATES ARRAY WITH ALL PINS (1 - 26)
 
-    for j in used_pins:                                                                    #REMOVES FROM ARRAY USED GPIOS
-       Total_pins.remove(j)
+    for j in used_pins:
+        if j in Total_pins:                                                                    #REMOVES FROM ARRAY USED GPIOS
+            Total_pins.remove(j)
 
     return jsonify(Total_pins)
 
@@ -221,7 +219,6 @@ def get_broker():
 
     return jsonify(Broker=broker)
 
-
 ######## UPDATE BROKER #################################
 @app.patch('/settings-broker')
 def update_broker():
@@ -246,7 +243,6 @@ def get_sensors():
 
     print("Process returned!")    
     return jsonify(sensors)
-
 
 ######## INSERT SENSORS #################################
 @app.post('/sensors')
@@ -293,26 +289,6 @@ def delete_sensor():
         res = "not found" 
 
     return jsonify(status=res)
-
-
-##### UPDATE PROCESS NOTIFICATION########
-@app.patch('/process-notification')
-def update_process_notification():
-
-    process = request.get_json()
-    process_id = request.args.get('id')
-
-    if db_processes.contains(doc_id=int(process_id)):    
-        db_processes.update(process, doc_ids=[int(process_id)])
-        res = "success"
-        print("Process updated!")
-    else:
-        res = "not found" 
-
-    return jsonify(status=res)
-
-
-
 
 
 @app.post("/dashboard")

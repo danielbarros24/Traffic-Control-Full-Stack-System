@@ -105,8 +105,7 @@
                 class="ml-4 mb-6"
                 :disabled="!valid_mqtt"
                 @click="
-                  submit_mqttIp();
-                  snackbar_mqtt = true;
+                  submit_mqttIp
                 "
               >
                 submit
@@ -267,6 +266,7 @@
 <script>
 import { consoleError } from "vuetify/lib/util/console";
 
+
 export default {
   data: () => ({
     //TABLE/////////////////////////////////////////////////////////////////
@@ -307,7 +307,7 @@ export default {
     snackbar_mqtt: false,
     snackbar_sensors: false,
     text_pass: "Password changed!",
-    text_mqtt: "Broker IP changed! Please restart the system!",
+    text_mqtt: "Error: Cannot communicate with System",
     text_sensors: "Number of sensors changed!",
     timeout: 4000,
 
@@ -486,12 +486,13 @@ export default {
         headers: { "Content-Type": "application/json" },
         body: file,
       });
-
       if (!response.ok) {
         this.text_mqtt = `An error has occured: ${response.status}`;
-      } else {
+      } else if (response.ok) {
         this.text_mqtt = "Broker IP changed! Please restart the system!";
       }
+
+      this.snackbar_mqtt = true;
     },
 
     async getBrokerIP() {
@@ -502,6 +503,7 @@ export default {
   },
 
   computed: {
+
     formTitle() {
       return this.editedIndex === -1 ? "New Sensor" : "Edit Sensor";
     },

@@ -277,12 +277,24 @@
     </div>
     <v-spacer></v-spacer>
     <div class="text-center">
-    
-      <v-snackbar v-model="processTriger" color="red darken-3" :timeout="timeout" elevation="24" class="mb-12 mr-12">
-        <h2 class="font-weight-medium">{{ textProcessTrigger }} </h2>
+      <v-snackbar
+        v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+        :key="snackbar.text"
+        v-model="snackbar.showing"
+        :timeout="0"
+        elevation="24"
+        :color="snackbar.color"
+        :style="`bottom: ${(index * 60) + 8}px`"
+      >
+        <h2 class="font-weight-medium">{{ snackbar.text }}</h2>
 
         <template v-slot:action="{ attrs }">
-          <v-btn color="white" text v-bind="attrs" @click="processTriger = false">
+          <v-btn
+            color="white"
+            text
+            v-bind="attrs"
+            @click="snackbar.showing = false"
+          >
             Close
           </v-btn>
         </template>
@@ -294,6 +306,7 @@
 <script>
 import ReteEditor from "@/components/rete/ReteEditor";
 import * as dayjs from "dayjs";
+import  { mapState }  from 'vuex';
 
 export default {
   name: "Automations",
@@ -345,7 +358,7 @@ export default {
       process_save: "Process Saved!",
       process_delete: "Process Deleted!",
 
-      processTriger: false,
+      //snackbar: false,
       textProcessTrigger: "",
 
       snackbar_saved: false,
@@ -426,6 +439,8 @@ export default {
   },
 
   computed: {
+    ...mapState(['snackbars']),
+
     formTitle() {
       return this.editedIndex === -1 ? "New Process" : "Edit Processes";
     },
@@ -466,15 +481,22 @@ export default {
 
   async mounted() {
     
-    this.getProcesses();
-    this.getPins();
+    await this.getProcesses();
+    await this.getPins();
   },
 
   async created() {
-    //this.interval = setInterval(() => this.getProcesses(), 1000);
+    this.interval = await setInterval(() => this.getProcesses(), 2000);
   },
 
   methods: {
+
+    notificationTest() {
+      this.$store.dispatch('setSnackbar',{
+          text: `process triggered!`
+          })
+    },
+
     isIsoDate(str) {
       if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
       const d = new Date(str);
@@ -502,9 +524,9 @@ export default {
         }
 
         if (notification) {
-          this.processTriger = false;
-          this.textProcessTrigger = `${processName} process triggered!`
-          this.processTriger = true;
+          this.$store.dispatch('setSnackbar',{
+          text: `${processName} process triggered!`
+          })
         }
 
         delete val.notification;
@@ -666,7 +688,7 @@ export default {
           this.process_save = `An error has occured: ${response.status}`;
           this.close();
         } else {
-          this.process_save = "Process Saved!";
+          this.process_save = "Process Edited!";
         }
       } else {
         const response = await fetch("http://127.0.0.1:5000/process", {
@@ -699,7 +721,6 @@ export default {
     },
 
     async Validate() {
-      console.log("start validate");
       const endNodes = this.editor.nodes.filter((node) => node.name === "GPIO");
       console.log(endNodes.length);
 
@@ -727,7 +748,6 @@ export default {
 
         if (connections.length == 0) {
           this.all_valid = false;
-          console.log("3");
           return;
         }
 
@@ -739,12 +759,10 @@ export default {
 
         if (connectionComponent0 !== connectionComponent) {
           this.all_valid = false;
-          console.log("4");
           return;
         }
       }
       this.all_valid = true;
-      console.log("sucess");
     },
   },
 };
