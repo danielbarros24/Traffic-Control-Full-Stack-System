@@ -62,10 +62,7 @@ def test_automations():
 
         if(compare_datetime(current_date, startTime, endTime) and enable == True):
 
-            
-
             triggering = doc.get('triggering')
-
 
             db_general.update({"start_time": "{}".format(raw_start_time)})
             rules = doc.get('rules') 
@@ -84,16 +81,20 @@ def test_automations():
                     doc.update({"lastTimeTriggerStart": "{}".format(current_date)})
                     
                     print("RISING EDGE")
+
+                    #TURN PINS HIGH IF NOT INVERTED
+                    #TURN PINS LOW IF INVERTED
             else:
                 if(triggering == True):             #FALLING EDGE - PROCESS NOT TRUE ANYMORE
                     doc.update({"triggering": False}) 
-                    doc.update({"lastTimeTriggerStop": "{}".format(current_date)})
                     print("FALLING EDGE")
-                    #TURN OFF PROCESS PINS
+                    #TURN PINS LOW IF NOT INVERTED
+                    #TURN PINS HIGH IF INVERTED
                 else:                               #PROCESS IS STILL FALSE
                     print("PROCESS IS STILL FALSE\n")
 
-        #elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
-            #TURN OFF pins[]
+        elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
+            #TURN OFF all pins[]
+            print("TURN OFF ALL PINS")
 
 

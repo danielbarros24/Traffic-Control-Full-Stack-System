@@ -16,10 +16,10 @@ Keep_Alive_Interval = 40
 # Connect
 client.connect(MQTT_Broker, int(MQTT_Port), int(Keep_Alive_Interval))
 
-# Continue the network loop
-client.loop_start()
-
 while True:
+    
+    # Continue the network loop
+    client.loop_start()
     test_automations()
     time.sleep(1)
 

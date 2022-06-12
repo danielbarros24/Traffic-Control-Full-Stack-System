@@ -98,7 +98,8 @@ def login():
 
                 #if not is_safe_url(next):
                 #    return flask.abort(400)
-                print(username_el)
+                print(str(username_el) + "logged in!")
+                print("Start session!")
                 return redirect(url_for('index'))
                 
             return jsonify(status='Login unsuccessful! Please check your credentials.')
@@ -109,6 +110,8 @@ def login():
 @app.route('/logout')
 def logout():   
     session.pop('username', None)
+    print("Logout!")
+    print("Session closed!")
     return redirect(url_for('index'))
 
 
@@ -129,13 +132,13 @@ def new_process():
 @app.patch('/process')
 def update_process():
 
-    automation = request.get_json()
-    automation_id = request.args.get('id')
+    process = request.get_json()
+    process_id = request.args.get('id')
 
-    if db_processes.contains(doc_id=int(automation_id)):    
-        db_processes.update(automation, doc_ids=[int(automation_id)])
+    if db_processes.contains(doc_id=int(process_id)):    
+        db_processes.update(process, doc_ids=[int(process_id)])
         res = "success"
-        print("Process updated!")
+        print("Process updated! id: " + str(process_id))
     else:
         res = "not found" 
 
@@ -148,9 +151,7 @@ def get_process():
     processes = db_processes.all()
     
     for n in processes:
-        n["id"] = n.doc_id
-
-    print("Process returned!")    
+        n["id"] = n.doc_id   
 
     new_processes = processes
 
@@ -158,6 +159,8 @@ def get_process():
         id = new_process.doc_id
         if(new_process.get('notification') == True):
             db_processes.update({"notification": False}, doc_ids=[int(id)])
+    
+    print("[GET PROCESSES]: Process returned!") 
  
     return jsonify(processes)
 
@@ -165,11 +168,11 @@ def get_process():
 @app.delete('/process')
 def delete_process():
 
-    automation_id = request.args.get('id')
-    if db_processes.contains(doc_id=int(automation_id)):   
-        db_processes.remove(doc_ids=[int(automation_id)])
+    process_id = request.args.get('id')
+    if db_processes.contains(doc_id=int(process_id)):   
+        db_processes.remove(doc_ids=[int(process_id)])
         res = "success"
-        print("Process deleted!")
+        print("Process deleted!" + str(process_id))
     else:
         res = "not found" 
 
@@ -194,6 +197,7 @@ def get_pins():
         if j in Total_pins:                                                                    #REMOVES FROM ARRAY USED GPIOS
             Total_pins.remove(j)
 
+    print("[GET PINS]: " + str(Total_pins) + " Pins returned!")
     return jsonify(Total_pins)
 
 ######## UPDATE PASSWORD #################################
@@ -241,7 +245,7 @@ def get_sensors():
     for n in sensors:
         n["id"] = n.doc_id
 
-    print("Process returned!")    
+    print("[GET SENSORS]: " + str(sensors))    
     return jsonify(sensors)
 
 ######## INSERT SENSORS #################################
@@ -253,7 +257,7 @@ def create_sensors():
     db_sensors.insert(sensor)
     print(sensor)
 
-    print("Process inserted!")
+    print("Sensor inserted! Sensor " + str(sensor))
     res = "ok"
     return jsonify(status=res)
 
@@ -263,12 +267,11 @@ def update_sensor():
 
     sensor = request.get_json()
     sensor_id = request.args.get('id')
-    print(sensor_id)
 
     if db_sensors.contains(doc_id=int(sensor_id)):    
         db_sensors.update(sensor, doc_ids=[int(sensor_id)])
         res = "success"
-        print("Sensor updated!")
+        print("Sensor updated! Sensor: " + str(sensor))
     else:
         res = "not found" 
 
@@ -284,7 +287,7 @@ def delete_sensor():
     if db_sensors.contains(doc_id=int(sensor_id)):   
         db_sensors.remove(doc_ids=[int(sensor_id)])
         res = "success"
-        print("Sensor deleted!")
+        print("Sensor deleted! id: " + str(sensor_id))
     else:
         res = "not found" 
 

@@ -14,8 +14,6 @@ MQTT_Port = 1883
 Keep_Alive_Interval = 45
 
 ######################################  MQTT TOPICS ################################################
- 
-#MQTT_Topic_JamDetection = "T1/onvif-ej/RuleEngine/CountAgregation/OccupancyCounter/&1/Jam 1"
 
 MQTT_Topic_truck_counter_1 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Truck 1"
 MQTT_Topic_truck_counter_2 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Truck 1"
@@ -27,31 +25,31 @@ MQTT_Topic_bike_counter_1 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/C
 MQTT_Topic_bike_counter_2 = "T1/onvif-ej/RuleEngine/CountAgregation/Counter/&1/Counter Bike 2"
 
 
-MQTT_Topic_IVA_double_park_car_1 = "T1/onvif-ej/IVA/IdleObject/DoublePark Car 1/&1"
-MQTT_Topic_IVA_double_park_car_2 = "T1/onvif-ej/IVA/IdleObject/DoublePark Car 2/&1"
+MQTT_Topic_IVA_double_park_car_1 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Car 1"
+MQTT_Topic_IVA_double_park_car_2 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Car 2"
 
-MQTT_Topic_IVA_double_park_truck_1 = "T1/onvif-ej/IVA/IdleObject/DoublePark Truck 1/&1"
-MQTT_Topic_IVA_double_park_truck_2 = "T1/onvif-ej/IVA/IdleObject/DoublePark Truck 2/&1"
+MQTT_Topic_IVA_double_park_truck_1 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Truck 1"
+MQTT_Topic_IVA_double_park_truck_2 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Truck 2"
 
-MQTT_Topic_IVA_double_park_bike_1 = "T1/onvif-ej/IVA/IdleObject/DoublePark Bike 1/&1"
-MQTT_Topic_IVA_double_park_bike_2 = "T1/onvif-ej/IVA/IdleObject/DoublePark Bike 2/&1"
-
-
-MQTT_Topic_IVA_idle_car_1 = "T1/onvif-ej/IVA/IdleObject/Idle Car 1/&1"
-MQTT_Topic_IVA_idle_car_2 = "T1/onvif-ej/IVA/IdleObject/Idle Car 2/&1"
-
-MQTT_Topic_IVA_idle_truck_1 = "T1/onvif-ej/IVA/IdleObject/Idle Truck 1/&1"
-MQTT_Topic_IVA_idle_truck_2 = "T1/onvif-ej/IVA/IdleObject/Idle Truck 2/&1"
-
-MQTT_Topic_IVA_idle_bike_1 = "T1/onvif-ej/IVA/IdleObject/Idle Bike 1/&1"
-MQTT_Topic_IVA_idle_bike_2 = "T1/onvif-ej/IVA/IdleObject/Idle Bike 2/&1"
+MQTT_Topic_IVA_double_park_bike_1 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Bike 1"
+MQTT_Topic_IVA_double_park_bike_2 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Bike 2"
 
 
-MQTT_Topic_IVA_jam_1 = "T1/onvif-ej/IVA/ObjectInField/Jam 1/&1"
-MQTT_Topic_IVA_jam_2 = "T1/onvif-ej/IVA/ObjectInField/Jam 2/&1"
+MQTT_Topic_IVA_idle_car_1 = "T2/onvif-ej/IVA/IdleObject/&1/Idle Car 1"
+MQTT_Topic_IVA_idle_car_2 = "T2/onvif-ej/IVA/IdleObject/&1/Idle Car 2"
+
+MQTT_Topic_IVA_idle_truck_1 = "T2/onvif-ej/IVA/IdleObject/&1/Idle Truck 1"
+MQTT_Topic_IVA_idle_truck_2 = "T2/onvif-ej/IVA/IdleObject/&1/Idle Truck 2"
+
+MQTT_Topic_IVA_idle_bike_1 = "T2/onvif-ej/IVA/IdleObject/&1/Idle Bike 1"
+MQTT_Topic_IVA_idle_bike_2 = "T1/onvif-ej/IVA/IdleObject/&1/Idle Bike 2"
 
 
-MQTT_Topic_IVA_Crowd_Detection = "T1/onvif-ej/IVA/CrowdDetection/Crowd Detection/&1"
+MQTT_Topic_IVA_jam_1 = "T2/onvif-ej/IVA/ObjectInField/&1/Jam 1"
+MQTT_Topic_IVA_jam_2 = "T1/onvif-ej/IVA/ObjectInField/&1/Jam 2"
+
+
+MQTT_Topic_IVA_Crowd_Detection = "T1/onvif-ej/IVA/CrowdDetection/&1/Crowd Detection"
 
 ##################################################################################################
 
@@ -224,7 +222,7 @@ def publish_Cam_Events_to_MQTT():
 	Cam_Data_Rule = {
 		"UtcTime": UtcTime,
 		"Source":
-			{"VideoSource":"1","Rule":"Counter bike 2"},
+			{"VideoSource":"1","Rule":"Counter Bike 2"},
 		"Data":
 			{"Count":Count}
 	}

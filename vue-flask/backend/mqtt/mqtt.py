@@ -125,7 +125,7 @@ def parse_mqtt_message(topic, message):
                     json_message = create_RuleEngine_message(_cam, _utc_time, _task, _vehicle, _zone, _count)
                     input_json_db(json_message)   
         elif Topic_array[2] == 'IVA':
-            name = Topic_array[4]
+            name = Topic_array[5]
             name_split = name.split()
 
             if len(name_split) == 2 and name_split[0] == 'Jam':
@@ -138,7 +138,7 @@ def parse_mqtt_message(topic, message):
 
             elif Topic_array[3] == 'CrowdDetection':
                 
-                if Topic_array[4].find('Crowd') != -1 and Topic_array[4].find('Detection') != -1:
+                if Topic_array[5].find('Crowd') != -1 and Topic_array[5].find('Detection') != -1:
                     _task = 'Crowd Detection'
                     _zone = _cam
                     _state = msg_deserialized['Data']['State']

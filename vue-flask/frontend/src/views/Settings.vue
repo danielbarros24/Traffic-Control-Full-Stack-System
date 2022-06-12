@@ -139,7 +139,7 @@
                       </v-card-title>
 
                       <v-card-text>
-                        <v-form ref="form" v-model="valid">
+                        <v-form ref="form" v-model="valid_sensor">
                           <v-text-field
                             v-model="editedItem.name"
                             label="Sensor name"
@@ -171,7 +171,7 @@
                           color="primary"
                           text
                           @click="save"
-                          :disabled="!valid"
+                          :disabled="!valid_sensor"
                         >
                           Save
                         </v-btn>
@@ -300,7 +300,6 @@ export default {
     ],
 
     sensorRules: [(v) => !!v || "Cannot be empty!"],
-    valid: true,
     text_sensors: "",
     /////////////////////////////////////////////////////////////////
     snackbar_password: false,
@@ -313,6 +312,7 @@ export default {
 
     valid: true,
     valid_mqtt: true,
+    valid_sensor: true,
     password: "",
     confirmPassword: "",
     passwordRules: [(v) => !!v],
@@ -355,15 +355,17 @@ export default {
   }),
 
   async mounted() {
-    const responseSensors = await fetch("http://127.0.0.1:5000/sensors");
-    const sensors_res = await responseSensors.json();
-    this.sensors = sensors_res;
-
-    console.log(this.sensors);
+    await this.getSensors();
     await this.getBrokerIP();
   },
 
   methods: {
+
+    async getSensors() {
+      const responseSensors = await fetch("http://127.0.0.1:5000/sensors");
+      const sensors_res = await responseSensors.json();
+      this.sensors = sensors_res;
+    },
     resetForm() {
       this.$refs.form.reset();
     },
@@ -447,6 +449,7 @@ export default {
         }
       }
       this.snackbar_sensors = true;
+      await this.getSensors();
       this.close();
     },
 

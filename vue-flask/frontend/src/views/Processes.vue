@@ -370,7 +370,7 @@ export default {
       menu1: null,
       menu2: null,
 
-      switch1: false,
+      switch1: true,
 
       AutomationName: "",
       dialog: false,
@@ -486,7 +486,7 @@ export default {
   },
 
   async created() {
-    this.interval = await setInterval(() => this.getProcesses(), 2000);
+    this.interval = await setInterval(() => this.getProcesses(), 10000);
   },
 
   methods: {
