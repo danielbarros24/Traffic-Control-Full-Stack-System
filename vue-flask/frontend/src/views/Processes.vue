@@ -497,7 +497,7 @@ export default {
     },
 
     async getProcesses() {
-      const responseAutomations = await fetch("http://127.0.0.1:5000/process");
+      const responseAutomations = await fetch("http://192.168.1.216:5000/process");
       const jsonAutomations = await responseAutomations.json();
 
       this.automations = jsonAutomations.map((val) => {
@@ -562,7 +562,7 @@ export default {
     },
 
     async getPins() {
-      const responseGpios = await fetch("http://127.0.0.1:5000/pins");
+      const responseGpios = await fetch("http://192.168.1.216:5000/pins");
       const jsonGpios = await responseGpios.json();
 
       this.gpios = jsonGpios.map((value) => ({
@@ -598,7 +598,7 @@ export default {
 
     async deleteItemConfirm() {
       const id = this.editedItem.id;
-      const response = await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
+      const response = await fetch(`http://192.168.1.216:5000/process?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -669,7 +669,7 @@ export default {
 
       if (this.editedIndex > -1) {
         const id = this.editedItem.id;
-        const response = await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
+        const response = await fetch(`http://192.168.1.216:5000/process?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -683,7 +683,7 @@ export default {
           this.process_save = "Process Edited!";
         }
       } else {
-        const response = await fetch("http://127.0.0.1:5000/process", {
+        const response = await fetch("http://192.168.1.216:5000/process", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -703,7 +703,7 @@ export default {
     async updateEnable(event, item) {
       const id = item.id;
 
-      await fetch(`http://127.0.0.1:5000/process?id=${id}`, {
+      await fetch(`http://192.168.1.216:5000/process?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

@@ -75,7 +75,7 @@ export default {
         password: this.password,
       }
       try {
-        const res = await fetch("http://127.0.0.1:5000/login", {
+        const res = await fetch("http://192.168.1.216:5000/login", {
           method: "POST",
           headers: {
             'Accept': 'application/json',
