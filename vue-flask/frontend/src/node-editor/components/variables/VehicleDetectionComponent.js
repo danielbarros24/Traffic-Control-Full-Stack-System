@@ -12,7 +12,7 @@ export class VehicleDetectionComponent extends Rete.Component {
 
     async builder(node) {
 
-        const responseZones = await fetch("http://127.0.0.1:5000/sensors");
+        const responseZones = await fetch("http://192.168.1.216:5000/sensors");
         const sensors = await responseZones.json();
 
         const all = []

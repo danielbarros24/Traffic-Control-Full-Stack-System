@@ -12,7 +12,7 @@ export class GpioComponent extends Rete.Component {
     }
 
     async builder(node) {
-      const responseGpios = await fetch("http://127.0.0.1:5000/pins");
+      const responseGpios = await fetch("http://192.168.1.216:5000/pins");
       const jsonGpios = await responseGpios.json();
 
       
