@@ -17,7 +17,7 @@ export default new Vuex.Store({
   actions: {
     setSnackbar({commit}, snackbar) {
       snackbar.showing = true;
-      snackbar.color = snackbar.color || 'red darken-3';
+      snackbar.color = snackbar.color || 'primary';
       commit ('SET_SNACKBAR', snackbar);
     }
   },

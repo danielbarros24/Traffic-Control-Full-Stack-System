@@ -36,8 +36,8 @@ def set_vehicleType_name(vehicleType):
         return 'Car'
     elif vehicleType == 'TRUCK':
         return 'Truck'
-    elif vehicleType == 'BICYCLE':
-        return 'Bicycle'
+    elif vehicleType == 'BIKE':
+        return 'Bike'
 
 def if_(*args):
     """Implements the 'if' operator with support for multiple elseif-s."""
@@ -309,10 +309,12 @@ def function_double_park(zone, vehicleType):
 
     time = [query.get('start_time') for query in db_general.all()]
     start_time = time[0]
-    
+
     docs = db_camera.search((query.Task == 'Double Park') & (query.UtcTime > start_time) & (query.Vehicle == vehicle) & (query.Zone == zone))
 
     last_state = False
+
+
     for doc in docs:
         if doc.get('State') == 'true':
             last_state = True

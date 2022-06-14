@@ -167,7 +167,6 @@ def parse_mqtt_message(topic, message):
 
 # Subscribe to all Sensors at Base Topic
 def on_connect(client, userdata, flags, rc):
-    print("Number of connected sensors: " + str(n_sensors))
     for i in range(int(n_sensors)):
         client.subscribe(MQTT_Topics[i], 0)
 

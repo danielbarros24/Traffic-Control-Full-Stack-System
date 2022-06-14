@@ -278,13 +278,13 @@
     <v-spacer></v-spacer>
     <div class="text-center">
       <v-snackbar
-        v-for="(snackbar, index) in snackbars.filter(s => s.showing)"
+        v-for="(snackbar, index) in snackbars.filter((s) => s.showing)"
         :key="snackbar.text"
         v-model="snackbar.showing"
         :timeout="0"
         elevation="24"
         :color="snackbar.color"
-        :style="`bottom: ${(index * 60) + 8}px`"
+        :style="`bottom: ${index * 60 + 8}px`"
       >
         <h2 class="font-weight-medium">{{ snackbar.text }}</h2>
 
@@ -306,7 +306,7 @@
 <script>
 import ReteEditor from "@/components/rete/ReteEditor";
 import * as dayjs from "dayjs";
-import  { mapState }  from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   name: "Automations",
@@ -397,7 +397,7 @@ export default {
         {
           text: "Last Trigger",
           align: "center",
-          value: "lastTimeTriggerStartDisplay",
+          value: "lastTimeTriggerDisplay",
         },
         { text: "Actions", value: "actions", sortable: false },
       ],
@@ -412,8 +412,8 @@ export default {
         startHour: "",
         endHour: "",
         triggering: false,
-        lastTimeTriggerStart: "",
-        lastTimeTriggerStartDisplay: "Never",
+        lastTimeTrigger: "",
+        lastTimeTriggerDisplay: "Never",
         notification: false,
         blueprint: {},
       },
@@ -427,8 +427,8 @@ export default {
         startHour: "",
         endHour: "",
         triggering: false,
-        lastTimeTriggerStart: "",
-        lastTimeTriggerStartDisplay: "Never",
+        lastTimeTrigger: "",
+        lastTimeTriggerDisplay: "Never",
         notification: false,
         blueprint: {},
       },
@@ -439,7 +439,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['snackbars']),
+    ...mapState(["snackbars"]),
 
     formTitle() {
       return this.editedIndex === -1 ? "New Process" : "Edit Processes";
@@ -480,27 +480,20 @@ export default {
   },
 
   async mounted() {
-    
     await this.getProcesses();
     await this.getPins();
+    this.interval = setInterval(() => this.getProcesses(), 2000);
   },
 
-  async created() {
-    this.interval = await setInterval(() => this.getProcesses(), 10000);
+  async beforeDestroy() {
+    clearInterval(this.interval)
   },
 
   methods: {
-
     notificationTest() {
-      this.$store.dispatch('setSnackbar',{
-          text: `process triggered!`
-          })
-    },
-
-    isIsoDate(str) {
-      if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(str)) return false;
-      const d = new Date(str);
-      return d.toISOString() === str;
+      this.$store.dispatch("setSnackbar", {
+        text: `process triggered!`,
+      });
     },
 
     async getProcesses() {
@@ -513,20 +506,19 @@ export default {
         const triggering = val.triggering;
         const notification = val.notification;
         const processName = val.name;
-        
 
-        if (this.isIsoDate(val.lastTimeTriggerStart)) {
-          val.lastTimeTriggerStartDisplay = dayjs(
-            val.lastTimeTriggerStart
-          ).fromNow();
+        if (dayjs(val.lastTimeTrigger).isValid()) {
+          
+          val.lastTimeTriggerDisplay = dayjs(val.lastTimeTrigger).fromNow();
+          console.log(val.lastTimeTrigger)
         } else {
-          val.lastTimeTriggerStartDisplay = "Never";
+          val.lastTimeTriggerDisplay = "Never";
         }
 
         if (notification) {
-          this.$store.dispatch('setSnackbar',{
-          text: `${processName} process triggered!`
-          })
+          this.$store.dispatch("setSnackbar", {
+            text: `${processName} process triggered!`,
+          });
         }
 
         delete val.notification;
