@@ -10,22 +10,26 @@ export class VehicleDetectionComponent extends Rete.Component {
         this.data.component = Node;
     }
 
+    
     async builder(node) {
 
-        const responseZones = await fetch("http://192.168.1.216:5000/sensors");
+        const urlDesktop = "127.0.0.1:5000"
+        const urlRasp = "192.168.1.216:8080"
+        
+        const responseZones = await fetch(`http://${urlDesktop}/sensors`);
         const sensors = await responseZones.json();
 
-        const all = []
+        let all = []
 
 
-        for (const x in sensors) {
+        for (var x in sensors) {
 
-            const sensor = sensors[x]
-            const lanes = sensor.lanes
+            let sensor = sensors[x]
+            let lanes = sensor.lanes
 
-            const n = 1
+            let n = 1
 
-            const aux = []
+            let aux = []
 
             while (lanes > 0) {
 

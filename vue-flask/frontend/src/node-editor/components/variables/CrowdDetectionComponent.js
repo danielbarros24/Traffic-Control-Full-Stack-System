@@ -12,22 +12,24 @@ export class CrowdDetectionComponent extends Rete.Component {
 
     async builder(node) {
 
-        const responseZones = await fetch("http://192.168.1.216:5000/sensors");
+        const urlDesktop = "127.0.0.1:5000"
+        const urlRasp = "192.168.1.216:8080"
+        
+        const responseZones = await fetch(`http://${urlDesktop}/sensors`);
         const sensors = await responseZones.json();
 
-        const all = []
+        let all = []
 
 
-        for (const x in sensors) {
+        for (let x in sensors) {
 
-            const sensor = sensors[x]
-            const lanes = sensor.lanes
+            let sensor = sensors[x]
 
             all.push(sensor.name);
             
         }
 
-        var out1 = new Rete.Output('num', "Out", Socket.boolean);
+        let out1 = new Rete.Output('num', "Out", Socket.boolean);
         return node
 
             .addControl(new SelectControl(this.editor, 'type1', all.map((value) => ({

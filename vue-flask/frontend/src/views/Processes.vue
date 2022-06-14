@@ -497,7 +497,11 @@ export default {
     },
 
     async getProcesses() {
-      const responseAutomations = await fetch("http://192.168.1.216:5000/process");
+      
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
+      const responseAutomations = await fetch(`http://${urlDesktop}/process`);
       const jsonAutomations = await responseAutomations.json();
 
       this.automations = jsonAutomations.map((val) => {
@@ -562,7 +566,11 @@ export default {
     },
 
     async getPins() {
-      const responseGpios = await fetch("http://192.168.1.216:5000/pins");
+
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
+      const responseGpios = await fetch(`http://${urlDesktop}/pins`);
       const jsonGpios = await responseGpios.json();
 
       this.gpios = jsonGpios.map((value) => ({
@@ -597,8 +605,11 @@ export default {
     },
 
     async deleteItemConfirm() {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+      
       const id = this.editedItem.id;
-      const response = await fetch(`http://192.168.1.216:5000/process?id=${id}`, {
+      const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -630,6 +641,9 @@ export default {
     },
 
     async save() {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
       const editor = this.editor;
 
       const blueprint = await editor.toJSON();
@@ -668,8 +682,9 @@ export default {
       console.log(file);
 
       if (this.editedIndex > -1) {
+
         const id = this.editedItem.id;
-        const response = await fetch(`http://192.168.1.216:5000/process?id=${id}`, {
+        const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -683,7 +698,7 @@ export default {
           this.process_save = "Process Edited!";
         }
       } else {
-        const response = await fetch("http://192.168.1.216:5000/process", {
+        const response = await fetch(`http://${urlDesktop}/process`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -701,9 +716,12 @@ export default {
     },
 
     async updateEnable(event, item) {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
       const id = item.id;
 
-      await fetch(`http://192.168.1.216:5000/process?id=${id}`, {
+      await fetch(`http://${urlDesktop}/process?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -714,7 +732,6 @@ export default {
 
     async Validate() {
       const endNodes = this.editor.nodes.filter((node) => node.name === "GPIO");
-      console.log(endNodes.length);
 
       if (endNodes.length <= 0) {
         this.all_valid = false;

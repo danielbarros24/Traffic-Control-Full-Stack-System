@@ -360,7 +360,10 @@ export default {
   methods: {
 
     async getSensors() {
-      const responseSensors = await fetch("http://192.168.1.216:5000/sensors");
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
+      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
       const sensors_res = await responseSensors.json();
       this.sensors = sensors_res;
     },
@@ -380,8 +383,11 @@ export default {
     },
 
     async deleteItemConfirm() {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
       const id = this.editedItem.id;
-      const response = await fetch(`http://192.168.1.216:5000/sensors?id=${id}`, {
+      const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -412,6 +418,9 @@ export default {
     },
 
     async save() {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
       const sensor = {
         name: this.editedItem.name,
         lanes: this.editedItem.lanes,
@@ -420,8 +429,9 @@ export default {
       const file = JSON.stringify(sensor);
 
       if (this.editedIndex > -1) {
+        
         const id = this.editedItem.id;
-        const response = await fetch(`http://192.168.1.216:5000/sensors?id=${id}`, {
+        const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -434,7 +444,7 @@ export default {
           this.text_sensors = "Sensor Edited!";
         }
       } else {
-        const response = await fetch("http://192.168.1.216:5000/sensors", {
+        const response = await fetch(`http://${urlDesktop}/sensors`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -458,11 +468,14 @@ export default {
       this.items[index].click.call(this);
     },
     async submit_password() {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
       const password = {
         password: this.confirmPassword,
       };
       const file = JSON.stringify(password);
-      const response = await fetch(`http://192.168.1.216:5000/settings`, {
+      const response = await fetch(`http://${urlDesktop}/settings`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
@@ -478,11 +491,14 @@ export default {
       this.$refs.myForm.reset();
     },
     async submit_mqttIp() {
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
       const broker = {
         Broker_IP: this.broker_ip,
       };
       const file = JSON.stringify(broker);
-      const response = await fetch(`http://192.168.1.216:5000/settings-broker`, {
+      const response = await fetch(`http://${urlDesktop}/settings-broker`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
@@ -497,7 +513,10 @@ export default {
     },
 
     async getBrokerIP() {
-      const response = await fetch("http://192.168.1.216:5000/settings-broker");
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+
+      const response = await fetch(`http://${urlDesktop}/settings-broker`);
       const ip = await response.json();
       this.broker_ip = ip.Broker;
     },
