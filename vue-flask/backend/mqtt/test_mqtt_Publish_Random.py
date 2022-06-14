@@ -185,15 +185,6 @@ def publish_Cam_Events_to_MQTT():
 
 	UtcTime = datetime.now()
 	UtcTime = UtcTime.isoformat() + 'Z'
-	Cam_Data_IVA_Crowd_True = {
-		"UtcTime": UtcTime,
-		"Source": 
-			{"Source": "1"},
-		"Data":
-			{"State":"false"}
-	}
-	Cam_Data_json_2 = json.dumps(Cam_Data_IVA_Crowd_True)
-	publish_To_Topic (MQTT_Topic_IVA_Crowd_Detection, Cam_Data_json_2)
 
 	time.sleep(1)
 
