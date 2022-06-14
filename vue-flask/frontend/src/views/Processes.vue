@@ -482,7 +482,7 @@ export default {
   async mounted() {
     await this.getProcesses();
     await this.getPins();
-    this.interval = setInterval(() => this.getProcesses(), 2000);
+    this.interval = setInterval(() => this.getProcesses(), 1000);
   },
 
   async beforeDestroy() {
