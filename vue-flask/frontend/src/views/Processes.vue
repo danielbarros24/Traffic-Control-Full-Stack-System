@@ -510,7 +510,7 @@ export default {
         if (dayjs(val.lastTimeTrigger).isValid()) {
           
           val.lastTimeTriggerDisplay = dayjs(val.lastTimeTrigger).fromNow();
-          console.log(val.lastTimeTrigger)
+          
         } else {
           val.lastTimeTriggerDisplay = "Never";
         }
