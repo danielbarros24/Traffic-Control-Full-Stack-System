@@ -221,6 +221,7 @@ def publish_Cam_Events_to_MQTT():
 	publish_To_Topic (MQTT_Topic_bike_counter_2, Cam_Data_json)
 	time.sleep(1)
 
+	'''
 	Cam_Data_Jam = {
 			"UtcTime": UtcTime,
 			"Source":
@@ -232,7 +233,7 @@ def publish_Cam_Events_to_MQTT():
 	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
 
 	time.sleep(1)
-
+	
 	Cam_Data_Jam = {
 		"UtcTime": UtcTime,
 		"Source":
@@ -243,7 +244,7 @@ def publish_Cam_Events_to_MQTT():
 	Cam_Data_json = json.dumps(Cam_Data_Jam)
 	publish_To_Topic (MQTT_Topic_IVA_jam_2, Cam_Data_json)
 	time.sleep(1)
-
+	'''
 	'''
 ################### DOUBLE PARK #################################
 	Cam_Data_IVA_double_park= {
