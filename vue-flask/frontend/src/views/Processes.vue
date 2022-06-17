@@ -304,12 +304,13 @@
 </template>
 
 <script>
+
 import ReteEditor from "@/components/rete/ReteEditor";
 import * as dayjs from "dayjs";
 import { mapState } from "vuex";
 
 export default {
-  name: "Automations",
+  name: "Processes",
   components: {
     ReteEditor,
   },

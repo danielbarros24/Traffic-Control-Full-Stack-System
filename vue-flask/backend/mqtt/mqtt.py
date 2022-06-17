@@ -167,9 +167,12 @@ def parse_mqtt_message(topic, message):
 
 # Subscribe to all Sensors at Base Topic
 def on_connect(client, userdata, flags, rc):
-    for i in range(int(n_sensors)):
-        client.subscribe(MQTT_Topics[i], 0)
-
+    if rc == 0:
+        for i in range(int(n_sensors)):
+            client.subscribe(MQTT_Topics[i], 0)
+        return 0
+    else:
+        return "Connection Refused! Error code: " + str(rc)
 
 def on_message(client, userdata, msg):
 

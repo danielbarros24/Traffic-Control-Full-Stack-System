@@ -40,97 +40,110 @@
           outlined
         >
           <v-card-text>
-            <h2 class="text-h6 text--primary">Location</h2>
-            <v-radio-group v-model="Location" mandatory>
-              <v-radio label="Camera 1" value="Cam 1" color="primary"></v-radio>
-              <v-radio label="Camera 2" value="Cam 2" color="primary"></v-radio>
+            <h2 class="text-h6 text--primary">Sensors</h2>
+            <v-radio-group v-model="radioGroup" mandatory>
+              <v-radio
+                v-for="i in sensors"
+                :key="i"
+                :label="`${i.name}`"
+                :value="i.id"
+              ></v-radio>
             </v-radio-group>
 
             <div class="my-12">
-              <h2 class="text-h6 text--primary">Time</h2>
+              <v-form ref="form" v-model="valid_time">
+                <h2 class="text-h6 text--primary">Time</h2>
+                <v-menu
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="dateRangeText"
+                      label="Select date range"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      required
+                      :rules="dateRules"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="editedItem.dates"
+                    range
+                  ></v-date-picker>
+                </v-menu>
+                <v-menu
+                  ref="menu1"
+                  v-model="menuStart"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="editedItem.startHour"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="editedItem.startHour"
+                      label="Start Time"
+                      prepend-icon="mdi-clock-time-four-outline"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="nameRules"
+                      required
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="menuStart"
+                    v-model="editedItem.startHour"
+                    format="24h"
+                    scrollable
+                    full-width
+                    @click:minute="$refs.menu1.save(editedItem.startHour)"
+                  ></v-time-picker>
+                </v-menu>
 
-              <v-menu
-                v-model="menu2"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="dateRangeText"
-                    label="Select date range"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker v-model="dates" range></v-date-picker>
-              </v-menu>
-
-              <v-menu
-                ref="menu1"
-                v-model="menuStart"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                :return-value.sync="time1"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="time1"
-                    label="Start Time"
-                    prepend-icon="mdi-clock-time-four-outline"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  v-if="menuStart"
-                  v-model="time1"
-                  format="24h"
-                  scrollable
-                  full-width
-                  @click:minute="$refs.menu1.save(time1)"
-                ></v-time-picker>
-              </v-menu>
-
-              <v-menu
-                ref="menu2"
-                v-model="menuEnd"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                :return-value.sync="time2"
-                transition="scale-transition"
-                offset-y
-                max-width="290px"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="time2"
-                    label="End Time"
-                    prepend-icon="mdi-clock-time-four-outline"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-time-picker
-                  v-if="menuEnd"
-                  v-model="time2"
-                  format="24h"
-                  scrollable
-                  full-width
-                  @click:minute="$refs.menu2.save(time2)"
-                ></v-time-picker>
-              </v-menu>
+                <v-menu
+                  ref="menu2"
+                  v-model="menuEnd"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="editedItem.endHour"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="editedItem.endHour"
+                      label="End Time"
+                      prepend-icon="mdi-clock-time-four-outline"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="nameRules"
+                      required
+                    ></v-text-field>
+                  </template>
+                  <v-time-picker
+                    v-if="menuEnd"
+                    v-model="editedItem.endHour"
+                    format="24h"
+                    scrollable
+                    full-width
+                    @click:minute="$refs.menu2.save(editedItem.endHour)"
+                  ></v-time-picker>
+                </v-menu>
+              </v-form>
             </div>
 
             <h2 class="text-h6 text--primary">Indicators</h2>
@@ -176,9 +189,15 @@
               width="1000"
               min-height="320"
               outlined
-              v-if="VehicleCountsGraph"
             >
-              <v-card-title class="text-center">Vehicle Counts</v-card-title>
+              <area-chart
+                :data="dataCountTruck"
+                :colors="['#32a852', '#2ca7b0']"
+                label="Vehicle Count"
+                legend="bottom"
+                :dataset="{ borderWidth: 2 }"
+                :library="{ backgroundColor: '#0e2c2e' }"
+              ></area-chart>
             </v-card>
           </v-expand-transition>
           <v-expand-transition>
@@ -189,9 +208,6 @@
               outlined
               v-if="TrafficFlowAnalysisGraph"
             >
-              <v-card-title class="text-center"
-                >Traffic Flow analysis</v-card-title
-              >
             </v-card>
           </v-expand-transition>
         </v-row>
@@ -244,62 +260,129 @@
 
 <script>
 export default {
-  data: () => ({
-    items: [
-      {
-        title: "Logout",
-        icon: "mdi-logout",
-        click() {
-          //console.log("logout");
-          this.$router.push("/");
+  data() {
+    return {
+      valid_time: true,
+      radioGroup: 1,
+
+      nameRules: [(v) => !!v],
+      dateRules: [
+        (v) => !!v || "Insert 2 dates",
+        (v) =>
+          /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])~\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/.test(
+            v
+          ) || "Insert 2 dates!",
+      ],
+
+      dataCountCars: [
+        { name: "Car Count", data: { "2017-01-01 10:30": 3, "2017-01-02 11:30": 4, "2017-01-03 11:30": 4, "2017-01-04 11:30": 4} },
+      ],
+      dataCountTruck: [
+        { name: "Truck Count", data: { "2017-01-01 10:30": 3, "2017-01-02 11:40": 7, "2017-01-03 11:30": 8, "2017-01-04 11:30": 8} },
+      ],
+
+      items: [
+        {
+          title: "Logout",
+          icon: "mdi-logout",
+          click() {
+            //console.log("logout");
+            this.$router.push("/");
+          },
         },
-      },
-      {
-        title: "Processes",
-        icon: "mdi-auto-fix",
-        click() {
-          console.log("processes");
-          this.$router.push("processes");
+        {
+          title: "Processes",
+          icon: "mdi-auto-fix",
+          click() {
+            console.log("processes");
+            this.$router.push("processes");
+          },
         },
-      },
-      {
-        title: "Settings",
-        icon: "mdi-cogs",
-        click() {
-          console.log("settings");
-          this.$router.push("settings");
+        {
+          title: "Settings",
+          icon: "mdi-cogs",
+          click() {
+            console.log("settings");
+            this.$router.push("settings");
+          },
         },
+      ],
+
+      editedItem: {
+        sensor: "",
+        dates: [],
+        startHour: "",
+        endHour: "",
+        indicator: "",
       },
-    ],
 
-    dates: [],
+      defaultItem: {
+        sensor: "",
+        dates: [],
+        startHour: "",
+        endHour: "",
+        indicator: "",
+      },
+      sensors: [],
 
-    Location: "",
+      menuStart: false,
+      menuEnd: false,
 
-    time1: null,
-    time2: null,
-    menuStart: false,
-    menuEnd: false,
+      menu1: null,
+      menu2: null,
 
-    menu1: null,
-    menu2: null,
-
-    VehicleCountsGraph: false,
-    TrafficFlowAnalysisGraph: false,
-    NumberOfStayGraph: false,
-    PedestrianFlowGraph: false,
-    LenghtOfStayGraph: false,
-  }),
+      VehicleCountsGraph: false,
+      TrafficFlowAnalysisGraph: false,
+      NumberOfStayGraph: false,
+      PedestrianFlowGraph: false,
+      LenghtOfStayGraph: false,
+    };
+  },
 
   methods: {
+    async getSensors() {
+      const urlDesktop = "127.0.0.1:5000";
+      const urlRasp = "192.168.1.216:8080";
+
+      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
+      const sensors_res = await responseSensors.json();
+      this.sensors = sensors_res;
+    },
+
+    async getData() {
+      const urlDesktop = "127.0.0.1:5000";
+      const urlRasp = "192.168.1.216:8080";
+
+      const sensor = this.radioGroup
+      
+      const dates = this.editedItem.dates;
+
+      const startHour = this.editedItem.startHour;
+      const endHour = this.editedItem.endHour;
+
+      const startTime = dayjs(dates[0] + " " + startHour).toISOString();
+      const endTime = dayjs(dates[1] + " " + endHour).toISOString();
+
+      const indicator = 1
+      
+      const data_json = await fetch(`http://${urlDesktop}/chart?id=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${indicator}`);
+      const data = await data_json.json();
+
+      console.log(data)
+    },
+    
     handleClick(index) {
       this.items[index].click.call(this);
     },
   },
   computed: {
     dateRangeText() {
-      return this.dates.join(" ~ ");
+      return this.editedItem.dates.join("~");
     },
+  },
+  async mounted() {
+    await this.getSensors();
+    await this.getData()
   },
 };
 </script>

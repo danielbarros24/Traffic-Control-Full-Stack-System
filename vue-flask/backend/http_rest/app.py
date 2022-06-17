@@ -1,3 +1,4 @@
+from curses.ascii import NUL
 from flask import Flask, jsonify, redirect, url_for, session, flash
 from flask import make_response, request, Response, render_template
 from flask_login import LoginManager, login_required, login_user
@@ -293,6 +294,42 @@ def delete_sensor():
 
     return jsonify(status=res)
 
+@app.get('/chart')
+def getChartData():
+    
+    counter_list = ["1","2","3"]
+    data = []
+
+    process_sensor = request.args.get('sensor')
+    process_startTime = request.args.get('startTime')
+    process_endTime = request.args.get('endTime')
+    process_indicator = request.args.get('indicator')
+
+    vehicle = ''
+    if process_indicator in counter_list:
+        
+        if process_indicator == "1": vehicle = 'Car'
+        if process_indicator == "2": vehicle = 'Truck'
+        if process_indicator == "3": vehicle = 'Bike'
+        docs = db_camera.search((query.Task == 'Counter') & (
+                query.Cam == process_sensor) & (query.Vehicle == vehicle) & (query.UtcTime > process_startTime) & (query.UtcTime < process_endTime))
+
+        for doc in docs:
+            msg = {"{}".format(doc.get('UtcTime')): "{}".format(doc.get('Count'))}
+            data.append(msg)
+
+    if process_indicator == "4": #COUNT DOUBLE-PARK
+        docs = db_camera.search((query.Task == 'Double Park') & (
+            query.Cam == process_sensor) & (query.UtcTime < process_endTime) & (query.State == "true"))
+        n = 0
+        print(docs)
+        for doc in docs:
+            n += 1
+            if doc.get('UtcTime') > process_startTime:
+                msg = {"{}".format(doc.get('UtcTime')): "{}".format(n)}
+                data.append(msg)
+
+    return jsonify(data)
 
 @app.post("/dashboard")
 def chartData():

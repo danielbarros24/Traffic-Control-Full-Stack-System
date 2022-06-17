@@ -38,7 +38,6 @@ def test_automations():
     docs = db_processes.all()
     current_date = datetime.now(timezone.utc)
 
-    print(current_date)
     if not docs:
         print("No processes configured")
 
