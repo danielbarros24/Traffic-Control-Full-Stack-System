@@ -171,7 +171,15 @@
               value="Flow"
               hide-details
             ></v-checkbox>
-            <v-btn depressed color="primary" class="mt-10" @click="getData" :disabled="!valid"> Submit </v-btn>
+            <v-btn
+              depressed
+              color="primary"
+              class="mt-10"
+              @click="getData"
+              :disabled="!valid"
+            >
+              Submit
+            </v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -190,6 +198,7 @@
                 :colors="['#32a852', '#2ca7b0']"
                 label="Vehicle Count"
                 legend="bottom"
+                id="truck-chart"
                 :dataset="{ borderWidth: 2 }"
               ></area-chart>
             </v-card>
@@ -259,7 +268,7 @@ export default {
   data() {
     return {
       valid: true,
-      radioGroup: 1,
+      radioGroup: undefined,
 
       nameRules: [(v) => !!v],
       dateRules: [
@@ -284,7 +293,7 @@ export default {
       dataCountTruck: [
         {
           name: "Truck Count",
-          data: {}
+          data: {},
         },
       ],
 
@@ -314,15 +323,16 @@ export default {
           },
         },
       ],
+      //dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')
       editedItem: {
-        dates: [dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')],
+        dates: ["2022-06-12", "2022-06-12"],
         startHour: "00:00",
         endHour: "23:59",
         indicator: "",
       },
 
       defaultItem: {
-        dates: [dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')],
+        dates: ["2022-06-12", "2022-06-12"],
         startHour: "00:00",
         endHour: "23:59",
         indicator: "",
@@ -371,15 +381,15 @@ export default {
       const data_json = await fetch(
         `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${indicator}`
       );
-      const data = await data_json.json();
+      const data_array = await data_json.json();
+      const data = Object.assign({}, ...data_array);
 
-      this.dataCountTruck.data = {}
-      console.log(data)
-      for (let i=0;i<data.length;i++) {
-        this.dataCountTruck["data"] = data[i]
-      }
+      this.dataCountTruck[0].data = data;
 
-      console.log(this.dataCountTruck);
+      let chart = Chartkick.charts["truck-chart"];
+      chart.updateData(this.dataCountTruck);
+
+      console.log(JSON.stringify(this.dataCountTruck[0]));
     },
 
     handleClick(index) {

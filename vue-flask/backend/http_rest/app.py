@@ -305,7 +305,11 @@ def getChartData():
     process_endTime = request.args.get('endTime')
     process_indicator = request.args.get('indicator')
 
-    vehicle = ''
+    print(process_sensor)
+    print(process_startTime)
+    print(process_endTime)
+    print(process_indicator)
+    vehicle = ''    
     if process_indicator in counter_list:
         
         if process_indicator == "1": vehicle = 'Car'
@@ -327,7 +331,8 @@ def getChartData():
             if doc.get('UtcTime') > process_startTime:
                 msg = {"{}".format(doc.get('UtcTime')): n}
                 data.append(msg)
-
+                
+    print("[GET CHART DATA]")
     return jsonify(data)
 
 @app.post("/dashboard")
