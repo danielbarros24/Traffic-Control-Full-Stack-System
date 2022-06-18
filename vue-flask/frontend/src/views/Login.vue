@@ -37,14 +37,13 @@
                         color="primary"
                         :rules="[v => !!v || 'You must type password!']"
                       />
-                      <v-btn @click="postData()" rounded color="primary" class="mt-4" block dark 
+                      <v-btn @click="postData" rounded color="primary" class="mt-4" block dark 
                       >SIGN IN</v-btn
                     >
                     <p class="red--text mt-3 mr-6" v-show="invalidCredentials" >
                       Invalid Credentials!
                     </p>
                     </v-form>
-
                   </v-card-text>
               </v-window>
             </v-card>
@@ -56,6 +55,8 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   data: () => ({
     username:'',
@@ -68,17 +69,19 @@ export default {
   },
 
   methods:{
+    ...mapMutations(["setUser", "setToken"]),
+
     async postData() {
       this.$refs.form.validate()
       const postData = {
         username: this.username,
         password: this.password,
       }
-      try {
+
         const urlDesktop = "127.0.0.1:5000"
         const urlRasp = "192.168.1.216:8080"
         
-        const res = await fetch(`http://${urlDesktop}/login`, {
+        const response = await fetch(`http://${urlDesktop}/login`, {
           method: "POST",
           headers: {
             'Accept': 'application/json',
@@ -87,38 +90,29 @@ export default {
           body: JSON.stringify(postData),
         })
 
-        const data = await res.json();
-        console.log(data)
-
-        if (data.access != "ok") {
+        const data = await response.json();
+        if(response.ok) {
+          if (data.user == this.username) {
+          this.setUser(data.user);
+          this.setToken(data.token);
+          this.$router.push("/dashboard");
+          
+        }
+        else {
           this.invalidCredentials = true
-          const message = `An error has occured: ${res.status} - ${res.statusText}`;
-          throw new Error(message)
         }
-        if(data.access == "ok") {
-          this.$router.push("dashboard")
+        
         }
+        
+        //console.log(data)
 
-        const result = {
-          status: res.status + "-" + res.statusText,
-          headers: {
-            "Content-Type": res.headers.get("Content-Type"),
-            "Content-Length": res.headers.get("Content-Length"),
-          },
-          data: data,
-        };
-        this.postResult = this.fortmatResponse(result);
-      } catch (err) {
-        this.postResult = err.message;
-      }
     },
     clearPostOutput() {
       this.postResult = null;
     },
   },
 
-  async mounted() {
-  }
+  async mounted() {}
 };
 
 </script>

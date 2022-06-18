@@ -360,10 +360,10 @@ export default {
       menu1: null,
       menu2: null,
 
-      carCountChart: true,
-      truckCountChart: true,
-      bikeCountChart: true,
-      doubleParkVehicles: true,
+      carCountChart: false,
+      truckCountChart: false,
+      bikeCountChart: false,
+      doubleParkVehicles: false,
     };
   },
 

@@ -1,15 +1,24 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    snackbars: []
+    snackbars: [],
+    user: null,
+    token: null,
   },
   getters: {
   },
   mutations: {
+    setUser(state, user) {
+      state.user = user;
+    },
+    setToken(state, token) {
+      state.token = token;
+    },
     SET_SNACKBAR(state, snackbar) {
       state.snackbars= state.snackbars.concat(snackbar)
     }
@@ -22,5 +31,5 @@ export default new Vuex.Store({
     }
   },
   modules: {
-  }
+  },
 })
