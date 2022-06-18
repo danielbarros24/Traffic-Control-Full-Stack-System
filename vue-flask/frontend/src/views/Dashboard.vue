@@ -43,15 +43,15 @@
             <h2 class="text-h6 text--primary">Sensors</h2>
             <v-radio-group v-model="radioGroup" mandatory>
               <v-radio
-                v-for="i in sensors"
-                :key="i"
-                :label="`${i.name}`"
-                :value="i.id"
+                v-for="sensor in sensors"
+                :key="sensor"
+                :label="`${sensor.name}`"
+                :value="sensor.name"
               ></v-radio>
             </v-radio-group>
 
-            <div class="my-12">
-              <v-form ref="form" v-model="valid_time">
+            <div class="my-5">
+              <v-form ref="form" v-model="valid">
                 <h2 class="text-h6 text--primary">Time</h2>
                 <v-menu
                   v-model="menu2"
@@ -149,34 +149,29 @@
             <h2 class="text-h6 text--primary">Indicators</h2>
             <v-checkbox
               v-on:click="VehicleCountsGraph = !VehicleCountsGraph"
-              label="Vehicle Counts"
+              label="Car Flow"
               value="Counts"
               hide-details
             ></v-checkbox>
             <v-checkbox
-              v-on:click="NumberOfStayGraph = !NumberOfStayGraph"
-              label="Number of Stay"
-              value="Stay"
-              hide-details
-            ></v-checkbox>
-            <v-checkbox
               v-on:click="LenghtOfStayGraph = !LenghtOfStayGraph"
-              label="Length of Stay"
+              label="Truck Flow"
               value="length"
               hide-details
             ></v-checkbox>
             <v-checkbox
               v-on:click="TrafficFlowAnalysisGraph = !TrafficFlowAnalysisGraph"
-              label="Traffic flow"
+              label="Bike flow"
               value="Flow"
               hide-details
             ></v-checkbox>
             <v-checkbox
-              v-on:click="PedestrianFlowGraph = !PedestrianFlowGraph"
-              label="Pedestrian Flow"
-              value="Pedestrian"
+              v-on:click="TrafficFlowAnalysisGraph = !TrafficFlowAnalysisGraph"
+              label="Double Park Vehicles"
+              value="Flow"
               hide-details
             ></v-checkbox>
+            <v-btn depressed color="primary" class="mt-10" @click="getData" :disabled="!valid"> Submit </v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -196,7 +191,6 @@
                 label="Vehicle Count"
                 legend="bottom"
                 :dataset="{ borderWidth: 2 }"
-                :library="{ backgroundColor: '#0e2c2e' }"
               ></area-chart>
             </v-card>
           </v-expand-transition>
@@ -259,10 +253,12 @@
 
 
 <script>
+import * as dayjs from "dayjs";
+
 export default {
   data() {
     return {
-      valid_time: true,
+      valid: true,
       radioGroup: 1,
 
       nameRules: [(v) => !!v],
@@ -275,10 +271,21 @@ export default {
       ],
 
       dataCountCars: [
-        { name: "Car Count", data: { "2017-01-01 10:30": 3, "2017-01-02 11:30": 4, "2017-01-03 11:30": 4, "2017-01-04 11:30": 4} },
+        {
+          name: "Car Count",
+          data: {
+            "2017-01-01 10:30": 3,
+            "2017-01-02 11:30": 4,
+            "2017-01-03 11:30": 4,
+            "2017-01-04 11:30": 4,
+          },
+        },
       ],
       dataCountTruck: [
-        { name: "Truck Count", data: { "2017-01-01 10:30": 3, "2017-01-02 11:40": 7, "2017-01-03 11:30": 8, "2017-01-04 11:30": 8} },
+        {
+          name: "Truck Count",
+          data: {}
+        },
       ],
 
       items: [
@@ -307,20 +314,17 @@ export default {
           },
         },
       ],
-
       editedItem: {
-        sensor: "",
-        dates: [],
-        startHour: "",
-        endHour: "",
+        dates: [dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')],
+        startHour: "00:00",
+        endHour: "23:59",
         indicator: "",
       },
 
       defaultItem: {
-        sensor: "",
-        dates: [],
-        startHour: "",
-        endHour: "",
+        dates: [dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')],
+        startHour: "00:00",
+        endHour: "23:59",
         indicator: "",
       },
       sensors: [],
@@ -353,8 +357,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:8080";
 
-      const sensor = this.radioGroup
-      
+      const sensor = this.radioGroup;
       const dates = this.editedItem.dates;
 
       const startHour = this.editedItem.startHour;
@@ -363,14 +366,22 @@ export default {
       const startTime = dayjs(dates[0] + " " + startHour).toISOString();
       const endTime = dayjs(dates[1] + " " + endHour).toISOString();
 
-      const indicator = 1
-      
-      const data_json = await fetch(`http://${urlDesktop}/chart?id=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${indicator}`);
+      const indicator = 2;
+
+      const data_json = await fetch(
+        `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${indicator}`
+      );
       const data = await data_json.json();
 
+      this.dataCountTruck.data = {}
       console.log(data)
+      for (let i=0;i<data.length;i++) {
+        this.dataCountTruck["data"] = data[i]
+      }
+
+      console.log(this.dataCountTruck);
     },
-    
+
     handleClick(index) {
       this.items[index].click.call(this);
     },
@@ -382,7 +393,7 @@ export default {
   },
   async mounted() {
     await this.getSensors();
-    await this.getData()
+    await this.getData();
   },
 };
 </script>

@@ -313,20 +313,19 @@ def getChartData():
         if process_indicator == "3": vehicle = 'Bike'
         docs = db_camera.search((query.Task == 'Counter') & (
                 query.Cam == process_sensor) & (query.Vehicle == vehicle) & (query.UtcTime > process_startTime) & (query.UtcTime < process_endTime))
-
+        print(docs)
         for doc in docs:
-            msg = {"{}".format(doc.get('UtcTime')): "{}".format(doc.get('Count'))}
+            msg = {"{}".format(doc.get('UtcTime')): doc.get('Count')}
             data.append(msg)
 
     if process_indicator == "4": #COUNT DOUBLE-PARK
         docs = db_camera.search((query.Task == 'Double Park') & (
             query.Cam == process_sensor) & (query.UtcTime < process_endTime) & (query.State == "true"))
         n = 0
-        print(docs)
         for doc in docs:
             n += 1
             if doc.get('UtcTime') > process_startTime:
-                msg = {"{}".format(doc.get('UtcTime')): "{}".format(n)}
+                msg = {"{}".format(doc.get('UtcTime')): n}
                 data.append(msg)
 
     return jsonify(data)
