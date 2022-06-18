@@ -305,10 +305,6 @@ def getChartData():
     process_endTime = request.args.get('endTime')
     process_indicator = request.args.get('indicator')
 
-    print(process_sensor)
-    print(process_startTime)
-    print(process_endTime)
-    print(process_indicator)
     vehicle = ''    
     if process_indicator in counter_list:
         
@@ -317,7 +313,7 @@ def getChartData():
         if process_indicator == "3": vehicle = 'Bike'
         docs = db_camera.search((query.Task == 'Counter') & (
                 query.Cam == process_sensor) & (query.Vehicle == vehicle) & (query.UtcTime > process_startTime) & (query.UtcTime < process_endTime))
-        print(docs)
+
         for doc in docs:
             msg = {"{}".format(doc.get('UtcTime')): doc.get('Count')}
             data.append(msg)
@@ -332,7 +328,7 @@ def getChartData():
                 msg = {"{}".format(doc.get('UtcTime')): n}
                 data.append(msg)
                 
-    print("[GET CHART DATA]")
+    print("[GET CHART DATA] Id: " + str(process_indicator))
     return jsonify(data)
 
 @app.post("/dashboard")

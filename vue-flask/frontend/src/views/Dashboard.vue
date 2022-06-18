@@ -148,34 +148,30 @@
 
             <h2 class="text-h6 text--primary">Indicators</h2>
             <v-checkbox
-              v-on:click="VehicleCountsGraph = !VehicleCountsGraph"
+              v-model="carCountChart"
               label="Car Flow"
-              value="Counts"
               hide-details
             ></v-checkbox>
             <v-checkbox
-              v-on:click="LenghtOfStayGraph = !LenghtOfStayGraph"
+              v-model="truckCountChart"
               label="Truck Flow"
-              value="length"
               hide-details
             ></v-checkbox>
             <v-checkbox
-              v-on:click="TrafficFlowAnalysisGraph = !TrafficFlowAnalysisGraph"
+              v-model="bikeCountChart"
               label="Bike flow"
-              value="Flow"
               hide-details
             ></v-checkbox>
             <v-checkbox
-              v-on:click="TrafficFlowAnalysisGraph = !TrafficFlowAnalysisGraph"
+              v-model="doubleParkVehicles"
               label="Double Park Vehicles"
-              value="Flow"
               hide-details
             ></v-checkbox>
             <v-btn
               depressed
               color="primary"
-              class="mt-10"
-              @click="getData"
+              class="d-flex mt-10"
+              @click="submitGetData"
               :disabled="!valid"
             >
               Submit
@@ -185,75 +181,88 @@
       </v-col>
 
       <v-col cols="6" md="10" no-gutters class="mt-13">
-        <v-row no-gutters max-height="320">
-          <v-expand-transition>
-            <v-card
-              class="d-flex ml-3 mb-6 pa-6"
-              width="1000"
-              min-height="320"
-              outlined
-            >
-              <area-chart
-                :data="dataCountTruck"
-                :colors="['#32a852', '#2ca7b0']"
-                label="Vehicle Count"
-                legend="bottom"
-                id="truck-chart"
-                :dataset="{ borderWidth: 2 }"
-              ></area-chart>
-            </v-card>
-          </v-expand-transition>
-          <v-expand-transition>
-            <v-card
-              class="d-flex ml-3 mb-6 pa-6"
-              width="400"
-              min-height="320"
-              outlined
-              v-if="TrafficFlowAnalysisGraph"
-            >
-            </v-card>
-          </v-expand-transition>
-        </v-row>
+        <v-row no-gutters max-height="800">
+          <v-card
+            class="d-flex mb-4 pt-1 ml-3 px-5"
+            width="750"
+            height="380"
+            outlined
+          >
+          <v-col>
+            <h1 class="d-flex justify-center mb-3 font-weight-regular">Car Flow</h1>
+            <area-chart
+              :data="dataCountCar"
+              :colors="['#db1e1e']"
+              id="car-chart"
+              xtitle="Time"
+              ytitle="Number of Cars"
+              empty="No data"
+              :dataset="{ borderWidth: 2 }"
+            ></area-chart>
+          </v-col>
+          </v-card>
 
-        <v-row no-gutters max-height="320">
-          <v-expand-transition>
-            <v-card
-              class="d-flex ml-3 pa-6"
-              min-width="400"
-              width="100"
-              height="320"
-              outlined
-              v-if="NumberOfStayGraph"
-            >
-              <v-card-title class="text-center">Number of Stay</v-card-title>
-            </v-card>
-          </v-expand-transition>
+          <v-card
+            class="d-flex ml-3 mb-4 pt-1 px-5 flex-wrap"
+            width="750"
+            height="380"
+            outlined
+          >
+          <v-col>
+            <h1 class="d-flex justify-center mb-3 font-weight-regular">Truck Flow</h1>
+            <area-chart
+              :data="dataCountTruck"
+              :colors="['#32a852']"
+              id="truck-chart"
+              xtitle="Time"
+              ytitle="Number of Trucks"
+              empty="No data"
+              :dataset="{ borderWidth: 2 }"
+            ></area-chart>
+          </v-col>
+          </v-card>
 
-          <v-expand-transition>
-            <v-card
-              class="d-flex ml-3 pa-6"
-              min-width="400"
-              width="700"
-              height="320"
-              outlined
-              v-if="PedestrianFlowGraph"
-            >
-              <v-card-title class="text-center">Pedestrian Flow</v-card-title>
-            </v-card>
-          </v-expand-transition>
+          <v-card
+            class="d-flex ml-3 pt-1 px-5 mb-4"
+            width="750"
+            height="380"
+            outlined
+          >
+          <v-col>
+             <h1 class="d-flex justify-center mb-3 font-weight-regular">Bike Flow</h1>
+             <area-chart
+              :data="dataCountBike"
+              :colors="['#dbcb1e']"
+              id="bike-chart"
+              xtitle="Time"
+              ytitle="Number of Bikes"
+              empty="No data"
+              :dataset="{ borderWidth: 2 }"
+            ></area-chart>
+          </v-col>
+           
+          </v-card>
 
-          <v-expand-transition>
-            <v-card
-              class="d-flex ml-3 pa-6"
-              min-width="400"
-              width="200"
-              height="320"
-              outlined
-              v-if="LenghtOfStayGraph"
-            >
-              <v-card-title class="text-center">Lenght of Stay</v-card-title>
-            </v-card>
-          </v-expand-transition>
+          <v-card
+            class="d-flex ml-3 pt-2 px-5"
+            width="750"
+            height="380"
+            outlined
+          >
+          <v-col>
+            <h1 class="d-flex justify-center mb-3 font-weight-regular">Double-Park Vehicles</h1>
+            <area-chart
+              :data="dataCountDoublePark"
+              :colors="['#721edb']"
+              id="doublePark-chart"
+              xtitle="Time"
+              ytitle="Number of Double-Parked Vehicles"
+              empty="No data"
+              :dataset="{ borderWidth: 2 }"
+            ></area-chart>
+          </v-col>
+            
+          </v-card>
         </v-row>
       </v-col>
     </v-row>
@@ -279,20 +288,27 @@ export default {
           ) || "Insert 2 dates!",
       ],
 
-      dataCountCars: [
+      dataCountCar: [
         {
           name: "Car Count",
-          data: {
-            "2017-01-01 10:30": 3,
-            "2017-01-02 11:30": 4,
-            "2017-01-03 11:30": 4,
-            "2017-01-04 11:30": 4,
-          },
+          data: {},
         },
       ],
       dataCountTruck: [
         {
-          name: "Truck Count",
+          name: "Truck Flow",
+          data: {},
+        },
+      ],
+      dataCountBike: [
+        {
+          name: "Bike Flow",
+          data: {},
+        },
+      ],
+      dataCountDoublePark: [
+        {
+          name: "Double-Park Flow",
           data: {},
         },
       ],
@@ -302,7 +318,6 @@ export default {
           title: "Logout",
           icon: "mdi-logout",
           click() {
-            //console.log("logout");
             this.$router.push("/");
           },
         },
@@ -323,16 +338,16 @@ export default {
           },
         },
       ],
-      //dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')
+      
       editedItem: {
-        dates: ["2022-06-12", "2022-06-12"],
+        dates: [dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')],
         startHour: "00:00",
         endHour: "23:59",
         indicator: "",
       },
 
       defaultItem: {
-        dates: ["2022-06-12", "2022-06-12"],
+        dates: [dayjs().format('YYYY-MM-DD'),dayjs().format('YYYY-MM-DD')],
         startHour: "00:00",
         endHour: "23:59",
         indicator: "",
@@ -345,15 +360,20 @@ export default {
       menu1: null,
       menu2: null,
 
-      VehicleCountsGraph: false,
-      TrafficFlowAnalysisGraph: false,
-      NumberOfStayGraph: false,
-      PedestrianFlowGraph: false,
-      LenghtOfStayGraph: false,
+      carCountChart: true,
+      truckCountChart: true,
+      bikeCountChart: true,
+      doubleParkVehicles: true,
     };
   },
 
   methods: {
+    async submitGetData() {
+      if (this.carCountChart === true) await this.getData(1);
+      if (this.truckCountChart === true) await this.getData(2);
+      if (this.bikeCountChart === true) await this.getData(3);
+      if (this.doubleParkVehicles === true) await this.getData(4);
+    },
     async getSensors() {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:8080";
@@ -363,7 +383,7 @@ export default {
       this.sensors = sensors_res;
     },
 
-    async getData() {
+    async getData(indicator) {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:8080";
 
@@ -376,20 +396,34 @@ export default {
       const startTime = dayjs(dates[0] + " " + startHour).toISOString();
       const endTime = dayjs(dates[1] + " " + endHour).toISOString();
 
-      const indicator = 2;
+      let id = parseInt(indicator);
 
       const data_json = await fetch(
-        `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${indicator}`
+        `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`
       );
       const data_array = await data_json.json();
       const data = Object.assign({}, ...data_array);
-
-      this.dataCountTruck[0].data = data;
-
-      let chart = Chartkick.charts["truck-chart"];
-      chart.updateData(this.dataCountTruck);
-
-      console.log(JSON.stringify(this.dataCountTruck[0]));
+      let chart;
+      if (id === 1) {
+        this.dataCountCar[0].data = data;
+        chart = Chartkick.charts["car-chart"];
+        chart.updateData(this.dataCountCar);
+      }
+      if (id === 2) {
+        this.dataCountTruck[0].data = data;
+        chart = Chartkick.charts["truck-chart"];
+        chart.updateData(this.dataCountTruck);
+      }
+      if (id === 3) {
+        this.dataCountBike[0].data = data;
+        chart = Chartkick.charts["bike-chart"];
+        chart.updateData(this.dataCountBike);
+      }
+      if (id === 4) {
+        this.dataCountDoublePark[0].data = data;
+        chart = Chartkick.charts["doublePark-chart"];
+        chart.updateData(this.dataCountDoublePark);
+      }
     },
 
     handleClick(index) {
@@ -403,7 +437,12 @@ export default {
   },
   async mounted() {
     await this.getSensors();
-    await this.getData();
+
+    await this.getData(1);
+    await this.getData(2);
+    await this.getData(3);
+    await this.getData(4);
+
   },
 };
 </script>
