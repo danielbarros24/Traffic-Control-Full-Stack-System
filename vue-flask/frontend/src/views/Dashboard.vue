@@ -379,7 +379,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseSensors = await fetch(`http://${urlRasp}/sensors`);
+      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
       const sensors_res = await responseSensors.json();
       this.sensors = sensors_res;
     },
@@ -400,7 +400,7 @@ export default {
       let id = parseInt(indicator);
 
       const data_json = await fetch(
-        `http://${urlRasp}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`
+        `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`
       );
       const data_array = await data_json.json();
       const data = Object.assign({}, ...data_array);
