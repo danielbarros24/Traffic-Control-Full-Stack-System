@@ -377,7 +377,7 @@ export default {
     },
     async getSensors() {
       const urlDesktop = "127.0.0.1:5000";
-      const urlRasp = "192.168.1.216:8080";
+      const urlRasp = "192.168.1.216:5000";
 
       const responseSensors = await fetch(`http://${urlRasp}/sensors`);
       const sensors_res = await responseSensors.json();
@@ -386,7 +386,7 @@ export default {
 
     async getData(indicator) {
       const urlDesktop = "127.0.0.1:5000";
-      const urlRasp = "192.168.1.216:8080";
+      const urlRasp = "192.168.1.216:5000";
 
       const sensor = this.radioGroup;
       const dates = this.editedItem.dates;

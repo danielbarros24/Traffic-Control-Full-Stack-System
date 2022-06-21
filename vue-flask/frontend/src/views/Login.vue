@@ -79,8 +79,8 @@ export default {
       /*this.$store.dispatch('login', { user: this.username, password: this.password })
         .then(() => this.$router.push('/'))*/
 
-      /*const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:5000"
       
       const response = await fetch(`http://${urlDesktop}/login`, {
         method: "POST",
@@ -107,10 +107,10 @@ export default {
       
       //console.log(data)
 
-    }
+    },
     clearPostOutput() {
       this.postResult = null;
-    }*/}
+    }
   },
 
   /*mounted () {

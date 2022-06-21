@@ -308,7 +308,7 @@
 import ReteEditor from "@/components/rete/ReteEditor";
 import * as dayjs from "dayjs";
 //import { mapState } from "vuex";
-import { mapGetters } from "vuex";
+//import { mapGetters } from "vuex";
 
 export default {
   name: "Processes",
@@ -484,7 +484,7 @@ export default {
 
   async mounted() {
     const urlDesktop = "127.0.0.1:5000"
-    const urlRasp = "192.168.1.216:8080"
+    const urlRasp = "192.168.1.216:5000"
 
     const responseUser = await fetch(`http://localhost:8080/api/user`);
     
@@ -507,7 +507,7 @@ export default {
     async getProcesses() {
       
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const responseAutomations = await fetch(`http://${urlRasp}/process`);
       const jsonAutomations = await responseAutomations.json();
@@ -575,7 +575,7 @@ export default {
     async getPins() {
 
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const responseGpios = await fetch(`http://${urlRasp}/pins`);
       const jsonGpios = await responseGpios.json();
@@ -613,7 +613,7 @@ export default {
 
     async deleteItemConfirm() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
       
       const id = this.editedItem.id;
       const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
@@ -649,7 +649,7 @@ export default {
 
     async save() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const editor = this.editor;
 
@@ -724,7 +724,7 @@ export default {
 
     async updateEnable(event, item) {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const id = item.id;
 

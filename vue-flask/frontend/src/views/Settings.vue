@@ -362,7 +362,7 @@ export default {
 
     async getSensors() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const responseSensors = await fetch(`http://${urlRasp}/sensors`);
       const sensors_res = await responseSensors.json();
@@ -385,7 +385,7 @@ export default {
 
     async deleteItemConfirm() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const id = this.editedItem.id;
       const response = await fetch(`http://${urlRasp}/sensors?id=${id}`, {
@@ -420,7 +420,7 @@ export default {
 
     async save() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const sensor = {
         name: this.editedItem.name,
@@ -470,7 +470,7 @@ export default {
     },
     async submit_password() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const password = {
         password: this.confirmPassword,
@@ -493,7 +493,7 @@ export default {
     },
     async submit_mqttIp() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const broker = {
         Broker_IP: this.broker_ip,
@@ -515,7 +515,7 @@ export default {
 
     async getBrokerIP() {
       const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:8080"
+      const urlRasp = "192.168.1.216:5000"
 
       const response = await fetch(`http://${urlRasp}/settings-broker`);
       const ip = await response.json();
