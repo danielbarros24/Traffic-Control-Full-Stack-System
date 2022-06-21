@@ -403,23 +403,27 @@ export default {
       );
       const data_array = await data_json.json();
       const data = Object.assign({}, ...data_array);
-      let chart;
+      
       if (id === 1) {
+        let chart
         this.dataCountCar[0].data = data;
         chart = Chartkick.charts["car-chart"];
         chart.updateData(this.dataCountCar);
       }
       if (id === 2) {
+        let chart
         this.dataCountTruck[0].data = data;
         chart = Chartkick.charts["truck-chart"];
         chart.updateData(this.dataCountTruck);
       }
       if (id === 3) {
+        let chart
         this.dataCountBike[0].data = data;
         chart = Chartkick.charts["bike-chart"];
         chart.updateData(this.dataCountBike);
       }
       if (id === 4) {
+        let chart
         this.dataCountDoublePark[0].data = data;
         chart = Chartkick.charts["doublePark-chart"];
         chart.updateData(this.dataCountDoublePark);
