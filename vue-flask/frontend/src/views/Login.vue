@@ -79,7 +79,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
       
-      const response = await fetch(`http://${urlDesktop}/login`, {
+      const response = await fetch(`http://${urlRasp}/login`, {
         method: "POST",
         headers: {
           'Accept': 'application/json',
@@ -93,7 +93,6 @@ export default {
         if (data.user == this.username) {
         this.setUser(data.user);
         this.setToken(data.token);
-
         this.$router.push("/dashboard");
       }
       else {
