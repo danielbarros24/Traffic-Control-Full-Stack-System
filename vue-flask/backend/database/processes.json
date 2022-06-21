@@ -7,7 +7,7 @@
             "enable": false,
             "gpios": [
                 {
-                    "gpio": 3,
+                    "gpio": 20,
                     "inverted": false
                 }
             ],
@@ -149,7 +149,7 @@
             "enable": false,
             "gpios": [
                 {
-                    "gpio": 2,
+                    "gpio": 24,
                     "inverted": true
                 }
             ],
@@ -468,7 +468,7 @@
             "enable": true,
             "gpios": [
                 {
-                    "gpio": 24,
+                    "gpio": 23,
                     "inverted": false
                 }
             ],

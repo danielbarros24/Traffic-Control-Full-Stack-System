@@ -47,7 +47,7 @@
                 :key="idx"
                 :label="`${sensor.name}`"
                 :value="sensor.name"
-              ></v-radio>
+              ></v-radio> 
             </v-radio-group>
 
             <div class="my-5">
