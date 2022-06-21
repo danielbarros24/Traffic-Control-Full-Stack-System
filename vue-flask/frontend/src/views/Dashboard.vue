@@ -43,8 +43,8 @@
             <h2 class="text-h6 text--primary">Sensors</h2>
             <v-radio-group v-model="radioGroup" mandatory>
               <v-radio
-                v-for="sensor in sensors"
-                :key="sensor"
+                v-for="(sensor, idx) in sensors"
+                :key="idx"
                 :label="`${sensor.name}`"
                 :value="sensor.name"
               ></v-radio>
