@@ -272,7 +272,6 @@
 
 <script>
 import * as dayjs from "dayjs";
-//import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -432,8 +431,6 @@ export default {
     },
   },
   computed: {
-    //...mapGetters(["isLoggedIn"]),
-
     dateRangeText() {
       return this.editedItem.dates.join("~");
     },

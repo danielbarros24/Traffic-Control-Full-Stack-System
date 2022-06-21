@@ -264,7 +264,6 @@
 </template>
 
 <script>
-//import { mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -524,7 +523,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isLoggedIn"]),
     formTitle() {
       return this.editedIndex === -1 ? "New Sensor" : "Edit Sensor";
     },

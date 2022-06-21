@@ -75,9 +75,6 @@ export default {
         username: this.username,
         password: this.password,
       }
-      
-      /*this.$store.dispatch('login', { user: this.username, password: this.password })
-        .then(() => this.$router.push('/'))*/
 
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
@@ -112,15 +109,6 @@ export default {
       this.postResult = null;
     }
   },
-
-  /*mounted () {
-    EventBus.$on('failedAuthentication', (msg) => {
-      this.errorMsg = msg
-    })
-  },
-  beforeDestroy () {
-    EventBus.$off('failedAuthentication')
-  }*/
 };
 
 </script>
