@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoggedIn">
+  <div>
     <v-app-bar color="transparent" dark elevation="0">
       <v-img
         max-height="35"
@@ -277,7 +277,7 @@ export default {
   data() {
     return {
       valid: true,
-      radioGroup: undefined,
+      
 
       nameRules: [(v) => !!v],
       dateRules: [
@@ -364,6 +364,7 @@ export default {
       truckCountChart: false,
       bikeCountChart: false,
       doubleParkVehicles: false,
+      radioGroup: "T1"
     };
   },
 
@@ -405,27 +406,23 @@ export default {
       const data = Object.assign({}, ...data_array);
       
       if (id === 1) {
-        let chart
         this.dataCountCar[0].data = data;
-        chart = Chartkick.charts["car-chart"];
+        let chart = Chartkick.charts["car-chart"];
         chart.updateData(this.dataCountCar);
       }
       if (id === 2) {
-        let chart
         this.dataCountTruck[0].data = data;
-        chart = Chartkick.charts["truck-chart"];
+        let chart = Chartkick.charts["truck-chart"];
         chart.updateData(this.dataCountTruck);
       }
       if (id === 3) {
-        let chart
         this.dataCountBike[0].data = data;
-        chart = Chartkick.charts["bike-chart"];
+        let chart = Chartkick.charts["bike-chart"];
         chart.updateData(this.dataCountBike);
       }
       if (id === 4) {
-        let chart
         this.dataCountDoublePark[0].data = data;
-        chart = Chartkick.charts["doublePark-chart"];
+        let chart = Chartkick.charts["doublePark-chart"];
         chart.updateData(this.dataCountDoublePark);
       }
     },
@@ -442,6 +439,7 @@ export default {
   async mounted() {
     await this.getSensors();
 
+    await this.getData(1);
     await this.getData(1);
     await this.getData(2);
     await this.getData(3);

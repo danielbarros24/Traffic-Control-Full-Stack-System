@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoggedIn">
+  <div>
     <v-app-bar color="transparent" dark elevation="0">
       <v-img
         max-height="35"

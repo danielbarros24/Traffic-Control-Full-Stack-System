@@ -484,8 +484,6 @@ export default {
   async mounted() {
     const urlDesktop = "127.0.0.1:5000"
     const urlRasp = "192.168.1.216:5000"
-
-    const responseUser = await fetch(`http://localhost:8080/api/user`);
     
     await this.getProcesses();
     await this.getPins();
