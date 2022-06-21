@@ -91,8 +91,8 @@ export default {
       const data = await response.json();
       if(response.ok) {
         if (data.username == this.username) {
-        this.setUser(data.username);
-        this.setToken(data.token);
+        //this.setUser(data.username);
+        //this.setToken(data.token);
         this.$router.push("/dashboard");
       }
       else {
