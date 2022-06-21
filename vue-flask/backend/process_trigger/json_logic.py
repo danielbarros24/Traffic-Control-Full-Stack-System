@@ -181,18 +181,19 @@ def function_vehicle_number(zone, vehicleType):
         docs = db_camera.search((query.Task == 'Counter') & (
             query.Vehicle == vehicle) & (query.Zone == zone) & (query.UtcTime > start_time))
 
-    i = 0
-    for doc in docs:
-        i += 1
-        if i == 1:
-            first_count = doc.get('Count')
-        count = doc.get('Count')
+    if docs:
+        i = 0
+        for doc in docs:
+            i += 1
+            if i == 1:
+                first_count = doc.get('Count')
+            count = doc.get('Count')
 
-    first_count = int(first_count)
-    count = int(count)
+        first_count = int(first_count)
+        count = int(count)
 
-    return abs(count-first_count)
-
+        return abs(count-first_count)
+    else: return 0
 
 def function_flow(zone, vehicleType, duration):
     vehicle = set_vehicleType_name(vehicleType)
@@ -214,28 +215,22 @@ def function_flow(zone, vehicleType, duration):
     i = 0
 
     start_time = parser.parse(start_time)
+    if docs:
+        for doc in docs:
+            doc_time = parser.parse(doc.get('UtcTime'))
+            amount = doc_time - start_time
+            i += 1
+            if i == 1:
+                first_count = doc.get('Count')
 
-    for doc in docs:
-        doc_time = parser.parse(doc.get('UtcTime'))
-        amount = doc_time - start_time
-        i += 1
-        if i == 1:
-            first_count = doc.get('Count')
+            if(amount.total_seconds() <= int(duration)):
+                count_flow = doc.get('Count')
 
-        if(amount.total_seconds() <= int(duration)):
-            count_flow = doc.get('Count')
-
-    first_count = int(first_count)
-    count_flow = int(count_flow)
-
-    #detected_vehicles = abs(count_flow - first_count)
-
-    #print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))
-    #print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
-
-    return count_flow - first_count
-
-
+        first_count = int(first_count)
+        count_flow = int(count_flow)
+        return count_flow - first_count
+    else: return 0
+    
 def function_stay_time(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
     #start_time = '2022-06-02T12:07:36.754733Z'
@@ -256,20 +251,22 @@ def function_stay_time(zone, vehicleType):
     end_time = 0
 
     last_state = False
-    for doc in docs:
-        if doc.get('State') == 'true':
-            last_state = True
-            end_time = doc.get('UtcTime')
-        if doc.get('State') == 'true':
-            last_state = False
 
-    if last_state == True:
-        stayTime = parser.parse(current_time) - parser.parse(end_time)
-    else:
-        stayTime = 0
+    if docs:
+        for doc in docs:
+            if doc.get('State') == 'true':
+                last_state = True
+                end_time = doc.get('UtcTime')
+            if doc.get('State') == 'true':
+                last_state = False
 
-    return stayTime.total_seconds()
+        if last_state == True:
+            stayTime = parser.parse(current_time) - parser.parse(end_time)
+        else:
+            stayTime = 0
 
+        return stayTime.total_seconds()
+    else: return False
 
 def function_jam_detection(zone):
     #start_time = '2022-05-16T19:45:35.461Z'
@@ -281,14 +278,15 @@ def function_jam_detection(zone):
         query.UtcTime > start_time) & (query.Zone == zone))
 
     last_state = False
-    for doc in docs:
-        if doc.get('State') == 'true':
-            last_state = True
-        if doc.get('State') == 'false':
-            last_state = False
+    if docs:
+        for doc in docs:
+            if doc.get('State') == 'true':
+                last_state = True
+            if doc.get('State') == 'false':
+                last_state = False
 
-    return last_state
-
+        return last_state
+    else: return False
 
 def function_crowd_detection(zone):
     start_time = '2022-06-02T14:18:10.597768Z'
@@ -300,14 +298,15 @@ def function_crowd_detection(zone):
         query.UtcTime > start_time) & (query.Cam == zone))
 
     last_state = False
-    for doc in docs:
-        if doc.get('State') == 'true':
-            last_state = True
-        if doc.get('State') == 'false':
-            last_state = False
+    if docs:
+        for doc in docs:
+            if doc.get('State') == 'true':
+                last_state = True
+            if doc.get('State') == 'false':
+                last_state = False
 
-    return last_state
-
+        return last_state
+    else: return False
 
 def function_double_park(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
@@ -321,14 +320,15 @@ def function_double_park(zone, vehicleType):
 
     last_state = False
 
-    for doc in docs:
-        if doc.get('State') == 'true':
-            last_state = True
-        if doc.get('State') == 'false':
-            last_state = False
+    if docs:
+        for doc in docs:
+            if doc.get('State') == 'true':
+                last_state = True
+            if doc.get('State') == 'false':
+                last_state = False
 
-    return last_state
-
+        return last_state
+    else: return False
 
 def function_vehicle_detection(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
@@ -350,26 +350,27 @@ def function_vehicle_detection(zone, vehicleType):
         db_count_truck = vehicle_counts.get('lastTruckCount')
         db_count_bike = vehicle_counts.get('lastBikeCount')
 
-        for doc in docs:
-            last_count = doc.get('Count')
-            vehicle_count = doc.get('vehicle')
+        if docs:
+            for doc in docs:
+                last_count = doc.get('Count')
+                vehicle_count = doc.get('vehicle')
 
-        last_count = int(last_count)
+            last_count = int(last_count)
 
-        if last_count > db_count_car or last_count > db_count_truck or last_count > db_count_bike:
-            # update db
-            if vehicle_count == "Car":
-                db_general.update({'jsonLogicCarCount': last_count})
-            if vehicle_count == "Truck":
-                db_general.update(
-                    {'jsonLogicTruckCount': last_count})
-            if vehicle_count == "Bike":
-                db_general.update(
-                    {'jsonLogicBikeCount': last_count})
-            return True
-        else:
-            return False
-
+            if last_count > db_count_car or last_count > db_count_truck or last_count > db_count_bike:
+                # update db
+                if vehicle_count == "Car":
+                    db_general.update({'jsonLogicCarCount': last_count})
+                if vehicle_count == "Truck":
+                    db_general.update(
+                        {'jsonLogicTruckCount': last_count})
+                if vehicle_count == "Bike":
+                    db_general.update(
+                        {'jsonLogicBikeCount': last_count})
+                return True
+            else:
+                return False
+        else: return False 
     else:
         docs = db_camera.search((query.Task == 'Counter') & (
             query.Vehicle == vehicle) & (query.Zone == zone) & (query.UtcTime > start_time))
@@ -381,25 +382,26 @@ def function_vehicle_detection(zone, vehicleType):
         if vehicle == "Bike":
             db_count = vehicle_counts.get('lastBikeCount')
 
-        for doc in docs:
-            last_count = doc.get('Count')
+        if docs:
+            for doc in docs:
+                last_count = doc.get('Count')
 
-        last_count = int(last_count)
+            last_count = int(last_count)
 
-        if last_count > db_count:
-            # update db
-            if vehicle == "Car":
-                db_general.update({'jsonLogicCarCount': last_count})
-            if vehicle == "Truck":
-                db_general.update(
-                    {'jsonLogicTruckCount': last_count})
-            if vehicle == "Bike":
-                db_general.update(
-                    {'jsonLogicBikeCount': last_count})
-            return True
-        else:
-            return False
-
+            if last_count > db_count:
+                # update db
+                if vehicle == "Car":
+                    db_general.update({'jsonLogicCarCount': last_count})
+                if vehicle == "Truck":
+                    db_general.update(
+                        {'jsonLogicTruckCount': last_count})
+                if vehicle == "Bike":
+                    db_general.update(
+                        {'jsonLogicBikeCount': last_count})
+                return True
+            else:
+                return False
+        else: return False
 
 operations = {
     "==": soft_equals,
