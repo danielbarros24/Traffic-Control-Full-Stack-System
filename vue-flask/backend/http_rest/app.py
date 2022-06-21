@@ -92,8 +92,9 @@ def login():
         if doc.get('username') == username:
             if check_password_hash(doc.get('password'), password):
 
-                token = jwt.encode({'sub': username, 'iat': datetime.utcnow(), 'exp': datetime.utcnow(
-                ) + timedelta(minutes=30)}, app.config['SECRET-KEY'])
+                #token = jwt.encode({'sub': username, 'iat': datetime.utcnow(), 'exp': datetime.utcnow(
+                #) + timedelta(minutes=30)}, app.config['SECRET-KEY'])
+                token = '1234ge4' 
                 #return jsonify({'token': token})
                 return jsonify({'username': username, 'token': token})
             else:
