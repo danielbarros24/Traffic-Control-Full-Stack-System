@@ -32,6 +32,7 @@ import { CrowdDetectionComponent }   from '@/node-editor/components/variables/Cr
 import { DoubleParkComponent }       from '@/node-editor/components/variables/DoubleParkComponent'
 import { StayTimeComponent }         from '@/node-editor/components/variables/StayTimeComponent'
 import { VehicleDetectionComponent } from '@/node-editor/components/variables/VehicleDetectionComponent'
+import { VehicleNumberComponent } from '@/node-editor/components/variables/VehicleNumberComponent'
 
 import { GpioComponent } from '@/node-editor/components/GpioComponent'
 
@@ -39,7 +40,7 @@ import Rete from "rete";
 
 
 export default async function(container) {
-    const components = [new GpioComponent(), new VehicleDetectionComponent(), new StayTimeComponent(), new FlowComponent(), new DoubleParkComponent(),
+    const components = [new GpioComponent(), new VehicleDetectionComponent(), new VehicleNumberComponent, new StayTimeComponent(), new FlowComponent(), new DoubleParkComponent(),
         new JamComponent(), new CrowdDetectionComponent(), new DurationComponent(), new ConstantComponent(), new AddComponent(), new SubComponent(), 
         new MultiplyComponent(), new DivisionComponent(), new MaxComponent(), new MinComponent(), new EqualToComponent(), new DifferentThanComponent(), 
         new GreaterThanComponent(), new LessThanComponent(), new GreaterThanOrEqualToComponent(), new LessThanOrEqualToComponent(), 

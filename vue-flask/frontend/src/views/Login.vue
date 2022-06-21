@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+
 
 export default {
   data: () => ({
@@ -69,50 +69,58 @@ export default {
   },
 
   methods:{
-    ...mapMutations(["setUser", "setToken"]),
-
     async postData() {
       this.$refs.form.validate()
       const postData = {
         username: this.username,
         password: this.password,
       }
+      
+      this.$store.dispatch('login', { user: this.username, password: this.password })
+        .then(() => this.$router.push('/'))
 
-        const urlDesktop = "127.0.0.1:5000"
-        const urlRasp = "192.168.1.216:8080"
-        
-        const response = await fetch(`http://${urlDesktop}/login`, {
-          method: "POST",
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json;charset=utf-8'
-          },
-          body: JSON.stringify(postData),
-        })
+      /*const urlDesktop = "127.0.0.1:5000"
+      const urlRasp = "192.168.1.216:8080"
+      
+      const response = await fetch(`http://${urlDesktop}/login`, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(postData),
+      })
 
-        const data = await response.json();
-        if(response.ok) {
-          if (data.user == this.username) {
-          this.setUser(data.user);
-          this.setToken(data.token);
-          this.$router.push("/dashboard");
-          
-        }
-        else {
-          this.invalidCredentials = true
-        }
-        
-        }
-        
-        //console.log(data)
+      const data = await response.json();
+      if(response.ok) {
+        if (data.user == this.username) {
+        this.setUser(data.user);
+        this.setToken(data.token);
 
-    },
+        this.$router.push("/dashboard");
+      }
+      else {
+        this.invalidCredentials = true
+      }
+      
+      }
+      
+      //console.log(data)
+
+    }
     clearPostOutput() {
       this.postResult = null;
-    },
+    }*/}
   },
 
-  async mounted() {}
+  mounted () {
+    EventBus.$on('failedAuthentication', (msg) => {
+      this.errorMsg = msg
+    })
+  },
+  beforeDestroy () {
+    EventBus.$off('failedAuthentication')
+  }
 };
 
 </script>

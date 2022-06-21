@@ -17,8 +17,8 @@ import json
 
 
 # Server Credentials
-username = "daniel"
-password = "password"
+username = "service"
+password = "service#4123"
 
 #new_data = 0
 

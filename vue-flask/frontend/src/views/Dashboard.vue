@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLoggedIn">
     <v-app-bar color="transparent" dark elevation="0">
       <v-img
         max-height="35"
@@ -272,6 +272,7 @@
 
 <script>
 import * as dayjs from "dayjs";
+import { mapGetters } from "vuex";
 
 export default {
   data() {
@@ -431,6 +432,8 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["isLoggedIn"]),
+
     dateRangeText() {
       return this.editedItem.dates.join("~");
     },

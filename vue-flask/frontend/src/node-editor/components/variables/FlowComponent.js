@@ -15,7 +15,7 @@ export class FlowComponent extends Rete.Component {
 
         const urlDesktop = "127.0.0.1:5000"
         const urlRasp = "192.168.1.216:8080"
-        const responseZones = await fetch(`http://${urlDesktop}/sensors`);
+        const responseZones = await fetch(`http://${urlRasp}/sensors`);
         const sensors = await responseZones.json();
 
         let all = []

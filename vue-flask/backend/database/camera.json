@@ -87731,6 +87731,101 @@
             "Vehicle": "Bike",
             "Zone": "T2-1",
             "State": "true"
+        },
+        "11172": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:19:19.649721Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 189
+        },
+        "11173": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:19:19.649721Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": 189
+        },
+        "11174": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:19:19.649721Z",
+            "Task": "Counter",
+            "Vehicle": "Bike",
+            "Zone": "T1-2",
+            "Count": 189
+        },
+        "11175": {
+            "Cam": "T2",
+            "UtcTime": "2022-06-20T10:19:23.654270Z",
+            "Task": "Idle Object",
+            "Vehicle": "Car",
+            "Zone": "T2-1",
+            "State": "true"
+        },
+        "11176": {
+            "Cam": "T2",
+            "UtcTime": "2022-06-20T10:19:23.654270Z",
+            "Task": "Idle Object",
+            "Vehicle": "Car",
+            "Zone": "T2-1",
+            "State": "false"
+        },
+        "11177": {
+            "Cam": "T2",
+            "UtcTime": "2022-06-20T10:19:23.654270Z",
+            "Task": "Idle Object",
+            "Vehicle": "Truck",
+            "Zone": "T2-2",
+            "State": "false"
+        },
+        "11178": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:56:06.570932Z",
+            "Task": "Crowd Detection",
+            "Zone": "T1",
+            "State": "true"
+        },
+        "11179": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:56:13.578597Z",
+            "Task": "Counter",
+            "Vehicle": "Truck",
+            "Zone": "T1-1",
+            "Count": 123
+        },
+        "11180": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:56:13.578597Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": 326
+        },
+        "11181": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:57:13.578597Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": 327
+        },
+        "11182": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:58:13.578597Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": 328
+        },
+        "11183": {
+            "Cam": "T1",
+            "UtcTime": "2022-06-20T10:59:13.578597Z",
+            "Task": "Counter",
+            "Vehicle": "Car",
+            "Zone": "T1-1",
+            "Count": 329
         }
     }
 }

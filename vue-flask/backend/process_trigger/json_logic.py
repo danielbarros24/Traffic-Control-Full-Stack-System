@@ -31,6 +31,7 @@ else:
     # Python 2 fallback.
     str = unicode
 
+
 def set_vehicleType_name(vehicleType):
     if vehicleType == 'CAR':
         return 'Car'
@@ -38,6 +39,7 @@ def set_vehicleType_name(vehicleType):
         return 'Truck'
     elif vehicleType == 'BIKE':
         return 'Bike'
+
 
 def if_(*args):
     """Implements the 'if' operator with support for multiple elseif-s."""
@@ -165,7 +167,8 @@ def missing_some(data, min_required, args):
 
 ######################################## ---NEW FUNCTIONS--- ########################################
 
-def function_vehicle_detection(zone, vehicleType):
+
+def function_vehicle_number(zone, vehicleType):
     vehicle = set_vehicleType_name(vehicleType)
     #start_time = '2022-05-16T19:45:35.461Z'
     time = [query.get('start_time') for query in db_general.all()]
@@ -184,14 +187,14 @@ def function_vehicle_detection(zone, vehicleType):
         if i == 1:
             first_count = doc.get('Count')
         count = doc.get('Count')
-   
+
     first_count = int(first_count)
     count = int(count)
 
     return abs(count-first_count)
 
 
-def function_flow(zone, vehicleType, duration):    
+def function_flow(zone, vehicleType, duration):
     vehicle = set_vehicleType_name(vehicleType)
     start_time = datetime.utcnow().isoformat()[:-3]+'Z'
 
@@ -227,10 +230,10 @@ def function_flow(zone, vehicleType, duration):
 
     #detected_vehicles = abs(count_flow - first_count)
 
-    #print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))    
+    #print("       [DURATION]: " + str(duration) + "s  | [Amount]: " + str(first_duration) + "s  | [Already Counted]: " + str(first_count) + " | [Counted]: " + str(count_flow))
     #print("       [FLOW]: " + str(detected_vehicles) + " vehicles detected in " + str(duration) + " seconds" )
-    
-    return count_flow - first_count 
+
+    return count_flow - first_count
 
 
 def function_stay_time(zone, vehicleType):
@@ -243,10 +246,11 @@ def function_stay_time(zone, vehicleType):
     current_time = datetime.utcnow().isoformat()[:-3]+'Z'
 
     if vehicleType == 'ALL':
-        docs = db_camera.search((query.Task == 'Idle Object') & (query.UtcTime >= start_time) & (query.Zone == zone))
+        docs = db_camera.search((query.Task == 'Idle Object') & (
+            query.UtcTime >= start_time) & (query.Zone == zone))
     else:
-        docs = db_camera.search((query.Task == 'Idle Object') & (query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Zone == zone))
-
+        docs = db_camera.search((query.Task == 'Idle Object') & (
+            query.Vehicle == vehicle) & (query.UtcTime >= start_time) & (query.Zone == zone))
 
     stayTime = 0
     end_time = 0
@@ -261,7 +265,7 @@ def function_stay_time(zone, vehicleType):
 
     if last_state == True:
         stayTime = parser.parse(current_time) - parser.parse(end_time)
-    else: 
+    else:
         stayTime = 0
 
     return stayTime.total_seconds()
@@ -272,8 +276,9 @@ def function_jam_detection(zone):
 
     time = [query.get('start_time') for query in db_general.all()]
     start_time = time[0]
-    
-    docs = db_camera.search((query.Task == 'Jam Detection') & (query.UtcTime > start_time) & (query.Zone == zone))
+
+    docs = db_camera.search((query.Task == 'Jam Detection') & (
+        query.UtcTime > start_time) & (query.Zone == zone))
 
     last_state = False
     for doc in docs:
@@ -290,8 +295,9 @@ def function_crowd_detection(zone):
 
     #time = [query.get('start_time') for query in db_general.all()]
     #start_time = time[0]
-    
-    docs = db_camera.search((query.Task == 'Crowd Detection') & (query.UtcTime > start_time) & (query.Cam == zone))
+
+    docs = db_camera.search((query.Task == 'Crowd Detection') & (
+        query.UtcTime > start_time) & (query.Cam == zone))
 
     last_state = False
     for doc in docs:
@@ -310,10 +316,10 @@ def function_double_park(zone, vehicleType):
     time = [query.get('start_time') for query in db_general.all()]
     start_time = time[0]
 
-    docs = db_camera.search((query.Task == 'Double Park') & (query.UtcTime > start_time) & (query.Vehicle == vehicle) & (query.Zone == zone))
+    docs = db_camera.search((query.Task == 'Double Park') & (
+        query.UtcTime > start_time) & (query.Vehicle == vehicle) & (query.Zone == zone))
 
     last_state = False
-
 
     for doc in docs:
         if doc.get('State') == 'true':
@@ -322,6 +328,77 @@ def function_double_park(zone, vehicleType):
             last_state = False
 
     return last_state
+
+
+def function_vehicle_detection(zone, vehicleType):
+    vehicle = set_vehicleType_name(vehicleType)
+    #start_time = '2022-05-16T19:45:35.461Z'
+    time = [query.get('start_time') for query in db_general.all()]
+    start_time = time[0]
+
+    db_count = 0
+    db_count_car = 0
+    db_count_truck = 0
+    db_count_bike = 0
+
+    vehicle_counts = db_general.all()[0]
+    if vehicleType == 'ALL':
+        docs = db_camera.search((query.Task == 'Counter') & (
+            query.Zone == zone) & (query.UtcTime > start_time))
+
+        db_count_car = vehicle_counts.get('lastCarCount')
+        db_count_truck = vehicle_counts.get('lastTruckCount')
+        db_count_bike = vehicle_counts.get('lastBikeCount')
+
+        for doc in docs:
+            last_count = doc.get('Count')
+            vehicle_count = doc.get('vehicle')
+
+        last_count = int(last_count)
+
+        if last_count > db_count_car or last_count > db_count_truck or last_count > db_count_bike:
+            # update db
+            if vehicle_count == "Car":
+                db_general.update({'jsonLogicCarCount': last_count})
+            if vehicle_count == "Truck":
+                db_general.update(
+                    {'jsonLogicTruckCount': last_count})
+            if vehicle_count == "Bike":
+                db_general.update(
+                    {'jsonLogicBikeCount': last_count})
+            return True
+        else:
+            return False
+
+    else:
+        docs = db_camera.search((query.Task == 'Counter') & (
+            query.Vehicle == vehicle) & (query.Zone == zone) & (query.UtcTime > start_time))
+
+        if vehicle == "Car":
+            db_count = vehicle_counts.get('lastCarCount')
+        if vehicle == "Truck":
+            db_count = vehicle_counts.get('lastTruckCount')
+        if vehicle == "Bike":
+            db_count = vehicle_counts.get('lastBikeCount')
+
+        for doc in docs:
+            last_count = doc.get('Count')
+
+        last_count = int(last_count)
+
+        if last_count > db_count:
+            # update db
+            if vehicle == "Car":
+                db_general.update({'jsonLogicCarCount': last_count})
+            if vehicle == "Truck":
+                db_general.update(
+                    {'jsonLogicTruckCount': last_count})
+            if vehicle == "Bike":
+                db_general.update(
+                    {'jsonLogicBikeCount': last_count})
+            return True
+        else:
+            return False
 
 
 operations = {
@@ -356,7 +433,8 @@ operations = {
     "stayTime": function_stay_time,
     "jamDetection": function_jam_detection,
     "crowdDetection": function_crowd_detection,
-    "doublePark": function_double_park
+    "doublePark": function_double_park,
+    "vehicleNumber": function_vehicle_number
 }
 
 

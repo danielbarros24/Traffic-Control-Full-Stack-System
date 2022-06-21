@@ -13,7 +13,18 @@ from tinydb import Query, TinyDB, where
 
 from .json_logic import jsonLogic
 
+########## GPIO SETUP ############
+#import RPi.GPIO as GPIO 
 
+#GPIO.setmode(GPIO.BCM)
+
+#gpio_list = [0, 1, 4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+
+#for p in gpio_list:
+#    GPIO.setup(24, GPIO.OUT)
+
+
+#===============================================================================================================
 # DATABASE
 db_camera = TinyDB('database/camera.json')
 db_auth = TinyDB('database/auth.json')
@@ -89,6 +100,12 @@ def test_automations():
                     print("TURN ON NOT INVERTED PINS " + str(normal_pins))
                     print("TURN OFF INVERTED PINS " + str(inverted_pins) + '\n')
 
+                    #for g1 in normal_pins:
+                    #   GPIO.output(g1, 1)
+
+                    #for g1_n in inverted_pins:
+                    #   GPIO.output(g1_n, 0)
+
             else:
                 if(triggering == True):             #FALLING EDGE - PROCESS NOT TRUE ANYMORE
                     doc.update({"triggering": False})
@@ -99,11 +116,28 @@ def test_automations():
                     print("TURN OFF NOT INVERTED PINS " + str(normal_pins))
                     print("TURN ON INVERTED PINS " + str(inverted_pins) + '\n')
 
+                    #for g2 in normal_pins:
+                    #   GPIO.output(g2, 0)
+
+                    #for g2_n in inverted_pins:
+                    #   GPIO.output(g2_n, 1)
+
                 else:                               #PROCESS IS STILL FALSE
                     print("PROCESS " + str(doc.get('name')) + " IS STILL FALSE" + '\n')
 
         elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
             print("PROCESS " + str(doc.get('name') + " is OFF"))
             print("TURN OFF " + str(doc.get('name')) + " PINS: " + str(all_pins) + '\n')
+            
+            #for g3 in all_pins:
+            #   GPIO.output(g3, 0)
 
-
+    #UPDATE VEHICLE DETECTION VALUES
+    doc_system = db_general.all()[0]
+    last_car_count = doc_system.get('jsonLogicCarCount')
+    last_truck_count = doc_system.get('jsonLogicTruckCount')
+    last_bike_count = doc_system.get('jsonLogicBikeCount')
+    
+    db_general.update({'lastCarCount': last_car_count})
+    db_general.update({'lastTruckCount': last_truck_count})
+    db_general.update({'lastBikeCount': last_bike_count})

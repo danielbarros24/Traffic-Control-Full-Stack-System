@@ -1,26 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from "vuex-persistedstate";
+
+// imports of AJAX functions will go here
+import { authenticate } from '@/api'  
+import { isValidJwt, EventBus } from '@/utils'
+
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     snackbars: [],
-    user: null,
-    token: null,
-  },
-  getters: {
+    surveys: [],
+    currentSurvey: {},
+    user: {},
+    jwt: ''
   },
   mutations: {
-    setUser(state, user) {
-      state.user = user;
-    },
-    setToken(state, token) {
-      state.token = token;
-    },
+
     SET_SNACKBAR(state, snackbar) {
       state.snackbars= state.snackbars.concat(snackbar)
+    },
+    setUserData (state, payload) {
+      console.log('setUserData payload = ', payload)
+      state.userData = payload.userData
+    },
+    setJwtToken (state, payload) {
+      console.log('setJwtToken payload = ', payload)
+      localStorage.token = payload.jwt.token
+      state.jwt = payload.jwt
     }
   },
   actions: {
@@ -28,6 +36,21 @@ export default new Vuex.Store({
       snackbar.showing = true;
       snackbar.color = snackbar.color || 'primary';
       commit ('SET_SNACKBAR', snackbar);
+    },
+    login (context, userData) {
+      context.commit('setUserData', { userData })
+      return authenticate(userData)
+        .then(response => context.commit('setJwtToken', { jwt: response.data }))
+        .catch(error => {
+          console.log('Error Authenticating: ', error)
+          EventBus.emit('failedAuthentication', error)
+        })
+    }
+  },
+  getters: {
+    // reusable data accessors
+    isAuthenticated (state) {
+      return isValidJwt(state.jwt.token)
     }
   },
   modules: {

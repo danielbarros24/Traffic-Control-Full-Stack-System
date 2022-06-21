@@ -9,9 +9,15 @@ from datetime import datetime
 import time
 #====================================================
 # MQTT Settings 
-MQTT_Broker = "192.168.1.199"
+MQTT_Broker = "192.168.1.216"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
+
+#Broker Credentials
+username = "service"
+password = "service#4123"
+
+#====================================================
 
 ######################################  MQTT TOPICS ################################################
 
@@ -53,12 +59,6 @@ MQTT_Topic_IVA_Crowd_Detection = "T1/onvif-ej/IVA/CrowdDetection/&1/Crowd Detect
 
 ##################################################################################################
 
-
-#Server Credentials
-username = "daniel"
-password = "password"
-
-#====================================================
 
 def on_connect(client, userdata, flags, rc):
 	if rc != 0:

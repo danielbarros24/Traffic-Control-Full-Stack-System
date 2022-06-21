@@ -308,6 +308,7 @@
 import ReteEditor from "@/components/rete/ReteEditor";
 import * as dayjs from "dayjs";
 import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Processes",
@@ -325,6 +326,8 @@ export default {
           title: "Logout",
           icon: "mdi-logout",
           click() {
+            localStorage.removeItem('token');
+            this.$store.dispatch('user', null);
             this.$router.push("/");
           },
         },
@@ -441,7 +444,6 @@ export default {
 
   computed: {
     ...mapState(["snackbars"]),
-
     formTitle() {
       return this.editedIndex === -1 ? "New Process" : "Edit Processes";
     },
@@ -481,6 +483,11 @@ export default {
   },
 
   async mounted() {
+    const urlDesktop = "127.0.0.1:5000"
+    const urlRasp = "192.168.1.216:8080"
+
+    const responseUser = await fetch(`http://localhost:8080/api/user`);
+    
     await this.getProcesses();
     await this.getPins();
     this.interval = setInterval(() => this.getProcesses(), 1000);
@@ -502,7 +509,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:8080"
 
-      const responseAutomations = await fetch(`http://${urlDesktop}/process`);
+      const responseAutomations = await fetch(`http://${urlRasp}/process`);
       const jsonAutomations = await responseAutomations.json();
 
       this.automations = jsonAutomations.map((val) => {
@@ -557,7 +564,6 @@ export default {
       this.snackbar_deleted = true;
     },
 
-    async createNodeClick() {},
     handleClick(index) {
       this.items[index].click.call(this);
     },
@@ -571,7 +577,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:8080"
 
-      const responseGpios = await fetch(`http://${urlDesktop}/pins`);
+      const responseGpios = await fetch(`http://${urlRasp}/pins`);
       const jsonGpios = await responseGpios.json();
 
       this.gpios = jsonGpios.map((value) => ({
@@ -610,7 +616,7 @@ export default {
       const urlRasp = "192.168.1.216:8080"
       
       const id = this.editedItem.id;
-      const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
+      const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -672,9 +678,9 @@ export default {
         endTime: endTime,
         enable: this.editedItem.enable,
         gpios: gpios,
-        triggering: this.editedItem.triggering,
-        lastTimeTriggerStart: this.editedItem.lastTimeTriggerStart,
-        notification: this.editedItem.notification,
+        triggering: false,
+        lastTimeTrigger: "",
+        notification: false,
         rules: logic,
         blueprint: blueprint,
       };
@@ -685,7 +691,7 @@ export default {
       if (this.editedIndex > -1) {
 
         const id = this.editedItem.id;
-        const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
+        const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -699,7 +705,7 @@ export default {
           this.process_save = "Process Edited!";
         }
       } else {
-        const response = await fetch(`http://${urlDesktop}/process`, {
+        const response = await fetch(`http://${urlRasp}/process`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -722,11 +728,12 @@ export default {
 
       const id = item.id;
 
-      await fetch(`http://${urlDesktop}/process?id=${id}`, {
+      await fetch(`http://${urlRasp}/process?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           enable: !!event,
+          triggering: false
         }),
       });
     },

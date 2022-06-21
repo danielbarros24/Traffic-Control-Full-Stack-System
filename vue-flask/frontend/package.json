@@ -8,6 +8,7 @@
     "production": "http-server ./dist"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "chart.js": "2.9",
     "chat.js": "^1.0.2",
     "core-js": "^3.8.3",

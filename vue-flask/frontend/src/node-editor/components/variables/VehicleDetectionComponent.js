@@ -16,7 +16,7 @@ export class VehicleDetectionComponent extends Rete.Component {
         const urlDesktop = "127.0.0.1:5000"
         const urlRasp = "192.168.1.216:8080"
         
-        const responseZones = await fetch(`http://${urlDesktop}/sensors`);
+        const responseZones = await fetch(`http://${urlRasp}/sensors`);
         const sensors = await responseZones.json();
 
         let all = []
@@ -45,7 +45,7 @@ export class VehicleDetectionComponent extends Rete.Component {
             }
         } 
 
-        var out1 = new Rete.Output('num', "Out", Socket.number);
+        var out1 = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
           .addControl(new SelectControl(this.editor, 'type', [
