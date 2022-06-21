@@ -96,7 +96,6 @@ def login():
 
 #####CREATE NEW PROCESS########
 @app.post('/process')
-@jwt_required()
 def new_process():
     automation = request.get_json()
 
@@ -110,7 +109,6 @@ def new_process():
 
 
 @app.patch('/process')
-@jwt_required()
 def update_process():
 
     process = request.get_json()
@@ -129,7 +127,6 @@ def update_process():
 
 
 @app.get('/process')
-@jwt_required()
 def get_process():
 
     processes = db_processes.all()
@@ -152,7 +149,6 @@ def get_process():
 
 
 @app.delete('/process')
-@jwt_required()
 def delete_process():
 
     process_id = request.args.get('id')
@@ -169,7 +165,6 @@ def delete_process():
 
 
 @app.get('/pins')
-@jwt_required()
 def get_pins():
 
     # GETS USED GPIOS IN AUTOMATIONS
@@ -195,7 +190,6 @@ def get_pins():
 
 
 @app.patch('/settings')
-@jwt_required()
 def update_password():
 
     credentials = request.get_json()
@@ -213,7 +207,6 @@ def update_password():
 
 
 @app.get('/settings-broker')
-@jwt_required()
 def get_broker():
 
     doc = db_system.get(doc_id=1)
@@ -226,7 +219,6 @@ def get_broker():
 
 
 @app.patch('/settings-broker')
-@jwt_required()
 def update_broker():
 
     new_broker = request.get_json()
@@ -242,7 +234,6 @@ def update_broker():
 
 
 @app.get('/sensors')
-@jwt_required()
 def get_sensors():
 
     sensors = db_sensors.all()
@@ -257,7 +248,6 @@ def get_sensors():
 
 
 @app.post('/sensors')
-@jwt_required()
 def create_sensors():
 
     sensor = request.get_json()
@@ -273,7 +263,6 @@ def create_sensors():
 
 
 @app.patch('/sensors')
-@jwt_required()
 def update_sensor():
 
     sensor = request.get_json()
@@ -292,7 +281,6 @@ def update_sensor():
 
 
 @app.delete('/sensors')
-@jwt_required()
 def delete_sensor():
 
     sensor_id = request.args.get('id')
@@ -309,7 +297,6 @@ def delete_sensor():
 
 
 @app.get('/chart')
-@jwt_required()
 def getChartData():
 
     counter_list = ["1", "2", "3"]
