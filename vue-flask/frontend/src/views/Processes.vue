@@ -308,6 +308,7 @@
 import ReteEditor from "@/components/rete/ReteEditor";
 import * as dayjs from "dayjs";
 import { mapState } from "vuex";
+import { mapGetters } from 'vuex'
 
 export default {
   name: "Processes",
@@ -325,9 +326,7 @@ export default {
           title: "Logout",
           icon: "mdi-logout",
           click() {
-            localStorage.removeItem('token');
-            this.$store.dispatch('user', null);
-            this.$router.push("/");
+            this.$store.dispatch('logout');
           },
         },
         {
@@ -443,6 +442,9 @@ export default {
 
   computed: {
     ...mapState(["snackbars"]),
+    ...mapGetters('auth', {
+				isAuth: 'isAuthenticated',
+			}),
     formTitle() {
       return this.editedIndex === -1 ? "New Process" : "Edit Processes";
     },

@@ -55,7 +55,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 
 export default {
   data: () => ({
@@ -71,36 +71,14 @@ export default {
   methods:{
     async postData() {
       this.$refs.form.validate()
-      const postData = {
+      const authData = {
         username: this.username,
         password: this.password,
       }
 
-      const urlDesktop = "127.0.0.1:5000"
-      const urlRasp = "192.168.1.216:5000"
-      
-      const response = await fetch(`http://${urlDesktop}/login`, {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(postData),
-      })
-
-      const data = await response.json();
-      if(response.ok) {
-        if (data.username == this.username) {
-        //this.setUser(data.username);
-        //this.setToken(data.token);
-        this.$router.push("/dashboard");
-      }
-      else {
-        this.invalidCredentials = true
-      }
-      
-      }
-      
+      this.$store.dispatch('login', authData).then(() => {
+			  this.$router.push('/dashboard');  
+			});
       //console.log(data)
 
     },

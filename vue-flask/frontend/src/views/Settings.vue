@@ -264,8 +264,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
+
   data: () => ({
     //TABLE/////////////////////////////////////////////////////////////////
     dialog: false,
@@ -332,7 +334,7 @@ export default {
         title: "Logout",
         icon: "mdi-logout",
         click() {
-          this.$router.push("/");
+          this.$store.dispatch('logout');
         },
       },
       {
@@ -523,6 +525,9 @@ export default {
   },
 
   computed: {
+    ...mapGetters('auth', {
+				isAuth: 'isAuthenticated',
+			}),
     formTitle() {
       return this.editedIndex === -1 ? "New Sensor" : "Edit Sensor";
     },

@@ -1,14 +1,10 @@
 
-from flask import Flask, jsonify, redirect, url_for, session, flash
+from flask import Flask, jsonify, redirect, url_for, session
 from flask import make_response, request, Response, render_template
-from flask_login import LoginManager, login_required, login_user
-from flask_session import Session
 from flask_cors import CORS
 from json_logic import jsonLogic
 from werkzeug.security import generate_password_hash, check_password_hash
-import json
-
-import jwt
+from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity, JWTManager
 
 from functools import wraps
 
@@ -19,22 +15,14 @@ from asyncio import tasks
 from pickle import TRUE
 from datetime import datetime, timedelta
 
-import attr
-import os
-import base64
 import json
-import random
-import hashlib
-import requests
-import time
-import re
+
 
 app = Flask(__name__)
 
-
 total_pins = 26
 
-
+jwt = JWTManager(app)
 # DATABASE
 db_camera = TinyDB('../database/camera.json')
 db_auth = TinyDB('../database/auth.json')
@@ -52,9 +40,11 @@ CORS(app, resources={r'/*': {'origins':
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # AUTH KEY
-app.config['SECRET-KEY'] = '5e8a67084c7862b81e91f3dc1742335c'
+app.config['JWT_SECRET_KEY'] = '5e8a67084c7862b81e91f3dc1742335c'
 
 
+
+'''
 def token_required(f):
     @wraps(f)
     def decoreated(*args, **kwargs):
@@ -69,17 +59,19 @@ def token_required(f):
         return f(*args, **kwargs)
 
     return decoreated
+'''
+
+@app.route('/verify-token', methods=['POST'])
+@jwt_required()
+def verify_token():
+    return jsonify({'success': True}), 200
 
 
-@app.route('/unprotected')
-def unprotected():
-    return jsonify({'message': 'Anyone can view this!'})
-
-
-@app.route('/protected')
-@token_required
+@app.route('/protected', methods=['GET'])
+@jwt_required()
 def protected():
-    return jsonify({'message': 'Only who is authenticated can view this!'})
+    current_user = get_jwt_identity()
+    return jsonify(logged_in_as=current_user), 200
 
 
 @app.post('/login')
@@ -93,30 +85,18 @@ def login():
         if doc.get('username') == username:
             if check_password_hash(doc.get('password'), password):
 
-                #token = jwt.encode({'sub': username, 'iat': datetime.utcnow(), 'exp': datetime.utcnow(
-                #) + timedelta(minutes=30)}, app.config['SECRET-KEY'])
-                token = '1234ge4' 
-                #return jsonify({'token': token})
-                return jsonify({'username': username, 'token': token})
+                #token = jwt.encode({'sub': username, 'iat': datetime.utcnow(), 'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET-KEY'])
+                access_token = create_access_token(username)
+                return jsonify({'success':True, 'token': access_token}), 200
             else:
                 return jsonify(access='denied')
         return jsonify({'message': 'Invalid credentials', 'authenticated': False}), 401
-
-#### LOGOUT #####
-
-
-@app.route('/logout')
-def logout():
-    session.pop('username', None)
-    print("Logout!")
-    print("Session closed!")
-    return redirect(url_for('index'))
-
 
 ############# SYSTEM FUNCTIONS ################
 
 #####CREATE NEW PROCESS########
 @app.post('/process')
+@jwt_required()
 def new_process():
     automation = request.get_json()
 
@@ -130,6 +110,7 @@ def new_process():
 
 
 @app.patch('/process')
+@jwt_required()
 def update_process():
 
     process = request.get_json()
@@ -148,6 +129,7 @@ def update_process():
 
 
 @app.get('/process')
+@jwt_required()
 def get_process():
 
     processes = db_processes.all()
@@ -170,6 +152,7 @@ def get_process():
 
 
 @app.delete('/process')
+@jwt_required()
 def delete_process():
 
     process_id = request.args.get('id')
@@ -186,6 +169,7 @@ def delete_process():
 
 
 @app.get('/pins')
+@jwt_required()
 def get_pins():
 
     # GETS USED GPIOS IN AUTOMATIONS
@@ -211,6 +195,7 @@ def get_pins():
 
 
 @app.patch('/settings')
+@jwt_required()
 def update_password():
 
     credentials = request.get_json()
@@ -228,6 +213,7 @@ def update_password():
 
 
 @app.get('/settings-broker')
+@jwt_required()
 def get_broker():
 
     doc = db_system.get(doc_id=1)
@@ -240,6 +226,7 @@ def get_broker():
 
 
 @app.patch('/settings-broker')
+@jwt_required()
 def update_broker():
 
     new_broker = request.get_json()
@@ -255,6 +242,7 @@ def update_broker():
 
 
 @app.get('/sensors')
+@jwt_required()
 def get_sensors():
 
     sensors = db_sensors.all()
@@ -269,6 +257,7 @@ def get_sensors():
 
 
 @app.post('/sensors')
+@jwt_required()
 def create_sensors():
 
     sensor = request.get_json()
@@ -284,6 +273,7 @@ def create_sensors():
 
 
 @app.patch('/sensors')
+@jwt_required()
 def update_sensor():
 
     sensor = request.get_json()
@@ -302,6 +292,7 @@ def update_sensor():
 
 
 @app.delete('/sensors')
+@jwt_required()
 def delete_sensor():
 
     sensor_id = request.args.get('id')
@@ -318,6 +309,7 @@ def delete_sensor():
 
 
 @app.get('/chart')
+@jwt_required()
 def getChartData():
 
     counter_list = ["1", "2", "3"]

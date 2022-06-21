@@ -272,6 +272,7 @@
 
 <script>
 import * as dayjs from "dayjs";
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -318,7 +319,7 @@ export default {
           title: "Logout",
           icon: "mdi-logout",
           click() {
-            this.$router.push("/");
+            this.$store.dispatch('logout');
           },
         },
         {
@@ -432,6 +433,9 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('auth', {
+				isAuth: 'isAuthenticated',
+			}),
     dateRangeText() {
       return this.editedItem.dates.join("~");
     },
