@@ -432,7 +432,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["isLoggedIn"]),
+    //...mapGetters(["isLoggedIn"]),
 
     dateRangeText() {
       return this.editedItem.dates.join("~");

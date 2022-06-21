@@ -87,14 +87,15 @@ def login():
     credentials = request.get_json()
     username = credentials.get('user')
     password = credentials.get('password')
-    print(1111)
+
     for doc in db_auth.all():
         if doc.get('username') == username:
             if check_password_hash(doc.get('password'), password):
 
                 token = jwt.encode({'sub': username, 'iat': datetime.utcnow(), 'exp': datetime.utcnow(
                 ) + timedelta(minutes=30)}, app.config['SECRET-KEY'])
-                return jsonify({'token': token})
+                #return jsonify({'token': token})
+                return jsonify({'user': username, 'token': token})
             else:
                 return jsonify(access='denied')
         return jsonify({'message': 'Invalid credentials', 'authenticated': False}), 401
