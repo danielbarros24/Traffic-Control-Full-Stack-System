@@ -87,6 +87,12 @@ def test_automations():
 
                 if(triggering == True):             #PROCESS IS STILL TRUE
                     print("PROCESS " + str(doc.get('name')) + " IS STILL TRUE" + '\n')
+                    
+                    #for g1 in normal_pins:
+                    #   GPIO.output(g1, 1)
+
+                    #for g1_n in inverted_pins:
+                    #   GPIO.output(g1_n, 0)
 
                 else:                               #RISING EDGE - PROCESS WAS FALSE AND NOW IS TRUE
                     doc.update({"triggering": True})
@@ -124,6 +130,12 @@ def test_automations():
 
                 else:                               #PROCESS IS STILL FALSE
                     print("PROCESS " + str(doc.get('name')) + " IS STILL FALSE" + '\n')
+
+                    #for g2 in normal_pins:
+                    #   GPIO.output(g2, 0)
+
+                    #for g2_n in inverted_pins:
+                    #   GPIO.output(g2_n, 1)
 
         elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
             print("PROCESS " + str(doc.get('name') + " is OFF"))

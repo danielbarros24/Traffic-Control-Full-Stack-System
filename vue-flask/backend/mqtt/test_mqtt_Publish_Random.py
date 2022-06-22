@@ -112,64 +112,6 @@ def publish_Cam_Events_to_MQTT():
 	publish_To_Topic (MQTT_Topic_IVA_idle_car_1, Cam_Data_json)
 
 	time.sleep(1)
-	Cam_Data_IVA_idle_car = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"Source": "1"},
-		"Data":
-			{"State":"false"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_car)
-	publish_To_Topic (MQTT_Topic_IVA_idle_car_1, Cam_Data_json)
-
-	time.sleep(1)
-
-	Cam_Data_IVA_idle_truck = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"Source": "1"},
-		"Data":
-			{"State":"false"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_truck)
-	publish_To_Topic (MQTT_Topic_IVA_idle_truck_2, Cam_Data_json)
-
-	time.sleep(1)
-
-	Cam_Data_IVA_idle_truck = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"Source": "1"},
-		"Data":
-			{"State":"true"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_truck)
-	publish_To_Topic (MQTT_Topic_IVA_idle_car_2, Cam_Data_json)
-
-	time.sleep(1)
-
-	Cam_Data_IVA_double_park= {
-		"UtcTime": UtcTime,
-		"Source":
-			{"Source": "1"},
-		"Data":
-			{"State":"true"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_IVA_double_park)
-	publish_To_Topic (MQTT_Topic_IVA_double_park_bike_1, Cam_Data_json)
-
-	time.sleep(1)
-	Cam_Data_IVA_double_park = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"Source": "1"},
-		"Data":
-			{"State":"true"}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_IVA_double_park)
-	publish_To_Topic (MQTT_Topic_IVA_double_park_bike_2, Cam_Data_json)
-
-	time.sleep(1)
 
 	Cam_Data_IVA_Crowd_True = {
 		"UtcTime": UtcTime,
@@ -199,27 +141,7 @@ def publish_Cam_Events_to_MQTT():
 	publish_To_Topic (MQTT_Topic_truck_counter_1, Cam_Data_json)
 	time.sleep(1)
 
-	Cam_Data_Rule = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"VideoSource":"1","Rule":"Counter Car 1"},
-		"Data":
-			{"Count":Count}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_Rule)
-	publish_To_Topic (MQTT_Topic_car_counter_1, Cam_Data_json)
-	time.sleep(1)
-
-	Cam_Data_Rule = {
-		"UtcTime": UtcTime,
-		"Source":
-			{"VideoSource":"1","Rule":"Counter Bike 2"},
-		"Data":
-			{"Count":Count}
-	}
-	Cam_Data_json = json.dumps(Cam_Data_Rule)
-	publish_To_Topic (MQTT_Topic_bike_counter_2, Cam_Data_json)
-	time.sleep(1)
+	
 
 	'''
 	Cam_Data_Jam = {

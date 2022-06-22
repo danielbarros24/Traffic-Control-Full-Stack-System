@@ -1,1 +1,1 @@
-{"_default": {"1": {"Broker_IP": "192.168.1.199", "mqtt_connection": "fail", "start_time": "2022-06-19T22:59:00.000Z", "lastCarCount": 0, "lastTruckCount": 0, "lastBikeCount": 0, "jsonLogicCarCount": 0, "jsonLogicTruckCount": 0, "jsonLogicBikeCount": 0}}}
+{"_default": {"1": {"Broker_IP": "192.168.1.199", "mqtt_connection": "ok", "start_time": "2022-06-19T22:59:00.000Z", "lastCarCount": 0, "lastTruckCount": 0, "lastBikeCount": 0, "jsonLogicCarCount": 0, "jsonLogicTruckCount": 0, "jsonLogicBikeCount": 0}}}
