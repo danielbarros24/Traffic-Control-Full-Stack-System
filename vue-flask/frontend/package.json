@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "production": "http-server ./dist"
+    "production": "http-server -P http://localhost:8080 ./dist"
   },
   "dependencies": {
     "axios": "^0.27.2",

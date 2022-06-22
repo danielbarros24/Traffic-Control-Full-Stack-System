@@ -42,25 +42,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # AUTH KEY
 app.config['JWT_SECRET_KEY'] = '5e8a67084c7862b81e91f3dc1742335c'
 
-
-
-'''
-def token_required(f):
-    @wraps(f)
-    def decoreated(*args, **kwargs):
-        token = request.args.get('token')
-        if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
-        try:
-            data = jwt(token, app.config['SECRET-KEY'])
-        except:
-            return jsonify({'message': 'Token is invalid'}), 401
-
-        return f(*args, **kwargs)
-
-    return decoreated
-'''
-
 @app.route('/verify-token', methods=['POST'])
 @jwt_required()
 def verify_token():
