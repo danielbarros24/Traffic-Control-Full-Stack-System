@@ -35,7 +35,7 @@ export default new Vuex.Store({
     },
 
     login: ({commit}, authData) => {
-      axios.post('/login', {
+      axios.post(':5000/login', {
         username: authData.username,
         password: authData.password,
       }).then(response => {
