@@ -365,7 +365,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
+      const responseSensors = await fetch(`http://${urlRasp}/sensors`);
       const sensors_res = await responseSensors.json();
       this.sensors = sensors_res;
     },
@@ -389,7 +389,7 @@ export default {
       const urlRasp = "192.168.1.216:5000"
 
       const id = this.editedItem.id;
-      const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
+      const response = await fetch(`http://${urlRasp}/sensors?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -433,7 +433,7 @@ export default {
       if (this.editedIndex > -1) {
         
         const id = this.editedItem.id;
-        const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
+        const response = await fetch(`http://${urlRasp}/sensors?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -446,7 +446,7 @@ export default {
           this.text_sensors = "Sensor Edited!";
         }
       } else {
-        const response = await fetch(`http://${urlDesktop}/sensors`, {
+        const response = await fetch(`http://${urlRasp}/sensors`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -477,7 +477,7 @@ export default {
         password: this.confirmPassword,
       };
       const file = JSON.stringify(password);
-      const response = await fetch(`http://${urlDesktop}/settings`, {
+      const response = await fetch(`http://${urlRasp}/settings`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
@@ -500,7 +500,7 @@ export default {
         Broker_IP: this.broker_ip,
       };
       const file = JSON.stringify(broker);
-      const response = await fetch(`http://${urlDesktop}/settings-broker`, {
+      const response = await fetch(`http://${urlRasp}/settings-broker`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
@@ -518,7 +518,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const response = await fetch(`http://${urlDesktop}/settings-broker`);
+      const response = await fetch(`http://${urlRasp}/settings-broker`);
       const ip = await response.json();
       this.broker_ip = ip.Broker;
     },
