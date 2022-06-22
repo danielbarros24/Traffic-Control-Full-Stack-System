@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import Index from '../views/Index.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Login from '../views/Login.vue'
 import Processes from '../views/Processes.vue'
@@ -32,7 +33,13 @@ const routes = [
     name: 'settings',
     component: Settings,
     meta: { requiresAuth: true }
-  }
+  },
+  { 
+	path: '/',
+	name: 'index',
+	component: Index,
+	meta: { requiresAuth: true }
+  },
 ]
 
 const router = new VueRouter({

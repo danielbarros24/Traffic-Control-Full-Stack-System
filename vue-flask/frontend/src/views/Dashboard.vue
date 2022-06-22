@@ -326,7 +326,6 @@ export default {
           title: "Processes",
           icon: "mdi-auto-fix",
           click() {
-            console.log("processes");
             this.$router.push("processes");
           },
         },
@@ -334,7 +333,6 @@ export default {
           title: "Settings",
           icon: "mdi-cogs",
           click() {
-            console.log("settings");
             this.$router.push("settings");
           },
         },

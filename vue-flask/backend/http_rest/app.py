@@ -177,7 +177,7 @@ def get_pins():
     for doc in docs:
         used_pins.append(doc.get('gpio'))
 
-    Total_pins = [0, 1, 4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]  # CREATES ARRAY WITH ALL PINS (1 - 26)
+    Total_pins = [4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]  # CREATES ARRAY WITH ALL PINS (1 - 26)
 
     for j in used_pins:
         if j in Total_pins:  # REMOVES FROM ARRAY USED GPIOS
