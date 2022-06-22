@@ -9,13 +9,13 @@ from datetime import datetime
 import time
 #====================================================
 # MQTT Settings 
-MQTT_Broker = "192.168.1.216"
+MQTT_Broker = "192.168.1.199"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 
 #Broker Credentials
-username = "service"
-password = "service#4123"
+username = "daniel"
+password = "password"
 
 #====================================================
 

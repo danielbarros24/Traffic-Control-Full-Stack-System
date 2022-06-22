@@ -15,8 +15,8 @@ import json
 # from tiny_db_manager import Data_handler
 
 # Server Credentials
-username = "service"
-password = "service#4123"
+username = "daniel"
+password = "password"
 
 #new_data = 0
 
@@ -162,8 +162,6 @@ def parse_mqtt_message(topic, message):
                         input_json_db(json_message)
     
 
-
-# Subscribe to all Sensors at Base Topic
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         for i in range(int(n_sensors)):

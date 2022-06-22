@@ -187,6 +187,18 @@ def update_password():
 ######## GET BROKER MQTT #################################
 
 
+@app.get('/broker-state')
+def get_broker_communication():
+
+    doc = db_system.get(doc_id=1)
+    state = doc.get('mqtt_connection')
+    print("[GET BROKER]: " + str(state))
+
+    return jsonify(state=state)
+
+######## GET BROKER COMMUNICATION STATE #################################
+
+
 @app.get('/settings-broker')
 def get_broker():
 

@@ -260,6 +260,22 @@
         </div>
       </div>
     </v-card>
+    <div class="text-center">
+      <v-snackbar v-model="brokerFail" color="red" >
+        <h2 class="font-weight-medium">BROKER COMMUNICATION DOWN!</h2>
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="white"
+            text
+            v-bind="attrs"
+            @click="brokerFail = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
   </div>
 </template>
 
@@ -269,6 +285,7 @@ import { mapGetters } from 'vuex'
 export default {
 
   data: () => ({
+    brokerFail: false,
     //TABLE/////////////////////////////////////////////////////////////////
     dialog: false,
     dialogDelete: false,
@@ -357,15 +374,34 @@ export default {
   async mounted() {
     await this.getSensors();
     await this.getBrokerIP();
+
+    this.interval = setInterval(() => this.getBrokerState(), 1000);
+  },
+  async beforeDestroy() {
+    clearInterval(this.interval)
   },
 
   methods: {
+    async getBrokerState() {
+      const urlDesktop = "127.0.0.1:5000";
+      const urlRasp = "192.168.1.216:5000";
+
+      const responseState= await fetch(`http://${urlDesktop}/broker-state`);
+      const res = await responseState.json();
+
+      if (res.state == "ok") {
+        this.brokerFail = false
+      }
+      else {
+        this.brokerFail = true
+      }
+    },
 
     async getSensors() {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseSensors = await fetch(`http://${urlRasp}/sensors`);
+      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
       const sensors_res = await responseSensors.json();
       this.sensors = sensors_res;
     },
@@ -389,7 +425,7 @@ export default {
       const urlRasp = "192.168.1.216:5000"
 
       const id = this.editedItem.id;
-      const response = await fetch(`http://${urlRasp}/sensors?id=${id}`, {
+      const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -433,7 +469,7 @@ export default {
       if (this.editedIndex > -1) {
         
         const id = this.editedItem.id;
-        const response = await fetch(`http://${urlRasp}/sensors?id=${id}`, {
+        const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -446,7 +482,7 @@ export default {
           this.text_sensors = "Sensor Edited!";
         }
       } else {
-        const response = await fetch(`http://${urlRasp}/sensors`, {
+        const response = await fetch(`http://${urlDesktop}/sensors`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -477,7 +513,7 @@ export default {
         password: this.confirmPassword,
       };
       const file = JSON.stringify(password);
-      const response = await fetch(`http://${urlRasp}/settings`, {
+      const response = await fetch(`http://${urlDesktop}/settings`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
@@ -500,7 +536,7 @@ export default {
         Broker_IP: this.broker_ip,
       };
       const file = JSON.stringify(broker);
-      const response = await fetch(`http://${urlRasp}/settings-broker`, {
+      const response = await fetch(`http://${urlDesktop}/settings-broker`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: file,
@@ -518,7 +554,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const response = await fetch(`http://${urlRasp}/settings-broker`);
+      const response = await fetch(`http://${urlDesktop}/settings-broker`);
       const ip = await response.json();
       this.broker_ip = ip.Broker;
     },

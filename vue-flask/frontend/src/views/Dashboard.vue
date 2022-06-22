@@ -266,6 +266,23 @@
         </v-row>
       </v-col>
     </v-row>
+
+    <div class="text-center">
+      <v-snackbar v-model="brokerFail" color="red" >
+        <h2 class="font-weight-medium">BROKER COMMUNICATION DOWN!</h2>
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="white"
+            text
+            v-bind="attrs"
+            @click="brokerFail = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
   </div>
 </template>
 
@@ -279,7 +296,6 @@ export default {
     return {
       valid: true,
       
-
       nameRules: [(v) => !!v],
       dateRules: [
         (v) => !!v || "Insert 2 dates",
@@ -363,11 +379,26 @@ export default {
       truckCountChart: false,
       bikeCountChart: false,
       doubleParkVehicles: false,
-      radioGroup: "T1"
+      radioGroup: "T1",
+      brokerFail: false
     };
   },
 
   methods: {
+    async getBrokerState() {
+      const urlDesktop = "127.0.0.1:5000";
+      const urlRasp = "192.168.1.216:5000";
+
+      const responseState= await fetch(`http://${urlDesktop}/broker-state`);
+      const res = await responseState.json();
+
+      if (res.state == "ok") {
+        this.brokerFail = false
+      }
+      else {
+        this.brokerFail = true
+      }
+    },
     async submitGetData() {
       if (this.carCountChart === true) await this.getData(1);
       if (this.truckCountChart === true) await this.getData(2);
@@ -378,7 +409,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseSensors = await fetch(`http://${urlRasp}/sensors`);
+      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
       const sensors_res = await responseSensors.json();
       this.sensors = sensors_res;
     },
@@ -399,7 +430,7 @@ export default {
       let id = parseInt(indicator);
 
       const data_json = await fetch(
-        `http://${urlRasp}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`
+        `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`
       );
       const data_array = await data_json.json();
       const data = Object.assign({}, ...data_array);
@@ -439,6 +470,9 @@ export default {
     },
   },
   async mounted() {
+    
+    await this.getBrokerState();
+
     await this.getSensors();
 
     await this.getData(1);
@@ -446,7 +480,12 @@ export default {
     await this.getData(2);
     await this.getData(3);
     await this.getData(4);
-
+    
+    this.interval = setInterval(() => this.getBrokerState(), 1000);
   },
+  async beforeDestroy() {
+    clearInterval(this.interval)
+  },
+
 };
 </script>

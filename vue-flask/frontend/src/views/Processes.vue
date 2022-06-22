@@ -300,6 +300,23 @@
         </template>
       </v-snackbar>
     </div>
+
+    <div class="text-center">
+      <v-snackbar v-model="brokerFail" color="red" >
+        <h2 class="font-weight-medium">BROKER COMMUNICATION DOWN!</h2>
+
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="white"
+            text
+            v-bind="attrs"
+            @click="brokerFail = false"
+          >
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
+    </div>
   </div>
 </template>
 
@@ -318,6 +335,7 @@ export default {
 
   data() {
     return {
+      brokerFail: false,
       gpios: [],
       value: null,
 
@@ -489,7 +507,7 @@ export default {
     
     await this.getProcesses();
     await this.getPins();
-    this.interval = setInterval(() => this.getProcesses(), 1000);
+    this.interval = setInterval(() => this.loopFunction(), 1000);
   },
 
   async beforeDestroy() {
@@ -497,6 +515,24 @@ export default {
   },
 
   methods: {
+    async loopFunction() {
+      await this.getProcesses()
+      await this.getBrokerState()
+    },
+    async getBrokerState() {
+      const urlDesktop = "127.0.0.1:5000";
+      const urlRasp = "192.168.1.216:5000";
+
+      const responseState= await fetch(`http://${urlDesktop}/broker-state`);
+      const res = await responseState.json();
+
+      if (res.state == "ok") {
+        this.brokerFail = false
+      }
+      else {
+        this.brokerFail = true
+      }
+    },
     notificationTest() {
       this.$store.dispatch("setSnackbar", {
         text: `process triggered!`,
@@ -508,7 +544,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseAutomations = await fetch(`http://${urlRasp}/process`);
+      const responseAutomations = await fetch(`http://${urlDesktop}/process`);
       const jsonAutomations = await responseAutomations.json();
 
       this.automations = jsonAutomations.map((val) => {
@@ -576,7 +612,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseGpios = await fetch(`http://${urlRasp}/pins`);
+      const responseGpios = await fetch(`http://${urlDesktop}/pins`);
       const jsonGpios = await responseGpios.json();
 
       this.gpios = jsonGpios.map((value) => ({
@@ -615,7 +651,7 @@ export default {
       const urlRasp = "192.168.1.216:5000"
       
       const id = this.editedItem.id;
-      const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
+      const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -690,7 +726,7 @@ export default {
       if (this.editedIndex > -1) {
 
         const id = this.editedItem.id;
-        const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
+        const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -704,7 +740,7 @@ export default {
           this.process_save = "Process Edited!";
         }
       } else {
-        const response = await fetch(`http://${urlRasp}/process`, {
+        const response = await fetch(`http://${urlDesktop}/process`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: file,
@@ -727,7 +763,7 @@ export default {
 
       const id = item.id;
 
-      await fetch(`http://${urlRasp}/process?id=${id}`, {
+      await fetch(`http://${urlDesktop}/process?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

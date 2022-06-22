@@ -14,22 +14,21 @@ MQTT_Port = 1883
 Keep_Alive_Interval = 40
 
 # Connect
-res = client.connect(MQTT_Broker, int(MQTT_Port), int(Keep_Alive_Interval))
+#rc = client.connect(MQTT_Broker, int(MQTT_Port), int(Keep_Alive_Interval))
 
 while True:
-    
-    # Continue the network loop
-    if res == 0: 
+
+    try:
+        rc = client.connect(MQTT_Broker, int(MQTT_Port), int(Keep_Alive_Interval))
         print("MQTT connection established!")
         client.loop_start()
+        db_system.update({'mqtt_connection': "ok"})
         test_automations()
-        
         time.sleep(1)
-    else:
-        client.loop_stop()
-        print("Error on communication")
-
-    
-   
+    except: 
+        test_automations()
+        time.sleep(1)
+        print("wrong connection")
+        db_system.update({'mqtt_connection': "failed"})
 
 
