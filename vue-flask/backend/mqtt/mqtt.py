@@ -18,8 +18,6 @@ import json
 username = "daniel"
 password = "password"
 
-#new_data = 0
-
 MQTT_Topics = []   
 zones = []
 sensors_list = []
@@ -34,6 +32,8 @@ for doc in docs:
     sensors_list.append(sensor)
 
 flag_connected = 1
+def set_flag():
+    return flag_connected
 
 def mqtt_data_received(msg):
     print(
@@ -163,11 +163,11 @@ def parse_mqtt_message(topic, message):
 
 def on_connect(client, userdata, flags, rc):
     global flag_connected
-    flag_connected = 1
-
     if rc == 0:
         for i in range(int(n_sensors)):
             client.subscribe(MQTT_Topics[i], 0)
+        print("connected OK | Returned code =",rc)
+        flag_connected = 1
         return 0
     else:
         return "Connection Refused! Error code: " + str(rc)
@@ -175,6 +175,8 @@ def on_connect(client, userdata, flags, rc):
 def on_disconnect(client, userdata, rc):
    global flag_connected
    flag_connected = 0
+   print(flag_connected)
+   print("DISCONNECTED DISCONNECTED================================================================================")
 
 def on_message(client, userdata, msg):
 
