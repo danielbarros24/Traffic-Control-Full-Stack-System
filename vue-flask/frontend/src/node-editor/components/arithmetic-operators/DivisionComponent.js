@@ -9,7 +9,7 @@ export class DivisionComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"Inputs", Socket.number, true);
+        var inp1 = new Rete.Input('input',"Inputs", Socket.number, true);
         var out = new Rete.Output('num', "Out", Socket.number);
 
         return node
@@ -18,13 +18,13 @@ export class DivisionComponent extends Rete.Component {
     }
     
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.num;
+        outputs['num'] = node.data.input;
     }
 
     toJsonLogic(node) {
         const { inputs } = node;
         
-        const inputNum = inputs.get('num1');
+        const inputNum = inputs.get('input');
         const { connections } = inputNum;
 
         return {

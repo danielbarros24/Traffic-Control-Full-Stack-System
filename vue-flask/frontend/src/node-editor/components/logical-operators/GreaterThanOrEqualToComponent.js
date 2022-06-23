@@ -9,8 +9,8 @@ export class GreaterThanOrEqualToComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"A", Socket.number);
-        var inp2 = new Rete.Input('num2',"B", Socket.number);
+        var inp1 = new Rete.Input('input1',"A", Socket.number);
+        var inp2 = new Rete.Input('input2',"B", Socket.number);
         var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
@@ -41,8 +41,8 @@ export class GreaterThanOrEqualToComponent extends Rete.Component {
     }
   
     toJsonLogic(node) {
-        const json1 = this._inputToJsonLogic(node, 'num1')
-        const json2 = this._inputToJsonLogic(node, 'num2')
+        const json1 = this._inputToJsonLogic(node, 'input1')
+        const json2 = this._inputToJsonLogic(node, 'input2')
 
         return {">=" : [json1, json2]}
     }

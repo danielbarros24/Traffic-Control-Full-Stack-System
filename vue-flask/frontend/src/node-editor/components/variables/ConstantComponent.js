@@ -13,15 +13,15 @@ export class ConstantComponent extends Rete.Component {
     builder(node) {
         var out1 = new Rete.Output('num', "Out", Socket.constant);
         return node
-          .addControl(new NumControl(this.editor, 'num1'))
+          .addControl(new NumControl(this.editor, 'value'))
           .addOutput(out1);
     }
 
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.num1;
+        outputs['num'] = node.data.num;
     }
 
     toJsonLogic(node) {
-        return node.data.num1;
+        return node.data.value;
     }
 }

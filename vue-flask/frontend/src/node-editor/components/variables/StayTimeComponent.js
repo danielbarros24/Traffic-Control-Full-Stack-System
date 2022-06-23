@@ -47,13 +47,13 @@ export class StayTimeComponent extends Rete.Component {
         var out = new Rete.Output('num', "Out", Socket.number);
 
         return node
-            .addControl(new SelectControl(this.editor, 'type', [
+            .addControl(new SelectControl(this.editor, 'vehicle', [
                 { text: 'All', value: 'ALL' },
                 { text: 'Car', value: 'CAR' },
                 { text: 'Truck', value: 'TRUCK' },
                 { text: 'Bike', value: 'BIKE' }
             ], "Vehicle Type"))
-            .addControl(new SelectControl(this.editor, 'type1', all.map((value) => ({
+            .addControl(new SelectControl(this.editor, 'zone', all.map((value) => ({
                 text: `${value[0]} - Lane ${value[1]}`, value: `${value[0]}-${value[1]}`,
             })), "Zone"))
             .addOutput(out);
@@ -64,8 +64,8 @@ export class StayTimeComponent extends Rete.Component {
     }
 
     toJsonLogic(node) {
-        const vehicleType = node.data.type;
-        const zone = node.data.type1;
+        const vehicleType = node.data.vehicle;
+        const zone = node.data.zone;
 
         return {
             "stayTime": [ zone, vehicleType ]

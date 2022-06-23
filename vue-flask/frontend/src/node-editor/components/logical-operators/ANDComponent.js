@@ -9,7 +9,7 @@ export class ANDComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"Inputs", Socket.boolean, true);
+        var inp1 = new Rete.Input('input',"Inputs", Socket.boolean, true);
         var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
@@ -24,7 +24,7 @@ export class ANDComponent extends Rete.Component {
     toJsonLogic(node) {
         const { inputs } = node;
         
-        const inputNum = inputs.get('num1');
+        const inputNum = inputs.get('input');
         const { connections } = inputNum;
 
         return {

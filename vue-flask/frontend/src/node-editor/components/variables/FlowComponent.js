@@ -48,16 +48,16 @@ export class FlowComponent extends Rete.Component {
 
         return node
     
-          .addControl(new SelectControl(this.editor, 'type', [
+          .addControl(new SelectControl(this.editor, 'vehicle', [
             { text: 'All', value: 'ALL' },
             { text: 'Car', value: 'CAR' },
             { text: 'Truck', value: 'TRUCK' },
             { text: 'Bike', value: 'BIKE' }
           ], "Vehicle Type"))
-          .addControl(new SelectControl(this.editor, 'type1', all.map((value) => ({
+          .addControl(new SelectControl(this.editor, 'zone', all.map((value) => ({
             text: `${value[0]} - Lane ${value[1]}`, value: `${value[0]}-${value[1]}`,
         })), "Zone"))
-          .addControl(new TimeControl(this.editor, 'str'))
+          .addControl(new TimeControl(this.editor, 'time'))
           .addOutput(out1);
     }
 
@@ -65,9 +65,9 @@ export class FlowComponent extends Rete.Component {
         outputs['num'] = node.data.num;
     }
     toJsonLogic(node) {
-        const zone = node.data.type1;
-        const vehicleType = node.data.type;
-        const duration = node.data.str;
+        const zone = node.data.zone;
+        const vehicleType = node.data.vehicle;
+        const duration = node.data.time;
 
         return {
             "flow": [ zone, vehicleType, duration ]

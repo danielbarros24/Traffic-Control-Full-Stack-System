@@ -17,7 +17,10 @@ export class GpioComponent extends Rete.Component {
         
         const responseGpios = await fetch(`http://${urlDesktop}/pins`);
         const jsonGpios = await responseGpios.json();
-        jsonGpios.push(node.data.gpio)
+        if (!(node.data.gpio === undefined || node.data.gpio === null)) {
+            jsonGpios.push(node.data.gpio)
+        }
+        
       
         var input = new Rete.Input('num', "Input", Socket.boolean, true);
         return node

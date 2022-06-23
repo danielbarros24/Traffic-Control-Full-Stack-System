@@ -14,15 +14,15 @@ export class DurationComponent extends Rete.Component {
         var out1 = new Rete.Output('num', "Out", Socket.constant);
         return node
 
-          .addControl(new TimeControl(this.editor, 'str'))
+          .addControl(new TimeControl(this.editor, 'time'))
           .addOutput(out1);
     }
 
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.str;
+        outputs['num'] = node.data.num;
     }
 
     toJsonLogic(node) {
-        return node.data.str;
+        return node.data.time;
     }
 }

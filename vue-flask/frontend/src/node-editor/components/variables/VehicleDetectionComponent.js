@@ -48,25 +48,25 @@ export class VehicleDetectionComponent extends Rete.Component {
         var out1 = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
-          .addControl(new SelectControl(this.editor, 'type', [
+          .addControl(new SelectControl(this.editor, 'vehicle', [
             { text: 'All', value: 'ALL' },
             { text: 'Car', value: 'CAR' },
             { text: 'Truck', value: 'TRUCK' },
             { text: 'Bicycle', value: 'BICYCLE' }
           ], "Vehicle Type"))
-          .addControl(new SelectControl(this.editor, 'type1', all.map((value) => ({
+          .addControl(new SelectControl(this.editor, 'zone', all.map((value) => ({
             text: `${value[0]} - Lane ${value[1]}`, value: `${value[0]}-${value[1]}`,
         })), "Zone"))
           .addOutput(out1);
     }
 
     worker(node, inputs, outputs) {
-        outputs['num'] = node.data.type;
+        outputs['num'] = node.data.num;
     }
 
     toJsonLogic(node) {
-        const type = node.data.type;
-        const zone = node.data.type1;
+        const type = node.data.vehicle;
+        const zone = node.data.zone;
 
         return {
             "vehicleDetection": [zone, type]

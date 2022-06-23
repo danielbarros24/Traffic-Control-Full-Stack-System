@@ -9,7 +9,7 @@ export class NOTComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('num1',"In", Socket.boolean);
+        var inp1 = new Rete.Input('input',"In", Socket.boolean);
         var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
@@ -18,6 +18,6 @@ export class NOTComponent extends Rete.Component {
     }
     
     worker(node, outputs) {
-        outputs['num'] = node.data.num;
+        outputs['num'] = node.data.input;
     }
 }
