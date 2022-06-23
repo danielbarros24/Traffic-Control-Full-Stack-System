@@ -66,8 +66,7 @@ def login():
         if doc.get('username') == username:
             if check_password_hash(doc.get('password'), password):
 
-                #token = jwt.encode({'sub': username, 'iat': datetime.utcnow(), 'exp': datetime.utcnow() + timedelta(minutes=30)}, app.config['SECRET-KEY'])
-                access_token = create_access_token(username)
+                access_token = create_access_token(username, expires_delta= timedelta(hours=24))
                 return jsonify({'success':True, 'token': access_token}), 200
             else:
                 return jsonify(access='denied')
@@ -77,9 +76,9 @@ def login():
 
 #####CREATE NEW PROCESS########
 @app.post('/process')
+
 def new_process():
     automation = request.get_json()
-
     db_processes.insert(automation)
 
     print("Process inserted!")
@@ -108,6 +107,7 @@ def update_process():
 
 
 @app.get('/process')
+@jwt_required()
 def get_process():
 
     processes = db_processes.all()

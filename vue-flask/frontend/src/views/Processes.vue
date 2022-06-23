@@ -192,9 +192,6 @@
                       <v-btn class="mt-12" @click="Validate" :disabled="!valid"
                         >Validate Rule</v-btn
                       >
-                      <!-- <v-textarea v-model="editorJSON"></v-textarea> -->
-                      <!-- <v-btn @click="onEditorSync">Sync</v-btn> -->
-                      <!-- <v-btn @click="onEditorImport">Import</v-btn> -->
                     </v-form>
                   </v-col>
 
@@ -469,10 +466,7 @@ export default {
     dateRangeText() {
       return this.editedItem.dates.join("~");
     },
-    /*allGpios() {
-      if (this.editedIndex < 0) {
-        return this.gpios.sort((a, b) => a.value - b.value);
-      }
+    /*
       return this.gpios
         .concat(
           this.automations[this.editedIndex].gpios.map((value) => ({
@@ -481,15 +475,7 @@ export default {
           }))
         )
         .sort((a, b) => a.value - b.value);
-    },
-    orderEditedGpios: {
-      get() {
-        return this.editedItem.gpios.sort((a, b) => a - b);
-      },
-      set(value) {
-        this.editedItem.gpios = value;
-      },
-    },*/
+    */
   },
 
   watch: {
@@ -544,7 +530,10 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseAutomations = await fetch(`http://${urlDesktop}/process`);
+      const responseAutomations = await fetch(`http://${urlDesktop}/process`, {headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
+
       const jsonAutomations = await responseAutomations.json();
 
       this.automations = jsonAutomations.map((val) => {

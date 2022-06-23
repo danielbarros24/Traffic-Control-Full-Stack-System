@@ -8,7 +8,7 @@
     dense
     clearable
   >
-  </v-select>
+  </v-select> 
 </template>
 
 

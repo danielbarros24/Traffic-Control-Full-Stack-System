@@ -16,16 +16,16 @@ export class GpioComponent extends Rete.Component {
         const urlRasp = "192.168.1.216:5000"
         
         const responseGpios = await fetch(`http://${urlDesktop}/pins`);
-      const jsonGpios = await responseGpios.json();
-
+        const jsonGpios = await responseGpios.json();
+        jsonGpios.push(node.data.gpio)
       
         var input = new Rete.Input('num', "Input", Socket.boolean, true);
         return node
           .addInput(input)
-          .addControl(new SelectControl(this.editor, 'type1', jsonGpios.map((value) => ({
+          .addControl(new SelectControl(this.editor, 'gpio', jsonGpios.map((value) => ({
             text: `GPIO ${value}`, value: value,
           })), "GPIO"))
-          .addControl(new SwitchControl(this.editor, 'type'))
+          .addControl(new SwitchControl(this.editor, 'inverted'))
     }
 
     worker(node, inputs, outputs) {
@@ -53,8 +53,8 @@ export class GpioComponent extends Rete.Component {
     }
 
     toGPIO(node) {
-        const gpio = parseInt(node.data.type1)
-        const inverted = node.data.type
+        const gpio = parseInt(node.data.gpio)
+        const inverted = node.data.inverted
 
         return {gpio, inverted}
     }

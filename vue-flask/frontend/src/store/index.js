@@ -8,24 +8,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     snackbars: [],
-    username: null,
-	  token: null,
   },
   mutations: {
 
     SET_SNACKBAR(state, snackbar) {
       state.snackbars= state.snackbars.concat(snackbar)
     },
-
-    authUser(state, userData) {
-      state.username = userData.username;
-      state.token = userData.token;
-    },
-    clearAuthData(state) {
-      state.username = null;
-      state.token = null;
-    },
-    
   },
   actions: {
     setSnackbar({commit}, snackbar) {
@@ -42,7 +30,6 @@ export default new Vuex.Store({
         let success = response.data.success;
   
         if (success === true) {
-          commit('authUser', { username: authData.username, token: response.data.token });
           localStorage.setItem('token', response.data.token);
           localStorage.setItem('username', authData.username);
           router.replace('dashboard');
@@ -54,18 +41,7 @@ export default new Vuex.Store({
         console.log(error);
       })
     },
-    autoLogin({commit}) {
-      let token = localStorage.getItem('token');
-      let username = localStorage.getItem('username');
-  
-      if (!token || !username) {
-        return;
-      }
-  
-      commit('authUser', { username: username, token: token });
-    },
     logout: ({commit}) => {
-      commit('clearAuthData');
       localStorage.removeItem('username');
       localStorage.removeItem('token');
       router.replace('login');
@@ -73,7 +49,7 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthenticated(state) {
-      return state.token !== null;
+      return localStorage.getItem('token') !== null;
     },
   },
   modules: {
