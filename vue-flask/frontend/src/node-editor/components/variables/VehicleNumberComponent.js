@@ -16,7 +16,9 @@ export class VehicleNumberComponent extends Rete.Component {
         const urlDesktop = "127.0.0.1:5000"
         const urlRasp = "192.168.1.216:5000"
         
-        const responseZones = await fetch(`http://${urlDesktop}/sensors`);
+        const responseZones = await fetch(`http://${urlDesktop}/sensors`, {headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+          }});
         const sensors = await responseZones.json();
 
         let all = []

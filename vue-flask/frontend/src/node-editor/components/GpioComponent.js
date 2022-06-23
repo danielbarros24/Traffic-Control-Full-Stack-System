@@ -15,7 +15,9 @@ export class GpioComponent extends Rete.Component {
         const urlDesktop = "127.0.0.1:5000"
         const urlRasp = "192.168.1.216:5000"
         
-        const responseGpios = await fetch(`http://${urlDesktop}/pins`);
+        const responseGpios = await fetch(`http://${urlDesktop}/pins`, {headers: {
+            'Authorization': `Bearer ${localStorage.getItem("token")}`
+          }});
         const jsonGpios = await responseGpios.json();
         if (!(node.data.gpio === undefined || node.data.gpio === null)) {
             jsonGpios.push(node.data.gpio)
