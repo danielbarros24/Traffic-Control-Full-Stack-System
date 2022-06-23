@@ -386,7 +386,10 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseState= await fetch(`http://${urlDesktop}/broker-state`);
+      const responseState= await fetch(`http://${urlDesktop}/broker-state`,
+      {headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
       const res = await responseState.json();
 
       if (res.state == "ok") {
@@ -401,7 +404,10 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseSensors = await fetch(`http://${urlDesktop}/sensors`);
+      const responseSensors = await fetch(`http://${urlDesktop}/sensors`,
+      {headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
       const sensors_res = await responseSensors.json();
       this.sensors = sensors_res;
     },
@@ -427,6 +433,9 @@ export default {
       const id = this.editedItem.id;
       const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
         method: "DELETE",
+        headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }
       });
       if (!response.ok) {
         this.text_sensors = `An error has occured: ${response.status}`;
@@ -471,7 +480,7 @@ export default {
         const id = this.editedItem.id;
         const response = await fetch(`http://${urlDesktop}/sensors?id=${id}`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
           body: file,
         });
         Object.assign(this.sensors[this.editedIndex], this.editedItem);
@@ -484,7 +493,7 @@ export default {
       } else {
         const response = await fetch(`http://${urlDesktop}/sensors`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
           body: file,
         });
         this.sensors.push(this.editedItem);
@@ -515,7 +524,7 @@ export default {
       const file = JSON.stringify(password);
       const response = await fetch(`http://${urlDesktop}/settings`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: file,
       });
       if (!response.ok) {
@@ -538,7 +547,7 @@ export default {
       const file = JSON.stringify(broker);
       const response = await fetch(`http://${urlDesktop}/settings-broker`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: file,
       });
       if (!response.ok) {
@@ -554,7 +563,9 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const response = await fetch(`http://${urlDesktop}/settings-broker`);
+      const response = await fetch(`http://${urlDesktop}/settings-broker`, {headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
       const ip = await response.json();
       this.broker_ip = ip.Broker;
     },

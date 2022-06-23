@@ -76,7 +76,7 @@ def login():
 
 #####CREATE NEW PROCESS########
 @app.post('/process')
-
+@jwt_required()
 def new_process():
     automation = request.get_json()
     db_processes.insert(automation)
@@ -89,6 +89,7 @@ def new_process():
 
 
 @app.patch('/process')
+@jwt_required()
 def update_process():
 
     process = request.get_json()
@@ -130,6 +131,7 @@ def get_process():
 
 
 @app.delete('/process')
+@jwt_required()
 def delete_process():
 
     process_id = request.args.get('id')
@@ -146,6 +148,7 @@ def delete_process():
 
 
 @app.get('/pins')
+@jwt_required()
 def get_pins():
 
     # GETS USED GPIOS IN AUTOMATIONS
@@ -171,6 +174,7 @@ def get_pins():
 
 
 @app.patch('/settings')
+@jwt_required()
 def update_password():
 
     credentials = request.get_json()
@@ -188,6 +192,7 @@ def update_password():
 
 
 @app.get('/broker-state')
+@jwt_required()
 def get_broker_communication():
 
     doc = db_system.get(doc_id=1)
@@ -200,6 +205,7 @@ def get_broker_communication():
 
 
 @app.get('/settings-broker')
+@jwt_required()
 def get_broker():
 
     doc = db_system.get(doc_id=1)
@@ -212,6 +218,7 @@ def get_broker():
 
 
 @app.patch('/settings-broker')
+@jwt_required()
 def update_broker():
 
     new_broker = request.get_json()
@@ -225,8 +232,8 @@ def update_broker():
 
 ######## GET SENSORS #################################
 
-
 @app.get('/sensors')
+@jwt_required()
 def get_sensors():
 
     sensors = db_sensors.all()
@@ -239,8 +246,8 @@ def get_sensors():
 
 ######## INSERT SENSORS #################################
 
-
 @app.post('/sensors')
+@jwt_required()
 def create_sensors():
 
     sensor = request.get_json()
@@ -254,8 +261,8 @@ def create_sensors():
 
 ##### UPDATE  SENSOR ########
 
-
 @app.patch('/sensors')
+@jwt_required()
 def update_sensor():
 
     sensor = request.get_json()
@@ -272,8 +279,8 @@ def update_sensor():
 
 ##### DELETE SENSORS ########
 
-
 @app.delete('/sensors')
+@jwt_required()
 def delete_sensor():
 
     sensor_id = request.args.get('id')
@@ -290,6 +297,7 @@ def delete_sensor():
 
 
 @app.get('/chart')
+@jwt_required()
 def getChartData():
 
     counter_list = ["1", "2", "3"]

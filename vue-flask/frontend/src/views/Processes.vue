@@ -466,16 +466,6 @@ export default {
     dateRangeText() {
       return this.editedItem.dates.join("~");
     },
-    /*
-      return this.gpios
-        .concat(
-          this.automations[this.editedIndex].gpios.map((value) => ({
-            text: `GPIO ${value}`,
-            value: value,
-          }))
-        )
-        .sort((a, b) => a.value - b.value);
-    */
   },
 
   watch: {
@@ -509,7 +499,9 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseState= await fetch(`http://${urlDesktop}/broker-state`);
+      const responseState= await fetch(`http://${urlDesktop}/broker-state`, {headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
       const res = await responseState.json();
 
       if (res.state == "ok") {
@@ -601,7 +593,10 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseGpios = await fetch(`http://${urlDesktop}/pins`);
+      const responseGpios = await fetch(`http://${urlDesktop}/pins`, 
+      {headers: {
+        'Authorization': `Bearer ${localStorage.getItem("token")}`
+      }});
       const jsonGpios = await responseGpios.json();
 
       this.gpios = jsonGpios.map((value) => ({
@@ -642,6 +637,7 @@ export default {
       const id = this.editedItem.id;
       const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
         method: "DELETE",
+        headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
       });
       if (!response.ok) {
         this.process_delete = `An error has occured: ${response.status}`;
@@ -717,7 +713,7 @@ export default {
         const id = this.editedItem.id;
         const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
           body: file,
         });
         Object.assign(this.automations[this.editedIndex], this.editedItem);
@@ -731,7 +727,7 @@ export default {
       } else {
         const response = await fetch(`http://${urlDesktop}/process`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
           body: file,
         });
         this.automations.push(this.editedItem);
@@ -754,7 +750,7 @@ export default {
 
       await fetch(`http://${urlDesktop}/process?id=${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify({
           enable: !!event,
           triggering: false
