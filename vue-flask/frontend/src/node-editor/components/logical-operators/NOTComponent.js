@@ -9,7 +9,7 @@ export class NOTComponent extends Rete.Component {
     }
     
     builder(node) {
-        var inp1 = new Rete.Input('input',"In", Socket.boolean);
+        var inp1 = new Rete.Input('input1',"In", Socket.boolean);
         var out = new Rete.Output('num', "Out", Socket.boolean);
 
         return node
@@ -17,7 +17,31 @@ export class NOTComponent extends Rete.Component {
             .addOutput(out);
     }
     
-    worker(node, outputs) {
+    worker(node, inputs, outputs) {
         outputs['num'] = node.data.input;
     }
+
+    _inputToJsonLogic(node, name) {
+        const { inputs } = node;
+
+        const input = inputs.get(name)
+        const { connections } = input;
+
+        if (connections.length == 0) {
+            return {};
+        }
+
+        const connection = connections[0];
+        const connectionNode = connection.output.node;
+        const connectionComponent = this.editor.getComponent(connectionNode.name);
+
+        return connectionComponent.toJsonLogic?.(connectionNode);
+    }
+
+    toJsonLogic(node) {
+        const input1 = this._inputToJsonLogic(node, 'input1')
+
+        return {"!" : input1}
+    }
+    
 }

@@ -2,7 +2,6 @@ import Rete from "rete";
 import * as Socket from "../../sockets";
 import Node from "../../../../node_modules/rete-vue-render-plugin/src/logical-operators/Node.vue";
 
-
 export class LessThanOrEqualToComponent extends Rete.Component {
     constructor(){
         super("A<=B");
