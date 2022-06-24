@@ -389,7 +389,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseState= await fetch(`http://${urlDesktop}/broker-state`, {headers: {
+      const responseState= await fetch(`http://${urlRasp}/broker-state`, {headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }});
       const res = await responseState.json();
@@ -411,7 +411,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseSensors = await fetch(`http://${urlDesktop}/sensors`, {headers: {
+      const responseSensors = await fetch(`http://${urlRasp}/sensors`, {headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }});
       const sensors_res = await responseSensors.json();
@@ -434,7 +434,7 @@ export default {
       let id = parseInt(indicator);
 
       const data_json = await fetch(
-        `http://${urlDesktop}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`, {headers: {
+        `http://${urlRasp}/chart?sensor=${sensor}&startTime=${startTime}&endTime=${endTime}&indicator=${id}`, {headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }}
       );

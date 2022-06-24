@@ -499,7 +499,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000";
       const urlRasp = "192.168.1.216:5000";
 
-      const responseState= await fetch(`http://${urlDesktop}/broker-state`, {headers: {
+      const responseState= await fetch(`http://${urlRasp}/broker-state`, {headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }});
       const res = await responseState.json();
@@ -522,7 +522,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseAutomations = await fetch(`http://${urlDesktop}/process`, {headers: {
+      const responseAutomations = await fetch(`http://${urlRasp}/process`, {headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }});
 
@@ -593,7 +593,7 @@ export default {
       const urlDesktop = "127.0.0.1:5000"
       const urlRasp = "192.168.1.216:5000"
 
-      const responseGpios = await fetch(`http://${urlDesktop}/pins`, {headers: {
+      const responseGpios = await fetch(`http://${urlRasp}/pins`, {headers: {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
       }});
       const jsonGpios = await responseGpios.json();
@@ -634,7 +634,7 @@ export default {
       const urlRasp = "192.168.1.216:5000"
       
       const id = this.editedItem.id;
-      const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
+      const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
         method: "DELETE",
         headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
       });
@@ -710,7 +710,7 @@ export default {
       if (this.editedIndex > -1) {
 
         const id = this.editedItem.id;
-        const response = await fetch(`http://${urlDesktop}/process?id=${id}`, {
+        const response = await fetch(`http://${urlRasp}/process?id=${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
           body: file,
@@ -724,7 +724,7 @@ export default {
           this.process_save = "Process Edited!";
         }
       } else {
-        const response = await fetch(`http://${urlDesktop}/process`, {
+        const response = await fetch(`http://${urlRasp}/process`, {
           method: "POST",
           headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
           body: file,
@@ -747,7 +747,7 @@ export default {
 
       const id = item.id;
 
-      await fetch(`http://${urlDesktop}/process?id=${id}`, {
+      await fetch(`http://${urlRasp}/process?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json", 'Authorization': `Bearer ${localStorage.getItem("token")}` },
         body: JSON.stringify({
