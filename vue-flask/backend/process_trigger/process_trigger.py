@@ -4,10 +4,7 @@
 #### Executa jsonLogic.apply(rules, data);
 #### Retorna true ou false -> se true coloca pino x a 1
 
-import json
 from datetime import datetime, timezone
-from ssl import VerifyFlags
-import pytz
 from dateutil import parser
 from tinydb import Query, TinyDB, where
 

@@ -1,21 +1,9 @@
-
-from flask import Flask, jsonify, redirect, url_for, session
-from flask import make_response, request, Response, render_template
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-from json_logic import jsonLogic
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity, JWTManager
-
-from functools import wraps
-
-from tinydb import TinyDB, Query, where
-from typing import Dict, Optional
-
-from asyncio import tasks
-from pickle import TRUE
-from datetime import datetime, timedelta
-
-import json
+from tinydb import TinyDB, Query
+from datetime import timedelta
 
 app = Flask(__name__)
 

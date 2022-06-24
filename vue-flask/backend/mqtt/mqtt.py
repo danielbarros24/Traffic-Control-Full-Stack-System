@@ -11,8 +11,6 @@ db_sensors = TinyDB('database/sensors.json')
 query = Query()
 
 import json
-# from store_data_into_db import sensor_Data_Handler
-# from tiny_db_manager import Data_handler
 
 # Server Credentials
 username = "daniel"
