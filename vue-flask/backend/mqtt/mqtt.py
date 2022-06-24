@@ -166,7 +166,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         for i in range(int(n_sensors)):
             client.subscribe(MQTT_Topics[i], 0)
-        print("connected OK | Returned code =",rc)
+        print("[MQTT CONNECTION]: OK \n")
         flag_connected = 1
         return 0
     else:
@@ -176,7 +176,7 @@ def on_disconnect(client, userdata, rc):
    global flag_connected
    flag_connected = 0
    print(flag_connected)
-   print("DISCONNECTED DISCONNECTED================================================================================")
+   print("[MQTT CONNECTION]: DOWN \n")
 
 def on_message(client, userdata, msg):
 

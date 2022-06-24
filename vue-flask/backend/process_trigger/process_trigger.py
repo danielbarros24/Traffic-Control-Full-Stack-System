@@ -29,7 +29,7 @@ from .json_logic import jsonLogic
 db_camera = TinyDB('database/camera.json')
 db_auth = TinyDB('database/auth.json')
 db_processes = TinyDB('database/processes.json')
-db_general = TinyDB('database/system.json')
+db_system = TinyDB('database/system.json')
 
 query = Query()
 
@@ -51,6 +51,8 @@ def test_automations():
 
     if not docs:
         print("No processes configured")
+        #for g in gpio_list:
+            #   GPIO.output(g, 0)
 
     for doc in docs:
         raw_start_time = doc.get('startTime')
@@ -77,7 +79,7 @@ def test_automations():
 
             triggering = doc.get('triggering')
 
-            db_general.update({"start_time": "{}".format(raw_start_time)})
+            db_system.update({"start_time": "{}".format(raw_start_time)})
 
             rules = doc.get('rules') 
 
@@ -106,11 +108,11 @@ def test_automations():
                     print("TURN ON NOT INVERTED PINS " + str(normal_pins))
                     print("TURN OFF INVERTED PINS " + str(inverted_pins) + '\n')
 
-                    #for g1 in normal_pins:
-                    #   GPIO.output(g1, 1)
+                    #for g2 in normal_pins:
+                    #   GPIO.output(g2, 1)
 
-                    #for g1_n in inverted_pins:
-                    #   GPIO.output(g1_n, 0)
+                    #for g2_n in inverted_pins:
+                    #   GPIO.output(g2_n, 0)
 
             else:
                 if(triggering == True):             #FALLING EDGE - PROCESS NOT TRUE ANYMORE
@@ -122,34 +124,34 @@ def test_automations():
                     print("TURN OFF NOT INVERTED PINS " + str(normal_pins))
                     print("TURN ON INVERTED PINS " + str(inverted_pins) + '\n')
 
-                    #for g2 in normal_pins:
-                    #   GPIO.output(g2, 0)
+                    #for g3 in normal_pins:
+                    #   GPIO.output(g3, 0)
 
-                    #for g2_n in inverted_pins:
-                    #   GPIO.output(g2_n, 1)
+                    #for g3_n in inverted_pins:
+                    #   GPIO.output(g3_n, 1)
 
                 else:                               #PROCESS IS STILL FALSE
                     print("PROCESS " + str(doc.get('name')) + " IS STILL FALSE" + '\n')
 
-                    #for g2 in normal_pins:
-                    #   GPIO.output(g2, 0)
+                    #for g4 in normal_pins:
+                    #   GPIO.output(g4, 0)
 
-                    #for g2_n in inverted_pins:
-                    #   GPIO.output(g2_n, 1)
+                    #for g4_n in inverted_pins:
+                    #   GPIO.output(g4_n, 1)
 
         elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
             print("PROCESS " + str(doc.get('name') + " is OFF"))
             print("TURN OFF " + str(doc.get('name')) + " PINS: " + str(all_pins) + '\n')
             
-            #for g3 in all_pins:
-            #   GPIO.output(g3, 0)
+            #for g5 in all_pins:
+            #   GPIO.output(g5, 0)
 
     #UPDATE VEHICLE DETECTION VALUES
-    doc_system = db_general.all()[0]
+    doc_system = db_system.all()[0]
     last_car_count = doc_system.get('jsonLogicCarCount')
     last_truck_count = doc_system.get('jsonLogicTruckCount')
     last_bike_count = doc_system.get('jsonLogicBikeCount')
     
-    db_general.update({'lastCarCount': last_car_count})
-    db_general.update({'lastTruckCount': last_truck_count})
-    db_general.update({'lastBikeCount': last_bike_count})
+    db_system.update({'lastCarCount': last_car_count})
+    db_system.update({'lastTruckCount': last_truck_count})
+    db_system.update({'lastBikeCount': last_bike_count})

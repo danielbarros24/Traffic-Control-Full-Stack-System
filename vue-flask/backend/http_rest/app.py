@@ -17,7 +17,6 @@ from datetime import datetime, timedelta
 
 import json
 
-
 app = Flask(__name__)
 
 total_pins = 26
@@ -72,9 +71,11 @@ def login():
                 return jsonify(access='denied')
         return jsonify({'message': 'Invalid credentials', 'authenticated': False}), 401
 
-############# SYSTEM FUNCTIONS ################
 
-#####CREATE NEW PROCESS########
+##################################### SYSTEM FUNCTIONS ########################################################
+
+##### CREATE NEW PROCESS ########################################################
+
 @app.post('/process')
 @jwt_required()
 def new_process():
@@ -85,8 +86,8 @@ def new_process():
 
     return jsonify(status='ok')
 
-#####UPDATE PROCESS########
 
+##### UPDATE PROCESS ################################################################
 
 @app.patch('/process')
 @jwt_required()
@@ -104,8 +105,8 @@ def update_process():
 
     return jsonify(status=res)
 
-#####GET PROCESSES########
 
+##### GET PROCESSE ################################################################
 
 @app.get('/process')
 @jwt_required()
@@ -127,8 +128,8 @@ def get_process():
 
     return jsonify(processes)
 
-#####DELETE PROCESSES########
 
+##### DELETE PROCESSE ################################################
 
 @app.delete('/process')
 @jwt_required()
@@ -144,8 +145,8 @@ def delete_process():
 
     return jsonify(status=res)
 
-#####GET AVAILABLE GPIOs########
 
+##### GET AVAILABLE GPIOs ########################################################
 
 @app.get('/pins')
 @jwt_required()
@@ -161,7 +162,7 @@ def get_pins():
     for doc in docs:
         used_pins.append(doc.get('gpio'))
 
-    Total_pins = [4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]  # CREATES ARRAY WITH ALL PINS (1 - 26)
+    Total_pins = [4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]  # CREATES ARRAY WITH ALL AVAILABLE PINS 
 
     for j in used_pins:
         if j in Total_pins:  # REMOVES FROM ARRAY USED GPIOS
@@ -170,8 +171,8 @@ def get_pins():
     print("[GET PINS]: " + str(Total_pins) + " Pins returned!")
     return jsonify(Total_pins)
 
-######## UPDATE PASSWORD #################################
 
+######## UPDATE PASSWORD #########################################
 
 @app.patch('/settings')
 @jwt_required()
@@ -188,8 +189,8 @@ def update_password():
 
     return jsonify(status=res)
 
-######## GET BROKER MQTT #################################
 
+######## GET BROKER COMMUNICATION STATE  #################################################
 
 @app.get('/broker-state')
 @jwt_required()
@@ -201,8 +202,8 @@ def get_broker_communication():
 
     return jsonify(state=state)
 
-######## GET BROKER COMMUNICATION STATE #################################
 
+######## GET MQTT BROKER IP ###############################################################
 
 @app.get('/settings-broker')
 @jwt_required()
@@ -214,8 +215,8 @@ def get_broker():
 
     return jsonify(Broker=broker)
 
-######## UPDATE BROKER #################################
 
+######## UPDATE MQTT BROKER ######################################################################
 
 @app.patch('/settings-broker')
 @jwt_required()
@@ -230,7 +231,8 @@ def update_broker():
 
     return jsonify(status=res)
 
-######## GET SENSORS #################################
+
+######## GET SENSORS #############################################################################
 
 @app.get('/sensors')
 @jwt_required()
@@ -244,7 +246,8 @@ def get_sensors():
     print("[GET SENSORS]: " + str(sensors))
     return jsonify(sensors)
 
-######## INSERT SENSORS #################################
+
+######## INSERT SENSOR #############################################################################
 
 @app.post('/sensors')
 @jwt_required()
@@ -259,7 +262,8 @@ def create_sensors():
     res = "ok"
     return jsonify(status=res)
 
-##### UPDATE  SENSOR ########
+
+####### UPDATE SENSOR ###############################################################################
 
 @app.patch('/sensors')
 @jwt_required()
@@ -277,7 +281,8 @@ def update_sensor():
 
     return jsonify(status=res)
 
-##### DELETE SENSORS ########
+
+##### DELETE SENSOR ################################################
 
 @app.delete('/sensors')
 @jwt_required()
@@ -295,7 +300,7 @@ def delete_sensor():
 
     return jsonify(status=res)
 
-
+##### GET CHART DATA ################################################
 @app.get('/chart')
 @jwt_required()
 def getChartData():
