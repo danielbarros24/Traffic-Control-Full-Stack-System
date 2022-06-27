@@ -9,13 +9,13 @@ from datetime import datetime
 import time
 #====================================================
 # MQTT Settings 
-MQTT_Broker = "192.168.1.199"
+MQTT_Broker = "192.168.1.216"
 MQTT_Port = 1883
 Keep_Alive_Interval = 45
 
 #Broker Credentials
-username = "daniel"
-password = "password"
+username = "service"
+password = "service#4123"
 
 #====================================================
 
@@ -37,8 +37,8 @@ MQTT_Topic_IVA_double_park_car_2 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Car
 MQTT_Topic_IVA_double_park_truck_1 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Truck 1"
 MQTT_Topic_IVA_double_park_truck_2 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Truck 2"
 
-MQTT_Topic_IVA_double_park_bike_1 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Bike 1"
-MQTT_Topic_IVA_double_park_bike_2 = "T2/onvif-ej/IVA/IdleObject/&1/DoublePark Bike 2"
+MQTT_Topic_IVA_double_park_bike_1 = "T1/onvif-ej/IVA/IdleObject/&1/DoublePark Bike 1"
+MQTT_Topic_IVA_double_park_bike_2 = "T1/onvif-ej/IVA/IdleObject/&1/DoublePark Bike 2"
 
 
 MQTT_Topic_IVA_idle_car_1 = "T2/onvif-ej/IVA/IdleObject/&1/Idle Car 1"
@@ -101,17 +101,41 @@ def publish_Cam_Events_to_MQTT():
 	UtcTime = UtcTime.isoformat() + 'Z'
 
 	
-	Cam_Data_IVA_idle_car= {
+	Cam_Data_IVA_double_park= {
 		"UtcTime": UtcTime,
 		"Source":
 			{"Source": "1"},
 		"Data":
 			{"State":"true"}
 	}
-	Cam_Data_json = json.dumps(Cam_Data_IVA_idle_car)
-	publish_To_Topic (MQTT_Topic_IVA_idle_car_1, Cam_Data_json)
+	Cam_Data_json = json.dumps(Cam_Data_IVA_double_park)
+	publish_To_Topic (MQTT_Topic_IVA_double_park_bike_1, Cam_Data_json)
 
-	time.sleep(1)
+	time.sleep(0.5)
+
+	Cam_Data_Jam = {
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"true"}
+		}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
+
+	time.sleep(0.5)
+	
+	Cam_Data_Jam = {
+		"UtcTime": UtcTime,
+		"Source":
+			{"Source":"1"},
+		"Data":
+			{"State":"false"}
+	}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_2, Cam_Data_json)
+
+	time.sleep(0.5)
 
 	Cam_Data_IVA_Crowd_True = {
 		"UtcTime": UtcTime,
@@ -123,25 +147,46 @@ def publish_Cam_Events_to_MQTT():
 	Cam_Data_json_1 = json.dumps(Cam_Data_IVA_Crowd_True)
 	publish_To_Topic (MQTT_Topic_IVA_Crowd_Detection, Cam_Data_json_1)
 
-	time.sleep(1)
-
-	UtcTime = datetime.now()
-	UtcTime = UtcTime.isoformat() + 'Z'
-
-	time.sleep(1)
-
-	Cam_Data_Rule = {
+	Cam_Data_IVA_false = {
 		"UtcTime": UtcTime,
 		"Source":
-			{"VideoSource":"1","Rule":"Counter Truck 1"},
+			{"Source": "1"},
 		"Data":
-			{"Count":Count}
+			{"State":"false"}
 	}
-	Cam_Data_json = json.dumps(Cam_Data_Rule)
-	publish_To_Topic (MQTT_Topic_truck_counter_1, Cam_Data_json)
-	time.sleep(1)
+	Cam_Data_json_1 = json.dumps(Cam_Data_IVA_false)
+	publish_To_Topic (MQTT_Topic_IVA_idle_car_1, Cam_Data_json_1)
 
-	
+	Cam_Data_Jam = {
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"true"}
+		}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
+
+	Cam_Data_Jam = {
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"false"}
+		}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
+
+
+	Cam_Data_Jam = {
+			"UtcTime": UtcTime,
+			"Source":
+				{"Source":"1"},
+			"Data":
+				{"State":"true"}
+		}
+	Cam_Data_json = json.dumps(Cam_Data_Jam)
+	publish_To_Topic (MQTT_Topic_IVA_jam_1, Cam_Data_json)
 
 	'''
 	Cam_Data_Jam = {

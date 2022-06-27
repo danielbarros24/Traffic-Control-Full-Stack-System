@@ -4,31 +4,35 @@
 #### Executa jsonLogic.apply(rules, data);
 #### Retorna true ou false -> se true coloca pino x a 1
 
+import json
 from datetime import datetime, timezone
+from ssl import VerifyFlags
+import pytz
 from dateutil import parser
-from tinydb import Query, TinyDB, where
+from tinydb import TinyDB
+from filelock import Timeout, FileLock
 
 from .json_logic import jsonLogic
 
+file_path = "src/backend/database/processes.json"
+lock_path = "src/backend/database/processes.json.lock"
+lock = FileLock(lock_path, timeout=20)
+
 ########## GPIO SETUP ############
-#import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO 
+GPIO.setwarnings(False)
 
-#GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
-#gpio_list = [4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
+gpio_list = [4 ,5 ,6 ,7 ,8 ,9 ,10 ,11, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]
 
-#for p in gpio_list:
-#    GPIO.setup(p, GPIO.OUT)
+for p in gpio_list:
+   GPIO.setup(p, GPIO.OUT)
 
 
 #===============================================================================================================
 # DATABASE
-db_camera = TinyDB('database/camera.json')
-db_auth = TinyDB('database/auth.json')
-db_processes = TinyDB('database/processes.json')
-db_system = TinyDB('database/system.json')
-
-query = Query()
+db_system = TinyDB('src/backend/database/system.json')
 
 startTime = ""
 
@@ -41,15 +45,16 @@ def compare_datetime(current_date, start_time, end_time):
 
 def test_automations():
 
-    #utc=pytz.UTC
+    with lock:
+        db_processes = TinyDB('src/backend/database/processes.json') 
+        docs = db_processes.all()
 
-    docs = db_processes.all()
     current_date = datetime.now(timezone.utc)
 
     if not docs:
-        print("No processes configured")
-        #for g in gpio_list:
-            #   GPIO.output(g, 0)
+        #print("No processes configured")
+        for g in gpio_list:
+            GPIO.output(g, 0)
 
     for doc in docs:
         raw_start_time = doc.get('startTime')
@@ -80,18 +85,18 @@ def test_automations():
 
             rules = doc.get('rules') 
 
-            print("Verifying " + str(doc.get('name') + " process..."))
+            #print("Verifying " + str(doc.get('name') + " process..."))
 
             if jsonLogic(rules):
 
                 if(triggering == True):             #PROCESS IS STILL TRUE
-                    print("PROCESS " + str(doc.get('name')) + " IS STILL TRUE" + '\n')
+                    #print("PROCESS " + str(doc.get('name')) + " IS STILL TRUE" + '\n')
                     
-                    #for g1 in normal_pins:
-                    #   GPIO.output(g1, 1)
+                    for g1 in normal_pins:
+                       GPIO.output(g1, 1)
 
-                    #for g1_n in inverted_pins:
-                    #   GPIO.output(g1_n, 0)
+                    for g1_n in inverted_pins:
+                       GPIO.output(g1_n, 0)
 
                 else:                               #RISING EDGE - PROCESS WAS FALSE AND NOW IS TRUE
                     doc.update({"triggering": True})
@@ -100,48 +105,48 @@ def test_automations():
                     
                     db_processes.update(doc, doc_ids=[int(doc.doc_id)])
 
-                    print("RISING EDGE")
+                    #print("RISING EDGE")
                     print("PROCESS START TRIGGERING: " + str(doc.get('name')))
-                    print("TURN ON NOT INVERTED PINS " + str(normal_pins))
-                    print("TURN OFF INVERTED PINS " + str(inverted_pins) + '\n')
+                    #print("TURN ON NOT INVERTED PINS " + str(normal_pins))
+                    #print("TURN OFF INVERTED PINS " + str(inverted_pins) + '\n')
 
-                    #for g2 in normal_pins:
-                    #   GPIO.output(g2, 1)
+                    for g2 in normal_pins:
+                       GPIO.output(g2, 1)
 
-                    #for g2_n in inverted_pins:
-                    #   GPIO.output(g2_n, 0)
+                    for g2_n in inverted_pins:
+                       GPIO.output(g2_n, 0)
 
             else:
                 if(triggering == True):             #FALLING EDGE - PROCESS NOT TRUE ANYMORE
                     doc.update({"triggering": False})
                     db_processes.update(doc, doc_ids=[int(doc.doc_id)])
 
-                    print("FALLING EDGE")
+                    #print("FALLING EDGE")
                     print("PROCESS STOP TRIGGERING: " + str(doc.get('name')))
-                    print("TURN OFF NOT INVERTED PINS " + str(normal_pins))
-                    print("TURN ON INVERTED PINS " + str(inverted_pins) + '\n')
+                    #print("TURN OFF NOT INVERTED PINS " + str(normal_pins))
+                    #print("TURN ON INVERTED PINS " + str(inverted_pins) + '\n')
 
-                    #for g3 in normal_pins:
-                    #   GPIO.output(g3, 0)
+                    for g3 in normal_pins:
+                       GPIO.output(g3, 0)
 
-                    #for g3_n in inverted_pins:
-                    #   GPIO.output(g3_n, 1)
+                    for g3_n in inverted_pins:
+                       GPIO.output(g3_n, 1)
 
                 else:                               #PROCESS IS STILL FALSE
-                    print("PROCESS " + str(doc.get('name')) + " IS STILL FALSE" + '\n')
+                    #print("PROCESS " + str(doc.get('name')) + " IS STILL FALSE" + '\n')
 
-                    #for g4 in normal_pins:
-                    #   GPIO.output(g4, 0)
+                    for g4 in normal_pins:
+                       GPIO.output(g4, 0)
 
-                    #for g4_n in inverted_pins:
-                    #   GPIO.output(g4_n, 1)
+                    for g4_n in inverted_pins:
+                       GPIO.output(g4_n, 1)
 
         elif(compare_datetime(current_date, startTime, endTime) == False or enable == False):
-            print("PROCESS " + str(doc.get('name') + " is OFF"))
-            print("TURN OFF " + str(doc.get('name')) + " PINS: " + str(all_pins) + '\n')
+            #print("PROCESS " + str(doc.get('name') + " is OFF"))
+            #print("TURN OFF " + str(doc.get('name')) + " PINS: " + str(all_pins) + '\n')
             
-            #for g5 in all_pins:
-            #   GPIO.output(g5, 0)
+            for g5 in all_pins:
+               GPIO.output(g5, 0)
 
     #UPDATE VEHICLE DETECTION VALUES
     doc_system = db_system.all()[0]

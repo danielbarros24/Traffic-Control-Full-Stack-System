@@ -375,7 +375,7 @@ export default {
     await this.getSensors();
     await this.getBrokerIP();
 
-    this.interval = setInterval(() => this.getBrokerState(), 1000);
+    this.interval = setInterval(() => this.getBrokerState(), 3000);
   },
   async beforeDestroy() {
     clearInterval(this.interval)

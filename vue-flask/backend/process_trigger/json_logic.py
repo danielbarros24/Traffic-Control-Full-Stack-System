@@ -14,12 +14,15 @@ from tinydb import TinyDB, Query, where
 
 from datetime import datetime
 from dateutil import parser
+from filelock import Timeout, FileLock
 
-
-db_camera = TinyDB('database/camera.json')
-db_system = TinyDB('database/system.json')
+db_system = TinyDB('src/backend/database/system.json')
 
 query = Query()
+
+file_path = "src/backend/database/camera.json"
+lock_path = "src/backend/database/camera.json.lock"
+lock = FileLock(lock_path, timeout=20)
 
 logger = logging.getLogger(__name__)
 
@@ -169,10 +172,14 @@ def missing_some(data, min_required, args):
 ######################################## ---NEW FUNCTIONS--- ########################################
 
 def function_vehicle_number(zone, vehicleType):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+    
+
     vehicle = set_vehicleType_name(vehicleType)
     time = [query.get('start_time') for query in db_system.all()]
     start_time = time[0]
-
+    
     if vehicleType == 'ALL':
         docs = db_camera.search((query.Task == 'Counter') & (
             query.Zone == zone) & (query.UtcTime > start_time))
@@ -195,12 +202,15 @@ def function_vehicle_number(zone, vehicleType):
     else: return 0
 
 def function_flow(zone, vehicleType, duration):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+
     vehicle = set_vehicleType_name(vehicleType)
     start_time = datetime.utcnow().isoformat()[:-3]+'Z'
 
     count_flow = -1
     first_count = -1
-
+    
     if vehicleType == 'ALL':
         docs = db_camera.search((query.Task == 'Counter') & (
             query.Zone == zone) & (query.UtcTime < start_time))
@@ -228,6 +238,9 @@ def function_flow(zone, vehicleType, duration):
     else: return 0
     
 def function_stay_time(zone, vehicleType):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+
     vehicle = set_vehicleType_name(vehicleType)
 
     time = [query.get('start_time') for query in db_system.all()]
@@ -261,9 +274,11 @@ def function_stay_time(zone, vehicleType):
             stayTime = 0
 
         return stayTime.total_seconds()
-    else: return False
+    else: return 0
 
 def function_jam_detection(zone):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
 
     time = [query.get('start_time') for query in db_system.all()]
     start_time = time[0]
@@ -283,6 +298,8 @@ def function_jam_detection(zone):
     else: return False
 
 def function_crowd_detection(zone):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
 
     time = [query.get('start_time') for query in db_system.all()]
     start_time = time[0]
@@ -302,6 +319,9 @@ def function_crowd_detection(zone):
     else: return False
 
 def function_double_park(zone, vehicleType):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+
     vehicle = set_vehicleType_name(vehicleType)
 
     time = [query.get('start_time') for query in db_system.all()]
@@ -311,7 +331,6 @@ def function_double_park(zone, vehicleType):
         query.UtcTime > start_time) & (query.Vehicle == vehicle) & (query.Zone == zone))
 
     last_state = False
-
     if docs:
         for doc in docs:
             if doc.get('State') == 'true':
@@ -323,6 +342,9 @@ def function_double_park(zone, vehicleType):
     else: return False
 
 def function_vehicle_detection(zone, vehicleType):
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+
     vehicle = set_vehicleType_name(vehicleType)
     time = [query.get('start_time') for query in db_system.all()]
     start_time = time[0]

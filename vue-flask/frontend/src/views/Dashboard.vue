@@ -31,13 +31,12 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-row no-gutters>
+    <v-row no-gutters class="d-flex flex-wrap">
       <v-col cols="1" sm="3" md="2">
-        <v-card
+        <v-card  
           class="d-flex ml-5 mt-13 pa-6"
           min-width="290"
           elevation="20"
-          outlined
         >
           <v-card-text>
             <h2 class="text-h6 text--primary">Sensors</h2>
@@ -180,7 +179,7 @@
         </v-card>
       </v-col>
 
-      <v-col cols="6" md="10" no-gutters class="mt-13">
+      <v-col cols="5" md="10" sm="9" class="mt-13">
         <v-row no-gutters max-height="800">
           <v-card
             class="d-flex mb-4 pt-1 ml-3 px-5"
@@ -487,7 +486,7 @@ export default {
     await this.getData(3);
     await this.getData(4);
     
-    this.interval = setInterval(() => this.getBrokerState(), 1000);
+    this.interval = setInterval(() => this.getBrokerState(), 3000);
   },
   async beforeDestroy() {
     clearInterval(this.interval)

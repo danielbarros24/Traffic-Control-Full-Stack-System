@@ -1,21 +1,36 @@
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity, JWTManager
 from tinydb import TinyDB, Query
 from datetime import timedelta
+from filelock import Timeout, FileLock
+import logging
 
 app = Flask(__name__)
 
-total_pins = 26
+#disable logs
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
+file_path = "src/backend/database/camera.json"
+lock_path = "src/backend/database/camera.json.lock"
+lock = FileLock(lock_path, timeout=20)
+
+file_path_processes = "src/backend/database/processes.json"
+lock_path_processes = "src/backend/database/processes.json.lock"
+lock_processes = FileLock(lock_path, timeout=20)
+
+file_path_system = "src/backend/database/system.json"
+lock_path_system = "src/backend/database/system.json.lock"
+lock_system = FileLock(lock_path, timeout=20)
 
 jwt = JWTManager(app)
 # DATABASE
-db_camera = TinyDB('../database/camera.json')
-db_auth = TinyDB('../database/auth.json')
-db_processes = TinyDB('../database/processes.json')
-db_system = TinyDB('../database/system.json')
-db_sensors = TinyDB('../database/sensors.json')
+db_auth = TinyDB('src/backend/database/auth.json')
+db_system = TinyDB('src/backend/database/system.json')
+db_sensors = TinyDB('src/backend/database/sensors.json')
 
 query = Query()
 Gpio = Query()
@@ -44,7 +59,7 @@ def protected():
 
 @app.post('/login')
 def login():
-
+    
     credentials = request.get_json()
     username = credentials.get('username')
     password = credentials.get('password')
@@ -67,10 +82,13 @@ def login():
 @app.post('/process')
 @jwt_required()
 def new_process():
-    automation = request.get_json()
-    db_processes.insert(automation)
+    with lock_processes:
+        db_processes = TinyDB('src/backend/database/processes.json')
+        
+        automation = request.get_json()
+        db_processes.insert(automation)
 
-    print("Process inserted!")
+        #print("Process inserted!")
 
     return jsonify(status='ok')
 
@@ -81,15 +99,18 @@ def new_process():
 @jwt_required()
 def update_process():
 
-    process = request.get_json()
-    process_id = request.args.get('id')
+    with lock_processes:
+        db_processes = TinyDB('src/backend/database/processes.json')
 
-    if db_processes.contains(doc_id=int(process_id)):
-        db_processes.update(process, doc_ids=[int(process_id)])
-        res = "success"
-        print("Process updated! id: " + str(process_id))
-    else:
-        res = "not found"
+        process = request.get_json()
+        process_id = request.args.get('id')
+
+        if db_processes.contains(doc_id=int(process_id)):
+            db_processes.update(process, doc_ids=[int(process_id)])
+            res = "success"
+            #print("Process updated! id: " + str(process_id))
+        else:
+            res = "not found"
 
     return jsonify(status=res)
 
@@ -100,19 +121,22 @@ def update_process():
 @jwt_required()
 def get_process():
 
-    processes = db_processes.all()
+    with lock_processes:
+        db_processes = TinyDB('src/backend/database/processes.json')
 
-    for n in processes:
-        n["id"] = n.doc_id
+        processes = db_processes.all()
 
-    new_processes = processes
+        for n in processes:
+            n["id"] = n.doc_id
 
-    for new_process in new_processes:
-        id = new_process.doc_id
-        if(new_process.get('notification') == True):
-            db_processes.update({"notification": False}, doc_ids=[int(id)])
+        new_processes = processes
 
-    print("[GET PROCESSES]: Process returned!")
+        for new_process in new_processes:
+            id = new_process.doc_id
+            if(new_process.get('notification') == True):
+                db_processes.update({"notification": False}, doc_ids=[int(id)])
+
+        #print("[GET PROCESSES]: Process returned!")
 
     return jsonify(processes)
 
@@ -123,13 +147,16 @@ def get_process():
 @jwt_required()
 def delete_process():
 
-    process_id = request.args.get('id')
-    if db_processes.contains(doc_id=int(process_id)):
-        db_processes.remove(doc_ids=[int(process_id)])
-        res = "success"
-        print("Process deleted!" + str(process_id))
-    else:
-        res = "not found"
+    with lock_processes:
+        db_processes = TinyDB('src/backend/database/processes.json')
+
+        process_id = request.args.get('id')
+        if db_processes.contains(doc_id=int(process_id)):
+            db_processes.remove(doc_ids=[int(process_id)])
+            res = "success"
+            #print("Process deleted!" + str(process_id))
+        else:
+            res = "not found"
 
     return jsonify(status=res)
 
@@ -141,9 +168,12 @@ def delete_process():
 def get_pins():
 
     # GETS USED GPIOS IN AUTOMATIONS
-    docs = [query.get('gpios') for query in db_processes.all()]
+    with lock_processes:
+        db_processes = TinyDB('src/backend/database/processes.json')
 
-    docs = [item for sublist in docs for item in sublist]
+        docs = [query.get('gpios') for query in db_processes.all()]
+
+        docs = [item for sublist in docs for item in sublist]
 
     used_pins = []
 
@@ -156,7 +186,7 @@ def get_pins():
         if j in Total_pins:  # REMOVES FROM ARRAY USED GPIOS
             Total_pins.remove(j)
 
-    print("[GET PINS]: " + str(Total_pins) + " Pins returned!")
+    #print("[GET PINS]: " + str(Total_pins) + " Pins returned!")
     return jsonify(Total_pins)
 
 
@@ -173,7 +203,7 @@ def update_password():
 
     db_auth.update({'password': "{}".format(hash_password)})
     res = "ok"
-    print("Password updated!")
+    #print("Password updated!")
 
     return jsonify(status=res)
 
@@ -184,9 +214,13 @@ def update_password():
 @jwt_required()
 def get_broker_communication():
 
-    doc = db_system.get(doc_id=1)
+    with lock_system:
+
+        db_system = TinyDB('src/backend/database/system.json')
+        doc = db_system.get(doc_id=1)
     state = doc.get('mqtt_connection')
-    print("[GET BROKER]: " + str(state))
+
+    #print("[GET BROKER]: " + str(state))
 
     return jsonify(state=state)
 
@@ -197,9 +231,12 @@ def get_broker_communication():
 @jwt_required()
 def get_broker():
 
+    with lock_system:
+
+        db_system = TinyDB('src/backend/database/system.json')
     doc = db_system.get(doc_id=1)
     broker = doc.get('Broker_IP')
-    print("[GET BROKER]: " + str(broker))
+    #print("[GET BROKER]: " + str(broker))
 
     return jsonify(Broker=broker)
 
@@ -210,12 +247,16 @@ def get_broker():
 @jwt_required()
 def update_broker():
 
+    
     new_broker = request.get_json()
     broker = new_broker.get('Broker_IP')
 
-    db_system.update({'Broker_IP': "{}".format(broker)})
+    with lock_system:
+
+        db_system = TinyDB('src/backend/database/system.json')
+        db_system.update({'Broker_IP': "{}".format(broker)})
     res = "ok"
-    print("Broker updated: " + str(broker))
+    #print("Broker updated: " + str(broker))
 
     return jsonify(status=res)
 
@@ -231,7 +272,7 @@ def get_sensors():
     for n in sensors:
         n["id"] = n.doc_id
 
-    print("[GET SENSORS]: " + str(sensors))
+    #print("[GET SENSORS]: " + str(sensors))
     return jsonify(sensors)
 
 
@@ -244,9 +285,8 @@ def create_sensors():
     sensor = request.get_json()
 
     db_sensors.insert(sensor)
-    print(sensor)
 
-    print("Sensor inserted! Sensor " + str(sensor))
+    #print("Sensor inserted! Sensor " + str(sensor))
     res = "ok"
     return jsonify(status=res)
 
@@ -263,7 +303,7 @@ def update_sensor():
     if db_sensors.contains(doc_id=int(sensor_id)):
         db_sensors.update(sensor, doc_ids=[int(sensor_id)])
         res = "success"
-        print("Sensor updated! Sensor: " + str(sensor))
+        #print("Sensor updated! Sensor: " + str(sensor))
     else:
         res = "not found"
 
@@ -277,12 +317,12 @@ def update_sensor():
 def delete_sensor():
 
     sensor_id = request.args.get('id')
-    print(sensor_id)
+
 
     if db_sensors.contains(doc_id=int(sensor_id)):
         db_sensors.remove(doc_ids=[int(sensor_id)])
         res = "success"
-        print("Sensor deleted! id: " + str(sensor_id))
+        #print("Sensor deleted! id: " + str(sensor_id))
     else:
         res = "not found"
 
@@ -293,6 +333,9 @@ def delete_sensor():
 @jwt_required()
 def getChartData():
 
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+    
     counter_list = ["1", "2", "3"]
     data = []
 
@@ -327,5 +370,5 @@ def getChartData():
                 msg = {"{}".format(doc.get('UtcTime')): n}
                 data.append(msg)
 
-    print("[GET CHART DATA] Id: " + str(process_indicator))
+    #print("[GET CHART DATA] Id: " + str(process_indicator))
     return jsonify(data)

@@ -483,7 +483,7 @@ export default {
     
     await this.getProcesses();
     await this.getPins();
-    this.interval = setInterval(() => this.loopFunction(), 1000);
+    this.interval = setInterval(() => this.loopFunction(), 3000);
   },
 
   async beforeDestroy() {

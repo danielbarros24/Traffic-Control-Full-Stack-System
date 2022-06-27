@@ -1,20 +1,22 @@
 # ------------------------------------------
 # ---Only to test a simple system-----------
 # ------------------------------------------
-
+import json
 import paho.mqtt.client as mqtt
 from tinydb import TinyDB, Query
+from filelock import Timeout, FileLock
 
-db_camera = TinyDB('database/camera.json')
-db_sensors = TinyDB('database/sensors.json')
+db_sensors = TinyDB('src/backend/database/sensors.json')
 
 query = Query()
 
-import json
+file_path = "src/backend/database/camera.json"
+lock_path = "src/backend/database/camera.json.lock"
+lock = FileLock(lock_path, timeout=20)
 
 # Server Credentials
-username = "daniel"
-password = "password"
+username = "service"
+password = "service#4123"
 
 MQTT_Topics = []   
 zones = []
@@ -30,24 +32,28 @@ for doc in docs:
     sensors_list.append(sensor)
 
 flag_connected = 1
+db_acess = 1            # if db_acess = 0 --> camera.json is being used!!
+
 def set_flag():
     return flag_connected
 
+def set_db_acess():
+    return db_acess
+
 def mqtt_data_received(msg):
-    print(
-        "=============================MQTT DATA RECEIVED==============================")
-    print("[MQTT TOPIC]: " + msg.topic)
-    print("[MQTT MESSAGE]: " + str(msg.payload))
-    print('\n')
     parse_mqtt_message(msg.topic, msg.payload)
 
 
 def input_json_db(json_message):
     json_message_serialized = json.dumps(json_message)
-    print("[DATABASE INPUT]: " + str(json_message_serialized))
-    db_camera.insert(json.loads(json_message_serialized))
-    print(
-        "==========================DATA INSERTED IN DATABASE==========================" + "\n\n\n")
+    #print("[DATABASE INPUT]: " + str(json_message_serialized))
+    print("[SUBSCRIBER]: MQTT DATA RECEIVED")
+    with lock:
+        db_camera = TinyDB('src/backend/database/camera.json')
+        db_camera.insert(json.loads(json_message_serialized))
+
+
+    #print("==========================DATA INSERTED IN DATABASE==========================" + "\n\n\n")
 
 
 def create_RuleEngine_message(cam, utc_time, task, vehicle, zone, count):
@@ -164,7 +170,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         for i in range(int(n_sensors)):
             client.subscribe(MQTT_Topics[i], 0)
-        print("[MQTT CONNECTION]: OK \n")
+        print("[MQTT]: Connection OK \n")
         flag_connected = 1
         return 0
     else:
@@ -173,8 +179,7 @@ def on_connect(client, userdata, flags, rc):
 def on_disconnect(client, userdata, rc):
    global flag_connected
    flag_connected = 0
-   print(flag_connected)
-   print("[MQTT CONNECTION]: DOWN \n")
+   print("[MQTT]: Connection DOWN \n")
 
 def on_message(client, userdata, msg):
 
